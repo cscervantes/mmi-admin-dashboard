@@ -1,0 +1,51 @@
+doctype html
+html
+  head
+    //- meta(http-equiv="Content-Type", content="text/html;charset=UTF-8")
+    //- meta(http-equiv="X-UA-Compatible", content="IE=7")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title
+    link(rel='stylesheet', href='/admin-lte-3/plugins/fontawesome-free/css/all.css')
+    link(rel="stylesheet", href="/admin-lte-3/dist/css/adminlte.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
+  body.hold-transition.login-page
+
+    .login-box
+        
+        .login-logo
+            a(href="http://") MMI ADMIN
+        
+        .card
+            div(class="card-body login-card-body")
+                
+                p.login-box-msg Login
+                
+                //- form#loginForm(action="/mmi-admin-dashboard/users/login", method="POST")
+                form#loginForm
+
+                    div(class="input-group mb-3")
+                        input(type="email", name="username", class="form-control", placeholder="Email", required)
+                        div(class="input-group-append")
+                            div(class="input-group-text")
+                                span.fas.fa-envelope
+                    
+                    div(class="input-group mb-3")
+                        input(type="password", name="password", class="form-control", placeholder="Password", required)
+                        div(class="input-group-append")
+                            div(class="input-group-text")
+                                span.fas.fa-lock
+                    
+                    .row
+                        .col-12
+                            //- input#btnSignIn(type="submit", class="btn btn-primary btn-block", value="Sign In")
+                            button#btnSignIn(type="button", class="btn btn-primary btn-block") Sign In
+
+                div(class="social-auth-links text-center mb-3")
+
+    script(src="/admin-lte-3/plugins/jquery/jquery.min.js")
+    script(src="/admin-lte-3/plugins/bootstrap/js/bootstrap.bundle.min.js")
+    script(src="/admin-lte-3/dist/js/adminlte.min.js")
+
+    //- custom
+    script(src="/admin-lte-3/javascripts/login.js")

@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    //- meta(http-equiv="Content-Type", content="text/html;charset=UTF-8")
+    //- meta(http-equiv="X-UA-Compatible", content="IE=7")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title
+    link(rel='stylesheet', href='/admin-lte-3/plugins/fontawesome-free/css/all.css')
+    link(rel="stylesheet", href="/admin-lte-3/dist/css/adminlte.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
+  body.hold-transition.login-page
+
+    .login-box   
+
+        h1=error.status+' '+message
+        //- h2= error.status
+        //- pre #{error.stack}
