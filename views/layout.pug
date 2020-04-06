@@ -7,6 +7,10 @@ html
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title= title
     link(rel='stylesheet', href='/admin-lte-3/plugins/fontawesome-free/css/all.css')
+
+    link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+
     link(rel="stylesheet", href="/admin-lte-3/dist/css/adminlte.min.css")
     link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
   body.hold-transition.sidebar-mini
@@ -20,7 +24,7 @@ html
       
       aside.main-sidebar.sidebar-dark-primary.elevation-4
 
-        a.brand-link
+        a(href="/mmi-admin-dashboard/").brand-link
           img(src="/admin-lte-3/dist/img/AdminLTELogo.png", alt="AdminLTE Logo", class="brand-image img-circle elevation-3", style="opacity: .8")
           span.brand-text.font-weight-light Admin
 
@@ -35,17 +39,28 @@ html
 
           nav.mt-2
             ul(class="nav nav-pills nav-sidebar flex-column", data-widget="treeview", role="menu", data-accordion="false")
-              li(class="nav-item has-treeview menu-open")
-                a.nav-link.active
+              li(class="nav-item has-treeview")
+                a(href="/mmi-admin-dashboard/", class=(path === '/dashboard' ) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-tachometer-alt
-                  p Starter Pages
+                  p Dashboard
+              li(class="nav-item has-treeview")
+                a(href="/mmi-admin-dashboard/websites", class=(path === '/websites' ) ? 'nav-link active' : 'nav-link')
+                  i.nav-icon.fas.fa-globe
+                  p Websites
+              li(class="nav-item has-treeview")
+                a(href="/mmi-admin-dashboard/articles", class=(path === '/articles' ) ? 'nav-link active' : 'nav-link')
+                  i.nav-icon.fas.fa-newspaper
+                  p Articles
               li(class="nav-item has-treeview")
                 a(href="/mmi-admin-dashboard/users/logout").nav-link
-                  i.nav-icon.fas.fa-sign-out
+                  i.nav-icon.fas.fa-sign-out-alt
                   p Logout
       .content-wrapper
         .content-header
-          //- header content
+          .container-fluid
+            .row.mb-2
+              .col-sm-6
+                h1=title
 
         .content
           .container-fluid
@@ -54,4 +69,12 @@ html
 
     script(src="/admin-lte-3/plugins/jquery/jquery.min.js")
     script(src="/admin-lte-3/plugins/bootstrap/js/bootstrap.bundle.min.js")
+
+    script(src="/admin-lte-3/plugins/datatables/jquery.dataTables.min.js")
+    script(src="/admin-lte-3/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")
+    script(src="/admin-lte-3/plugins/datatables-responsive/js/dataTables.responsive.min.js")
+    script(src="/admin-lte-3/plugins/datatables-responsive/js/responsive.bootstrap4.min.js")
+
     script(src="/admin-lte-3/dist/js/adminlte.min.js")
+
+    block js

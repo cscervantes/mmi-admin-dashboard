@@ -1,0 +1,27 @@
+extends ../../layout
+
+block content
+  .row
+    .col-12
+      .card
+        .card-header
+          h3.card-title List of websites
+        .card-body
+          table#website-datatable(class="table table-bordered table-hover")
+            thead
+              tr
+                th NAME
+                th FQDN
+                th CATEGORY
+                th TYPE
+                th Country
+                th STATUS
+                th CREATED
+    
+    .col-12
+      a.btn.btn-primary.bg-gradient-blue
+        span.fas.fa-globe
+        |  New
+
+block js
+  script(src="/admin-lte-3/javascripts/website/index.js")

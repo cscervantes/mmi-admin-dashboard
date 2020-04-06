@@ -7,6 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var websitesRouter = require('./routes/websites');
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use(function(req, res, next){
 
 app.use('/mmi-admin-dashboard', indexRouter);
 app.use('/mmi-admin-dashboard/users', usersRouter);
+app.use('/mmi-admin-dashboard/websites', websitesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
