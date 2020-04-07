@@ -4,6 +4,7 @@ $(document).ready(function(){
         "autoWidth": false,
         "processing": true,
         "serverSide": true,
+        "deferRender": true,
         "ajax": {
             "url": "/mmi-admin-dashboard/websites",
             "type": "POST"

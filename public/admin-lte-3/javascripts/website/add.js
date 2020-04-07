@@ -40,7 +40,7 @@ $(document).on('change', 'input#website_name', function(){
     let webName = $(this).val().split(' ').filter(v=>v).map(v=>{
         if(v){
             let vName = v.replace(/[^a-zA-Z0-9]/g, "")
-            return vName.trim().charAt(0).toUpperCase() + vName.trim().slice(1)  
+            return vName.trim().charAt(0).toUpperCase() + vName.trim().slice(1).toLowerCase()  
         }
     }).join(' ')
     $(this).val(webName)
@@ -135,5 +135,6 @@ function formObject(formData){
     obj.needs_https = $('input[name="needs_https"]').prop('checked')
     obj.needs_endslash = $('input[name="needs_endslash"]').prop('checked')
     obj.main_sections = Array.from(new Set(obj.main_sections.split('\n').map(v=>v.trim())))
+    obj.date_created = new Date()
     return obj
 }
