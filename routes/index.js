@@ -19,4 +19,8 @@ router.get('/articles', auth.redirectLogin, function(req, res, next) {
   res.render('pages/article', { title: 'Articles', path: req.path })
 })
 
+router.get('/add-website', auth.redirectLogin, function(req, res, next){
+  res.render('pages/website/add', {title: 'New Website', path: req.path})
+})
+
 module.exports = router;

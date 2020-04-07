@@ -15,4 +15,14 @@ router.post('/', function(req, res, next) {
     })
 })
 
+router.post('/store', function(req, res, next) {
+    request.post(configUrl+'web/', {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
 module.exports = router

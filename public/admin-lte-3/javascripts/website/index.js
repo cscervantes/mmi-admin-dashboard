@@ -13,7 +13,7 @@ $(document).ready(function(){
             { "data": "fqdn" },
             { "data": "website_category" },
             { "data": "website_type" },
-            { "data": "country_code" },
+            { "data": "country" },
             { "data": "status" },
             { "data": "date_created" },
         ],

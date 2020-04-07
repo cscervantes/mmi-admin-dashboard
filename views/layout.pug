@@ -5,7 +5,8 @@ html
     //- meta(http-equiv="X-UA-Compatible", content="IE=7")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= title
+    //- title= title
+    title MMI - ADMIN
     link(rel='stylesheet', href='/admin-lte-3/plugins/fontawesome-free/css/all.css')
 
     link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
@@ -44,7 +45,7 @@ html
                   i.nav-icon.fas.fa-tachometer-alt
                   p Dashboard
               li(class="nav-item has-treeview")
-                a(href="/mmi-admin-dashboard/websites", class=(path === '/websites' ) ? 'nav-link active' : 'nav-link')
+                a(href="/mmi-admin-dashboard/websites", class=(path === '/websites' || path === '/add-website' ) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-globe
                   p Websites
               li(class="nav-item has-treeview")
@@ -57,10 +58,10 @@ html
                   p Logout
       .content-wrapper
         .content-header
-          .container-fluid
-            .row.mb-2
-              .col-sm-6
-                h1=title
+          //- .container-fluid
+          //-   .row.mb-2
+          //-     .col-sm-6
+          //-       h1=title
 
         .content
           .container-fluid
