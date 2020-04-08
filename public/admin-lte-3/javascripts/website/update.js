@@ -1,4 +1,6 @@
-$(document).on('click', 'button#btnAdd', function(){
+$(document).on('click', 'button[id^="btnUpdate-"]', function(){
+    const idx = $(this).attr('id').split('-').splice(-1)[0]
+    console.log(idx)
     const form = document.querySelector('form#form-website')
     const formData = new FormData(form)
     let formObj = formObject(formData)
@@ -34,8 +36,9 @@ $(document).on('click', 'button#btnAdd', function(){
           })
         $('#fqdn').focus()
     }else{
+        // console.log(formObj)
         $.ajax({
-            url: '/mmi-admin-dashboard/websites/store',
+            url: '/mmi-admin-dashboard/websites/update/'+idx,
             method: 'POST',
             'contentType': 'application/json',
             data: JSON.stringify(formObj),
@@ -48,9 +51,13 @@ $(document).on('click', 'button#btnAdd', function(){
                     autohide: true,
                     title: 'Success.',
                     // subtitle: 'Subtitle',
-                    body: response.data.website_name+' has been successfully added.'
+                    body: response.data.website_name+' has been successfully updated.'
                   })
-                $('form#form-website')[0].reset()
+                // $('form#form-website')[0].reset()
+                setTimeout(() => {
+                    location.reload()  
+                }, 2500);
+                
             }
             if(response.hasOwnProperty('error')){
                 $(document).Toasts('create', {
@@ -193,14 +200,14 @@ function formObject(formData){
         obj[f[0]] = f[1]
     }
     obj.alexa_rankings = {
-        global: obj.global || 0,
-        local: obj.local || 0
+        global: parseInt(obj.global || 0),
+        local: parseInt(obj.local || 0)
     }
     obj.website_cost = obj.website_cost || 0
     obj.country = obj.country || 'Philippines'
     obj.needs_https = $('input[name="needs_https"]').prop('checked')
     obj.needs_endslash = $('input[name="needs_endslash"]').prop('checked')
     obj.main_sections = Array.from(new Set(obj.main_sections.split('\n').map(v=>v.trim()))).filter(v=>v)
-    obj.date_created = new Date()
+    obj.date_updated = new Date()
     return obj
 }

@@ -5,7 +5,7 @@ block content
     .col-12
       .card.card-primary
         .card-header
-          h3.card-title #{title}
+          h3.card-title Update #{website_name}
           .card-tools
             button(type="button", class="btn btn-tool", data-card-widget="maximize")
               i.fas.fa-expand
@@ -16,21 +16,21 @@ block content
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_name") Website Name
               .col-sm-10
-                input#website_name(type="text", name="website_name", class="form-control", placeholder="(Required)")
+                input#website_name(type="text", name="website_name", class="form-control", placeholder="(Required)", value=website_name)
                 //- small
                 //-   i This is required field
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_url") Website Url
               .col-sm-10
-                input#website_url(type="url", name="website_url", class="form-control", placeholder="(Required)")
+                input#website_url(type="url", name="website_url", class="form-control", placeholder="(Required)", value=website_url)
                 //- small
                 //-   i This is required field
 
             .form-group.row
               label(class="col-sm-2 col-form-label", for="fqdn") FQDN
               .col-sm-10
-                input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)")
+                input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)", value=fqdn)
                 //- small
                 //-   i This is required field
             
@@ -38,81 +38,81 @@ block content
               label(class="col-sm-2 col-form-label", for="website_category") Website Category
               .col-sm-10
                   .custom-control.custom-radio.col-sm-1.float-left
-                    input#news(type="radio", name="website_category", class="custom-control-input", value="News", checked=true)
+                    input#news(type="radio", name="website_category", class="custom-control-input", value="News", checked=(website_category === 'News') ? true : false )
                     label(for='news', class="custom-control-label") News
                   .custom-control.custom-radio.col-sm-1.float-left
-                    input#blog(type="radio", name="website_category", class="custom-control-input", value="Blog")
+                    input#blog(type="radio", name="website_category", class="custom-control-input", value="Blog", checked=(website_category === 'Blog') ? true : false)
                     label(for='blog', class="custom-control-label") Blog
 
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_category") Website Type
               .col-sm-10
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#local_news(type="radio", name="website_type", class="custom-control-input", value="LOCAL_NEWS", checked=true)
+                    input#local_news(type="radio", name="website_type", class="custom-control-input", value="LOCAL_NEWS", checked=(website_type === 'LOCAL_NEWS') ? true : false)
                     label(for='local_news', class="custom-control-label") Local News
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#local_blog(type="radio", name="website_type", class="custom-control-input", value="LOCAL_BLOG")
+                    input#local_blog(type="radio", name="website_type", class="custom-control-input", value="LOCAL_BLOG", checked=(website_type === 'LOCAL_BLOG') ? true : false)
                     label(for='local_blog', class="custom-control-label") Local Blog
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#provincial_news(type="radio", name="website_type", class="custom-control-input", value="PROVINCIAL_NEWS")
+                    input#provincial_news(type="radio", name="website_type", class="custom-control-input", value="PROVINCIAL_NEWS", checked=(website_type === 'PROVINCIAL_NEWS') ? true : false)
                     label(for='provincial_news', class="custom-control-label") Provincial News
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#news_compilation(type="radio", name="website_type", class="custom-control-input", value="NEWS_COMPILATION")
+                    input#news_compilation(type="radio", name="website_type", class="custom-control-input", value="NEWS_COMPILATION", checked=(website_type === 'NEWS_COMPILATION') ? true : false)
                     label(for='news_compilation', class="custom-control-label") News Compilation
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#tabloid(type="radio", name="website_type", class="custom-control-input", value="TABLOID")
+                    input#tabloid(type="radio", name="website_type", class="custom-control-input", value="TABLOID", checked=(website_type === 'TABLOID') ? true : false)
                     label(for='tabloid', class="custom-control-label") Tabloid
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#magazine(type="radio", name="website_type", class="custom-control-input", value="MAGAZINE")
+                    input#magazine(type="radio", name="website_type", class="custom-control-input", value="MAGAZINE", checked=(website_type === 'MAGAZINE') ? true : false)
                     label(for='magazine', class="custom-control-label") Magazine
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#international_news(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_NEWS")
+                    input#international_news(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_NEWS", checked=(website_type === 'INTERNATIONAL_NEWS') ? true : false)
                     label(for='international_news', class="custom-control-label") International News
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#international_blog(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_BLOG")
+                    input#international_blog(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_BLOG", checked=(website_type === 'INTERNATIONAL_BLOG') ? true : false)
                     label(for='international_blog', class="custom-control-label") International Blog
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="alexa") Alexa Ranking
               .form-group.col-sm-2.float-left
-                input#global(type="number", name="global", class="form-control", placeholder="Global Rank (Optional)")
+                input#global(type="number", name="global", class="form-control", placeholder="Global Rank (Optional)", value=alexa_rankings.global)
               .col-sm-2.float-left
-                input#local(type="number", name="local", class="form-control", placeholder="Local Rank (Optional)")
+                input#local(type="number", name="local", class="form-control", placeholder="Local Rank (Optional)", value=alexa_rankings.local)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="country") Country
               .col-sm-10
-                input#country(type="url", name="country", class="form-control", placeholder="(Optional) default is Philippines")
+                input#country(type="url", name="country", class="form-control", placeholder="(Optional) default is Philippines", value=country)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_cost") Website Cost
               .col-sm-10
-                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 0")
+                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 0", value=website_cost)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_https") Need Https?
               .col-sm-10
                 .custom-control.custom-switch
-                  input#needs_https(type="checkbox", name="needs_https", class="custom-control-input")
+                  input#needs_https(type="checkbox", name="needs_https", class="custom-control-input", checked=(needs_https) ? true  : false)
                   label(for="needs_https", class="custom-control-label") Yes or No
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_endslash") Need Endslash?
               .col-sm-10
                 .custom-control.custom-switch
-                  input#needs_endslash(type="checkbox", name="needs_endslash", class="custom-control-input")
+                  input#needs_endslash(type="checkbox", name="needs_endslash", class="custom-control-input", checked=(needs_endslash) ? true: false)
                   label(for="needs_endslash", class="custom-control-label") Yes or No
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="main_sections") Section Urls
               .col-sm-10
-                textarea#main_sections(name="main_sections", cols="30", rows="5", style="resize:none;", class="form-control")
+                textarea#main_sections(name="main_sections", cols="30", rows="5", style="resize:none;", class="form-control")=main_sections
 
           .card-footer
-            button.btn.btn-primary(type="button", id="btnAdd") Add
+            button.btn.btn-primary(type="button", id="btnUpdate-"+_id) Save Changes
                 
 
           
 
 block js
-  script(src="/admin-lte-3/javascripts/website/add.js")
+  script(src="/admin-lte-3/javascripts/website/update.js")

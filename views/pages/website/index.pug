@@ -6,6 +6,11 @@ block content
       .card
         .card-header
           h3.card-title List of websites
+          .card-tools
+            button(type="button", class="btn btn-tool", data-card-widget="maximize")
+              i.fas.fa-expand
+            button(type="button", class="btn btn-tool", data-card-widget="collapse")
+              i.fas.fa-minus
         .card-body
           table#website-datatable(class="table table-bordered table-hover")
             thead
@@ -25,3 +30,5 @@ block content
 
 block js
   script(src="/admin-lte-3/javascripts/website/index.js")
+  script.
+    websiteTable('#{session.user.acc_type}')

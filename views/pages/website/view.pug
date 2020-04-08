@@ -1,0 +1,15 @@
+extends ../../layout
+
+block content
+    .row
+        .col-12
+            .card(data-widget="collapse")
+                .card-header
+                    h3.card-title=website_name
+                    .card-tools
+                        button(type="button", class="btn btn-tool", data-card-widget="maximize")
+                            i.fas.fa-expand
+                        button(type="button", class="btn btn-tool", data-card-widget="collapse")
+                            i.fas.fa-minus
+                .card-body
+                    h5=website_url
