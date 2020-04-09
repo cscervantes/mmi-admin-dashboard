@@ -52,6 +52,11 @@ html
                 a(href="/mmi-admin-dashboard/articles", class=(path === '/articles' ) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-newspaper
                   p Articles
+              if session.user.acc_type == 'dev'
+                li(class="nav-item has-treeview")
+                  a(href="/mmi-admin-dashboard/advance-setting", class=(path === '/advance-setting' ) ? 'nav-link active' : 'nav-link')
+                    i.nav-icon.fas.fa-cog
+                    p Advance Setting
               li(class="nav-item has-treeview")
                 a(href="/mmi-admin-dashboard/users/logout").nav-link
                   i.nav-icon.fas.fa-sign-out-alt

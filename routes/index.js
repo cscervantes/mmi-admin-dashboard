@@ -23,4 +23,8 @@ router.get('/add-website', auth.redirectLogin, function(req, res, next){
   res.render('pages/website/add', {title: 'New Website', path: req.path})
 })
 
+router.get('/advance-setting', auth.redirectLogin, function(req, res, next){
+  res.render('pages/setting', { title: 'Advance Setting', path: req.path})
+})
+
 module.exports = router;
