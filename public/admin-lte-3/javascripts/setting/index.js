@@ -14,7 +14,9 @@ function advanceSearch(moment){
                         <hr>
                     `
                     return contentHtml
-                }).join('\n')  : '<h3 class="text-center">No result found!</h3>'
+                }).join('\n')  : `<h3 class="text-center">No result found!</h3>
+                        <p class="text-center">Do you want to see if the website is scrappable before adding? <button class="btn btn-primary" id="btnParse">Parse now</button>
+                        </p>`
                 let wrapper = `
                     <div class="row">
                         <h1>Search result ${response.data.length}</h1>
@@ -44,6 +46,58 @@ function advanceSearch(moment){
                 body: 'Website is required.'
               })
             $('input#search').focus()
+        }
+    })
+
+    $(document).on('click', 'button#btnParse', function(){
+        try{
+            const sval = $('input#search').val()
+            if(sval.trim()){
+                const searchVal = new URL(sval).origin
+                $.ajax({
+                    url: '/mmi-admin-dashboard/advance/parse_website',
+                    contentType: 'application/json',
+                    method: 'POST',
+                    data: JSON.stringify({'url': searchVal}),
+                    dataType: 'json'
+                }).done(function(response){
+                    let wrapper = '<ul>'
+                    let mapResult = response.map(v=>{
+                        return `<li>${v}`
+                    }).join('</li>')
+                    wrapper += mapResult +'</ul>'
+
+                    $('#search-result').html(wrapper)
+
+                }).fail(function(response){
+                    $(document).Toasts('create', {
+                        class: 'bg-danger', 
+                        delay: 3000,
+                        autohide: true,
+                        title: 'Oops! '+response.status,
+                        // subtitle: 'Subtitle',
+                        body: response.statusText
+                      })
+                })
+            }else{
+                $(document).Toasts('create', {
+                    class: 'bg-warning', 
+                    delay: 3000,
+                    autohide: true,
+                    title: 'Warning!',
+                    // subtitle: 'Subtitle',
+                    body: 'Url is required!'
+                  }) 
+            }
+        }catch(error){
+            $(document).Toasts('create', {
+                class: 'bg-warning', 
+                delay: 3000,
+                autohide: true,
+                title: 'Warning!',
+                // subtitle: 'Subtitle',
+                body: error
+              })
         }
     })
 }
