@@ -1,10 +1,16 @@
 function advanceSearch(moment){
+    const overlay = $('div.overlay')
     $(document).on('click', 'button#btnSearch', function(){
         const sV = $('input#search').val()
         const searchVal = (sV.startsWith('http')) ? new URL(sV).hostname  : sV
         if(searchVal.trim()){
             $.ajax({
-                url: '/mmi-admin-dashboard/advance?fqdn='+searchVal
+                url: '/mmi-admin-dashboard/advance?fqdn='+searchVal,
+                beforeSend: function(xhr){
+                    overlay.css({
+                        'display': 'flex'
+                    })
+                }
             }).done(function(response){
                 let responseData = ( response.data.length > 0 ) ? response.data.map(v=>{
                     let contentHtml = `
@@ -26,7 +32,15 @@ function advanceSearch(moment){
                     </div>
                 `
                 $('#search-result').html(wrapper)
+
+                overlay.css({
+                    'display': 'none'
+                })
+                
             }).fail(function(response){
+                overlay.css({
+                    'display': 'none'
+                })
                 $(document).Toasts('create', {
                     class: 'bg-danger', 
                     delay: 3000,
@@ -59,7 +73,12 @@ function advanceSearch(moment){
                     contentType: 'application/json',
                     method: 'POST',
                     data: JSON.stringify({'url': searchVal}),
-                    dataType: 'json'
+                    dataType: 'json',
+                    beforeSend: function(xhr){
+                        overlay.css({
+                            'display': 'flex'
+                        })
+                    }
                 }).done(function(response){
                     let wrapper = '<ul>'
                     let mapResult = response.map(v=>{
@@ -69,7 +88,14 @@ function advanceSearch(moment){
 
                     $('#search-result').html(wrapper)
 
+                    overlay.css({
+                        'display': 'none'
+                    })
+
                 }).fail(function(response){
+                    overlay.css({
+                        'display': 'none'
+                    })
                     $(document).Toasts('create', {
                         class: 'bg-danger', 
                         delay: 3000,
