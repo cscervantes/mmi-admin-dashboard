@@ -68,4 +68,16 @@ router.get('/edit/:id', auth.redirectLogin, function(req, res, next){
     })
 })
 
+router.get('/new/:id', auth.redirectLogin, function(req, res, next){
+    request.get(configUrl+'web/'+req.params.id, {headers:configHeaders}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            // res.status(200).send(body)
+            // console.log(body.data.shift())
+            res.render('pages/setting/edit', body.data.shift())
+        }
+    })
+})
+
 module.exports = router

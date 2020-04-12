@@ -1,0 +1,64 @@
+extends ../../layout
+block css
+    style.
+        textarea {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: auto;
+        }
+block content
+    .row
+        .col-12
+            .card
+                .card-header
+                    h3.card-title=website_name
+                    .card-tools
+                        button(type="button", class="btn btn-tool", data-card-widget="maximize")
+                            i.fas.fa-expand
+                        button(type="button", class="btn btn-tool", data-card-widget="collapse")
+                            i.fas.fa-minus
+                .card-body
+                    .row                        
+                        .col-sm-12
+                           label(for="website-selectors") Website Selectors
+                           textarea#website-selectors.form-control(name="website-selectors", cols="30", rows="10")
+                            | // this will be configure later
+                            | {
+                            |    "data": []
+                            | }
+                            
+                        
+                        .col-sm-12
+                           label(for="website-snippets") Website Snippet
+                           textarea#website-snippets.form-control(name="website-snippets", cols="30", rows="10", readonly)
+                            | // this will be configure later
+                            | class Mod {
+                            |    constructor(any){
+                            |        this._any = any;
+                            |    }
+                            | }
+                            |    
+                            | Mod.prototype.run = function(){
+                            |    return this._any.name;
+                            | }
+
+                            | Mod.prototype.today = function(){
+                            |    return new Date();
+                            | }
+                            |
+                            | Mod.prototype.parse = function(html, $){
+                            |    console.log($);
+                            |    return $.load(html, {decodeEntities:true});
+                            | }
+                            |
+                            | return Mod;
+
+
+block js
+    script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
+    script(src="/admin-lte-3/javascripts/setting/edit.js")
+    script.
+        editWebsite(ace)

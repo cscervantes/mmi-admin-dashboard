@@ -53,7 +53,7 @@ $(document).on('click', 'button#btnAdd', function(){
                 // $('form#form-website')[0].reset()
                 setTimeout(() => {
                     // location.href="/mmi-admin-dashboard/advance-setting"  
-                    location.href="/mmi-admin-dashboard/advance/new/"+response.data._id  
+                    location.href="/mmi-admin-dashboard/websites/new/"+response.data._id  
                 }, 3000);
                 
             }
