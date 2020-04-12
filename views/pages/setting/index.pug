@@ -18,6 +18,10 @@ block content
                                 i.fas.fa-globe
                         input#search(type="search", name="search", class="form-control", placeholder="Search website")
                         span.input-group-append
+                            select#request_source.form-control(name="request_source")
+                                option(value="request") Request
+                                option(value="cloudscraper") Cloud Scraper
+                        span.input-group-append
                             button.btn.btn-default.bg-info(id="btnSearch")
                                 i.fas.fa-search
                                 |  Search

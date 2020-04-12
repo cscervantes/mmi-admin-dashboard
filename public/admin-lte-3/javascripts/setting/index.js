@@ -72,7 +72,7 @@ function advanceSearch(moment){
                     url: '/mmi-admin-dashboard/advance/parse_website',
                     contentType: 'application/json',
                     method: 'POST',
-                    data: JSON.stringify({'url': searchVal}),
+                    data: JSON.stringify({'url': searchVal, 'request_source': $('select#request_source').val()}),
                     dataType: 'json',
                     beforeSend: function(xhr){
                         overlay.css({
@@ -80,13 +80,24 @@ function advanceSearch(moment){
                         })
                     }
                 }).done(function(response){
-                    let wrapper = '<ul>'
-                    let mapResult = response.map(v=>{
-                        return `<li>${v}`
-                    }).join('</li>')
-                    wrapper += mapResult +'</ul>'
+                    if(response.length > 0){
+                        let wrapper = `<h4 class="text-center">Do you want to add this website? <div class="btn-group">
+                            <button class="btn btn-flat" id="btnYes">Yes</button>
+                            <button class="btn btn-flat" id="btnNo">No</button>
+                        </div></h4>`
+                        wrapper += '<ul>'
+                        let mapResult = response.map(v=>{
+                            return `<li><a href="${v}" class="nav-link" target="_blank">${v}</a>`
+                        }).join('</li>')
+                        wrapper += mapResult +'</ul>'
 
-                    $('#search-result').html(wrapper)
+                        $('#search-result').html(wrapper)
+                    }else{
+                        $('#search-result').html(`
+                            <p class="text-center">If this website does not have any results from either <i><b>Request</b></i> or <i><b>Cloud Scraper</b></i>. Contact IT to add the website in different scraper!</p>
+                        `)
+                    }
+                    
 
                     overlay.css({
                         'display': 'none'
@@ -124,6 +135,32 @@ function advanceSearch(moment){
                 // subtitle: 'Subtitle',
                 body: error
               })
+        }
+    })
+
+    $(document).on('click', '#btnYes', function(){
+        try {
+            const sval = $('input#search').val()
+            location.href="/mmi-admin-dashboard/advance/new?url="+new URL(sval).origin+"&request_source="+$('select#request_source').val()
+        } catch (error) {
+            $(document).Toasts('create', {
+                class: 'bg-warning', 
+                delay: 3000,
+                autohide: true,
+                title: 'Warning!',
+                // subtitle: 'Subtitle',
+                body: error
+              })
+        }
+    })
+
+    $(document).on('click', '#btnNo', function(){
+        location.reload()
+    })
+
+    $(document).on('keypress', '#search', function(e){
+        if(e.which === 13){
+            $('button#btnSearch').click()
         }
     })
 }

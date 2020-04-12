@@ -30,4 +30,29 @@ router.post('/parse_website', function(req, res, next){
     })
 })
 
+router.get('/new', function(req, res, next){
+    request.post(lambdaUrl+'website/new_website', {body:
+        {"url":req.query.url, "request_source": req.query.request_source}
+    }, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            // res.status(200).send(body)
+            // console.log(body)
+            res.render('pages/setting/new', body)
+        }
+    })
+})
+
+router.get('/new/:id', function(req, res, next){
+    request.get(configUrl+'web/'+req.params.id, {headers:configHeaders}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+            // console.log(body)
+            // res.render('pages/setting/new', body)
+        }
+    })
+})
 module.exports = router
