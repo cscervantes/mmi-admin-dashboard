@@ -46,9 +46,10 @@ function editWebsite(ace){
             const section_filters = JSON.parse(editor.getValue())
             const article_filters = JSON.parse(editor2.getValue())
             const url = $('#url').val()
+            const request_source = $("#request_source").val()
             if(url.trim()){
                 const data = {
-                    id, url, website_url, needs_https, needs_endslash, section_filters, article_filters
+                    id, url, website_url, request_source, needs_https, needs_endslash, section_filters, article_filters
                 }
                 console.log(data)
                 $.ajax({
