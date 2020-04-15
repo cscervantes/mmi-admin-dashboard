@@ -35,6 +35,11 @@ block content
                 //-   i This is required field
             
             .form-group.row
+              label(class="col-sm-2 col-form-label", for="") Website Icon
+              .col-sm-10
+                input#website_icon_url(type="text", name="website_icon_url", class="form-control", placeholder="(Optional)", value=website_icon_url)
+
+            .form-group.row
               label(class="col-sm-2 col-form-label", for="website_category") Website Category
               .col-sm-10
                   .custom-control.custom-radio.col-sm-1.float-left
@@ -85,9 +90,19 @@ block content
                 input#country(type="url", name="country", class="form-control", placeholder="(Optional) default is Philippines", value=country)
             
             .form-group.row
+              label(class="col-sm-2 col-form-label", for="country_code") Country Code
+              .col-sm-10   
+                input#country_code(type="text", name="country_code", class="form-control", placeholder="(Optional) default is PHL", value=country_code)
+            
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="language") Website Language
+              .col-sm-10    
+                input#language(type="text", name="language", class="form-control", placeholder="(Optional) default is English", value=website_language)
+            
+            .form-group.row
               label(class="col-sm-2 col-form-label", for="website_cost") Website Cost
               .col-sm-10
-                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 0", value=website_cost)
+                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 300", value=website_cost)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_https") Need Https?
@@ -115,4 +130,7 @@ block content
           
 
 block js
+  script.
+    const userData = JSON.parse('!{JSON.stringify(session)}')
+    const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
   script(src="/admin-lte-3/javascripts/website/update.js")

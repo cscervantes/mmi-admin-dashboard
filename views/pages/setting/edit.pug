@@ -58,6 +58,9 @@ block content
 
 
 block js
+    script.
+        const userData = JSON.parse('!{JSON.stringify(session)}')
+        const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
     script(src="/admin-lte-3/javascripts/setting/edit.js")
     script.

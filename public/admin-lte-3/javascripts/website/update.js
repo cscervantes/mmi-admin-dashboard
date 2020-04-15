@@ -205,9 +205,12 @@ function formObject(formData){
     }
     obj.website_cost = obj.website_cost || 0
     obj.country = obj.country || 'Philippines'
+    obj.country_code = obj.country_code || 'PHL'
+    obj.website_language = obj.website_language || 'English'
     obj.needs_https = $('input[name="needs_https"]').prop('checked')
     obj.needs_endslash = $('input[name="needs_endslash"]').prop('checked')
     obj.main_sections = Array.from(new Set(obj.main_sections.split('\n').map(v=>v.trim()))).filter(v=>v)
     obj.date_updated = new Date()
+    obj.updated_by = user
     return obj
 }

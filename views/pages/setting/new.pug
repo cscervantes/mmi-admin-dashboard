@@ -17,7 +17,6 @@ block content
               label(class="col-sm-2 col-form-label", for="website_name") Website Name
               .col-sm-10
                 input#website_name(type="text", name="website_name", class="form-control", placeholder="(Required)", value=title)
-                input#website_icon_url(type="text", name="website_icon_url", class="form-control", placeholder="(Required)", value=fav_icon)
                 //- small
                 //-   i This is required field
             
@@ -34,6 +33,11 @@ block content
                 input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)", value=fqdn)
                 //- small
                 //-   i This is required field
+
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="") Website Icon
+              .col-sm-10
+                input#website_icon_url(type="text", name="website_icon_url", class="form-control", placeholder="(Optional)", value=fav_icon)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_category") Website Category
@@ -84,7 +88,15 @@ block content
               label(class="col-sm-2 col-form-label", for="country") Country
               .col-sm-10
                 input#country(type="text", name="country", class="form-control", placeholder="(Optional) default is Philippines", value=alexa_rankings.country)
+            
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="country_code") Country Code
+              .col-sm-10   
                 input#country_code(type="text", name="country_code", class="form-control", placeholder="(Optional) default is PHL", value=country_code.slice(-1)[0])
+            
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="language") Website Language
+              .col-sm-10    
                 input#language(type="text", name="language", class="form-control", placeholder="(Optional) default is English", value=language)
             
             .form-group.row
@@ -118,4 +130,7 @@ block content
           
 
 block js
+  script.
+    const userData = JSON.parse('!{JSON.stringify(session)}')
+    const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
   script(src="/admin-lte-3/javascripts/setting/add.js")

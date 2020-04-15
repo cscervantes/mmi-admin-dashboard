@@ -33,6 +33,11 @@ block content
                 input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)")
                 //- small
                 //-   i This is required field
+
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="") Website Icon
+              .col-sm-10
+                input#website_icon_url(type="text", name="website_icon_url", class="form-control", placeholder="(Optional)")
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_category") Website Category
@@ -85,9 +90,19 @@ block content
                 input#country(type="url", name="country", class="form-control", placeholder="(Optional) default is Philippines")
             
             .form-group.row
+              label(class="col-sm-2 col-form-label", for="country_code") Country Code
+              .col-sm-10   
+                input#country_code(type="text", name="country_code", class="form-control", placeholder="(Optional) default is PHL")
+            
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="language") Website Language
+              .col-sm-10    
+                input#language(type="text", name="language", class="form-control", placeholder="(Optional) default is English")
+            
+            .form-group.row
               label(class="col-sm-2 col-form-label", for="website_cost") Website Cost
               .col-sm-10
-                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 0")
+                input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 300")
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_https") Need Https?
@@ -115,4 +130,7 @@ block content
           
 
 block js
+  script.
+    const userData = JSON.parse('!{JSON.stringify(session)}')
+    const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
   script(src="/admin-lte-3/javascripts/website/add.js")
