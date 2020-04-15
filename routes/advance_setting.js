@@ -44,4 +44,14 @@ router.get('/new', function(req, res, next){
     })
 })
 
+router.post('/test_filters', function(req, res, next){
+    request.post(lambdaUrl+'website/test_filters', {body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
 module.exports = router

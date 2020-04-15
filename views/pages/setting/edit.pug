@@ -15,46 +15,264 @@ block content
             .card
                 .card-header
                     h3.card-title=website_name
+                        |  - 
+                        b Article & Section Filters 
+                        img(src=website_icon_url, width="20")
                     .card-tools
                         button(type="button", class="btn btn-tool", data-card-widget="maximize")
                             i.fas.fa-expand
                         button(type="button", class="btn btn-tool", data-card-widget="collapse")
                             i.fas.fa-minus
                 .card-body
-                    .row                        
-                        .col-sm-12
-                           label(for="website-selectors") Website Selectors
-                           textarea#website-selectors.form-control(name="website-selectors", cols="30", rows="10")
-                            | // this will be configure later
-                            | {
-                            |    "data": []
-                            | }
-                            
-                        
-                        .col-sm-12
-                           label(for="website-snippets") Website Snippet
-                           textarea#website-snippets.form-control(name="website-snippets", cols="30", rows="10", readonly)
-                            | // this will be configure later
-                            | class Mod {
-                            |    constructor(any){
-                            |        this._any = any;
-                            |    }
-                            | }
-                            |    
-                            | Mod.prototype.run = function(){
-                            |    return this._any.name;
-                            | }
+                    form#article-section-filters
+                        .row
+                            .col-sm-12
+                                label(for="section_filters") Section Filters
+                                textarea#section_filters.form-control(name="section_filters", cols="30", rows="10")
+                                    | {
+                                    |    "includes": [],
+                                    |    "excludes": []
+                                    | }
 
-                            | Mod.prototype.today = function(){
-                            |    return new Date();
-                            | }
-                            |
-                            | Mod.prototype.parse = function(html, $){
-                            |    console.log($);
-                            |    return $.load(html, {decodeEntities:true});
-                            | }
-                            |
-                            | return Mod;
+                            .col-sm-12
+                                label(for="article_filters") Article Filters
+                                textarea#article_filters.form-control(name="article_filters", cols="30", rows="10")
+                                    | {
+                                    |    "includes": [],
+                                    |    "excludes": []
+                                    | }
+                            
+                            .col-sm-12
+                                .input-group
+                                    span.input-group-prepend
+                                        span.input-group-text.bg-info
+                                            i.fas.fa-globe
+                                    input#url.form-control(type="url", name="url", placeholder="Url", value=website_url)
+                                    span.input-group-append
+                                        select.form-control(id="request_source", name="request_source")
+                                            option(value="request", selected=(request_source === 'request') ? true : false) Request
+                                            option(value="cloudscraper", selected=(request_source === 'cloudscraper') ? true : false) Cloud Scraper
+                                    span.input-group-append
+                                        button.btn.btn-default.bg-info(type="button", id="btnTest") Test Filters
+                .card-footer#result-for-filters
+                .overlay(style="display:none;")
+                    i(class="fas fa-2x fa-sync-alt fa-spin")
+
+    .row
+        .col-12
+            .card
+                .card-header
+                    h3.card-title=website_name
+                        |  - 
+                        b Scraper Settings
+                    .card-tools
+                        button(type="button", class="btn btn-tool", data-card-widget="maximize")
+                            i.fas.fa-expand
+                        button(type="button", class="btn btn-tool", data-card-widget="collapse")
+                            i.fas.fa-minus
+                .card-body
+                    form#scraper-settings
+                        .row
+                            label(class="col-sm-2 col-form-label", for="is_using_selectors") Is Using Selectors?
+                            .col-sm-6
+                                .custom-control.custom-switch
+                                    input#is_using_selectors(type="checkbox", name="is_using_selectors", class="custom-control-input", checked=(is_using_selectors) ? true  : false)
+                                    label(for="is_using_selectors", class="custom-control-label") No or Yes                       
+                            
+                            .col-sm-12
+                                label(for="selectors") Website Selectors
+                                textarea#selectors.form-control(name="selectors", cols="30", rows="10")
+                                    | {
+                                    |    "title": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "publish": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "author": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "section": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "body": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "image": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ],
+                                    |     "video": [
+                                    |         {
+                                    |             "selector": "element|class|id|pseudo-class|selector",
+                                    |             "attribute": null,
+                                    |             "ignore_tags": [],
+                                    |             "replace": []
+                                    |         }
+                                    |     ]
+                                    | }    
+                            
+                            label(class="col-sm-2 col-form-label", for="is_using_snippets") Is Using Code Snippet?
+                            .col-sm-6
+                                .custom-control.custom-switch
+                                    input#is_using_snippets(type="checkbox", name="is_using_snippets", class="custom-control-input", checked=(is_using_snippets) ? true  : false)
+                                    label(for="is_using_snippets", class="custom-control-label") No or Yes 
+
+                            .col-sm-12
+                                label(for="code_snippet") Website Snippet
+                                textarea#code_snippet.form-control(name="code_snippet", cols="30", rows="10", readonly)
+                                    | // this will be configure later
+                                    | class Article {
+                                    |     constructor($wrapper, $string, $moment){
+                                    |         this._cheerio = $wrapper;
+                                    |         this._string = $string;
+                                    |         this._moment = $moment;
+                                    |     }
+                                    | }
+                                    | 
+                                    | //Dont modify this block
+                                    | Article.prototype.ENTITY = function(){
+                                    |     return this._cheerio
+                                    | }
+                                    | 
+                                    | //Dont modify this block
+                                    | Article.prototype.STRING = function(){
+                                    |     return this._string
+                                    | }
+                                    | 
+                                    | //Dont modify this block
+                                    | Article.prototype.MOMENT = function(){
+                                    |     return this._moment
+                                    | }
+                                    | 
+                                    | // You can modify this function
+                                    | Article.prototype.ARTICLE_TITLE = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_PUBLISH = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_AUTHOR = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_SECTION = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_HTML = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_TEXT = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_IMAGE = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | Article.prototype.ARTICLE_VIDEO = async function(){
+                                    |     const $ = this.ENTITY()
+                                    |     const p = new Promise(async (resolve, reject) => {
+                                    |         try{
+                                    |             // insert your code here
+                                    |         }catch(error){
+                                    |             reject(error)
+                                    |         }
+                                    |     })
+                                    |     return p
+                                    | }
+                                    | 
+                                    | 
+                                    | return Article;
 
 
 block js
@@ -64,4 +282,8 @@ block js
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
     script(src="/admin-lte-3/javascripts/setting/edit.js")
     script.
+        const id = '#{_id}'
+        const website_url = '#{website_url}'
+        const needs_https = '#{needs_https}'
+        const needs_endslash = '#{needs_endslash}'
         editWebsite(ace)

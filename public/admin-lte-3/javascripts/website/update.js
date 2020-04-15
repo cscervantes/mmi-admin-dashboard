@@ -87,7 +87,7 @@ $(document).on('click', 'button[id^="btnUpdate-"]', function(){
                     autohide: true,
                     title: 'Oops!',
                     // subtitle: 'Subtitle',
-                    body: error.statusText
+                    body: error.responseText
                   })
             }
         })

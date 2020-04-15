@@ -85,7 +85,7 @@ $(document).on('click', 'button#btnAdd', function(){
                     autohide: true,
                     title: 'Oops!',
                     // subtitle: 'Subtitle',
-                    body: error.statusText
+                    body: error.responseText
                   })
             }
         })

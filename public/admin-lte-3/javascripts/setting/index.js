@@ -47,7 +47,7 @@ function advanceSearch(moment){
                     autohide: true,
                     title: 'Oops! '+response.status,
                     // subtitle: 'Subtitle',
-                    body: response.statusText
+                    body: response.responseText
                   })
             })
         }else{
@@ -113,7 +113,7 @@ function advanceSearch(moment){
                         autohide: true,
                         title: 'Oops! '+response.status,
                         // subtitle: 'Subtitle',
-                        body: response.statusText
+                        body: response.responseText
                       })
                 })
             }else{
