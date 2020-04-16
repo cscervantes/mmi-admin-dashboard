@@ -22,7 +22,12 @@ $(document).on('click', '#btnSignIn', function(e){
             response_html.innerHTML = response.message
             location.href = '/mmi-admin-dashboard/dashboard'
         }).fail(function(error){
-            response_html.innerHTML = error.responseJSON.message
+            if(error.hasOwnProperty('responseJSON')){
+                response_html.innerHTML = error.responseJSON.message
+            }else{
+                response_html.innerHTML = error.responseText
+            }
+            
         })
     }else{
         response_html.innerHTML = 'Both fields are required'
