@@ -21,6 +21,7 @@ app.use(session({
 app.use(function(req, res, next){
   var session = req.session
   res.locals.session = session
+  res.locals.moment = require('moment')
   next();
 })
 

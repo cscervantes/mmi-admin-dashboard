@@ -2,16 +2,138 @@ extends ../../layout
 
 block content
     .row
-        .col-12
+        .col-sm-3
+            .card.card-primary.card-outline
+                .card-body.box-profile
+                    .text-center
+                        a(href=website_url, title="Visit "+website_url+" in the browser", target="_blank")
+                            span(class="fas fa-globe", style="font-size:50px")
+                    h3(class="profile-username text-center")=website_name
+                    p(class="text-muted text-center")=website_category
+                        |  / #{website_type}
+                    ul(class="list-group list-group-unbordered mb-3")
+                        li(class="list-group-item")
+                            b Home Url
+                            a(class="float-right")=website_url
+                        li(class="list-group-item")
+                            b FQDN
+                            a(class="float-right")=fqdn
+                        li(class="list-group-item")
+                            b Country
+                            a(class="float-right")=country
+                        li(class="list-group-item")
+                            b Country Code
+                            a(class="float-right")=country_code
+                        li(class="list-group-item")
+                            b Language
+                            a(class="float-right")=website_language
             .card
-                .card-header
-                    h3.card-title=website_name
-                    .card-tools
-                        button(type="button", class="btn btn-tool", data-card-widget="maximize")
-                            i.fas.fa-expand
-                        button(type="button", class="btn btn-tool", data-card-widget="collapse")
-                            i.fas.fa-minus
+                .card-body.box-profile
+                    h3(class="profile-username text-center") History
+                    strong
+                        i.fas.fa-user
+                        |  Created By
+                    p.text-muted=created_by
+                    hr
+                    strong 
+                        i.fas.fa-calendar
+                        |  Date Created
+                    p.text-muted(title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
+                    hr
+                    strong
+                        i.fas.fa-user
+                        |  Updated By
+                    p.text-muted=updated_by
+                    hr
+                    strong 
+                        i.fas.fa-calendar
+                        |  Date Updated
+                    p.text-muted(title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
+        
+        .col-sm-9
+            .card
+                .card-header.p-2
+                    ul.nav.nav-pills
+                        li.nav-item
+                            a(href="#sections", data-toggle="tab", class="nav-link active") Sections
+                        li.nav-item
+                            a(href="#filters", data-toggle="tab", class="nav-link") Filters
+                        li.nav-item
+                            a(href="#scrapers", data-toggle="tab", class="nav-link", aria-expanded="false") Scraper
+                        li.nav-item
+                            a(href="#others", data-toggle="tab", class="nav-link", aria-expanded="false") Others
                 .card-body
-                    h5=website_url
-                    p Created by: #{created_by} When: #{date_created}
-                    p Updated by: #{updated_by} When: #{date_updated}
+                    .tab-content
+
+                        #sections.active.tab-pane
+                            - const sections = main_sections.map(v=>`<li><a href="${v}" class="nav-link" target="_blank">${v}</a>`).join('</li>')
+                            ul(style="list-style: square outside none;") !{sections}
+                            
+                        #filters.tab-pane
+                            if (is_using_selectors || is_using_snippets)
+                                p 
+                                    strong Article Filters
+                                textarea#filter-div.form-control=JSON.stringify(article_filter, null, 4)
+                                hr
+
+                                p 
+                                    strong Section Filters
+                                textarea#filter-div2.form-control=JSON.stringify(section_filter, null, 4)
+                                hr
+
+                            else
+                                h3.text-muted.text-center Scraper is not configured!
+                                    a(class="nav-link", href="/mmi-admin-dashboard/websites/new/"+_id) Configure now?
+
+                        #scrapers.tab-pane
+                            if (is_using_selectors || is_using_snippets)
+                                p.text-muted
+                                    i.fas.fa-question-circle
+                                    |  The configuration of this website scraper is using the
+                                    if is_using_selectors
+                                        strong  Selectors
+                                    else
+                                        strong  Snippet
+
+                                if is_using_selectors
+                                    textarea#scraper-div.form-control=JSON.stringify(selectors, null, 4)
+                                else
+                                    textarea#scraper-div.form-control=code_snippet
+                                hr
+                            else
+                                h3.text-muted.text-center Scraper is not configured!
+                                    a(class="nav-link", href="/mmi-admin-dashboard/websites/new/"+_id) Configure now?
+                        
+                        #others.tab-pane
+                            p.text-muted
+                                i.fas.fa-question-circle
+                                |  These are some of the options used in scraping.
+                            ul(class="list-group list-group-unbordered mb-3")
+                                li(class="list-group-item")
+                                    b Status
+                                    a(class="float-right")=status
+                                li(class="list-group-item")
+                                    b Starts with https
+                                    a(class="float-right")=needs_https
+                                li(class="list-group-item")
+                                    b Ends with slash
+                                    a(class="float-right")=needs_endslash
+                                li(class="list-group-item")
+                                    b Programming Language
+                                    a(class="float-right")=programming_language || 'None'
+                                li(class="list-group-item")
+                                    b Dynamic website
+                                    a(class="float-right")=is_dynamic_website
+                                li(class="list-group-item")
+                                    b Request Source
+                                    a(class="float-right")=request_source
+                                li(class="list-group-item")
+                                    b Is using selectors
+                                    a(class="float-right")=is_using_selectors
+                                li(class="list-group-item")
+                                    b Is using snippet
+                                    a(class="float-right")=is_using_snippets                             
+
+block js
+    script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
+    script(src="/admin-lte-3/javascripts/website/view.js")

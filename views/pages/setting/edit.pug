@@ -180,6 +180,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Title')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -192,6 +193,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Date')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -204,6 +206,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Author')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -216,6 +219,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Section')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -228,6 +232,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Html')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -240,6 +245,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Text')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -252,6 +258,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Image')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -264,6 +271,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
+                                    |             resolve('Video')
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -274,7 +282,25 @@ block content
                                     | 
                                     | return Article;
 
+                            .col-sm-12
+                                .input-group
+                                    span.input-group-prepend
+                                        span.input-group-text.bg-info
+                                            i.fas.fa-globe
+                                    input#url2.form-control(type="url", name="url2", placeholder="Article Url")
+                                    span.input-group-append
+                                        select.form-control(id="request_source2", name="request_source2")
+                                            option(value="request", selected=(request_source === 'request') ? true : false) Request
+                                            option(value="cloudscraper", selected=(request_source === 'cloudscraper') ? true : false) Cloud Scraper
+                                    span.input-group-append
+                                        button.btn.btn-default.bg-info(type="button", id="btnParseArticle") Parse Article
+                .card-footer#result-for-article
+                .overlay(style="display:none;")
+                    i(class="fas fa-2x fa-sync-alt fa-spin")
 
+    .row
+        .col-sm-12
+            button#btnUpdateWebsite(type="button", class="btn btn-info") Save Changes
 block js
     script.
         const userData = JSON.parse('!{JSON.stringify(session)}')
@@ -286,4 +312,5 @@ block js
         const website_url = '#{website_url}'
         const needs_https = '#{needs_https}'
         const needs_endslash = '#{needs_endslash}'
+        const sections = JSON.parse('!{JSON.stringify(main_sections)}')
         editWebsite(ace)
