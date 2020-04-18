@@ -55,7 +55,7 @@ router.post('/test_filters', function(req, res, next){
 })
 
 router.post('/test_article', function(req, res, next){
-    request.post(lambdaUrl+'website/test_article', {body:req.body}, function(error, response, body){
+    request.post(lambdaUrl+'article/test_article', {body:req.body}, function(error, response, body){
         if(error){
             next(error)
         }else{

@@ -258,7 +258,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Image')
+                                    |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -271,7 +271,7 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Video')
+                                    |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -313,4 +313,8 @@ block js
         const needs_https = '#{needs_https}'
         const needs_endslash = '#{needs_endslash}'
         const sections = JSON.parse('!{JSON.stringify(main_sections)}')
+        const alexa = JSON.parse('!{JSON.stringify(alexa_rankings)}')
+        const global_rank = alexa.global
+        const local_rank = alexa.local
+        const website_cost = parseInt('#{website_cost}')
         editWebsite(ace)
