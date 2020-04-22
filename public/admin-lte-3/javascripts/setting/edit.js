@@ -361,6 +361,48 @@ function editWebsite(ace){
     })
 
     $(document).on('click', '#btnSaveArticles', function(){
+        const article_array = []
+        $('dl').eq(0).children('dd').each(function(i, e){
+            article_array.push({idx:i, href:$(e).text()})
+        })
+        console.log(article_array)
+        const requestFunct = async (data) => {
+            let dataObj = {
+                article_url: data.href,
+                created_by: user,
+                updated_by: user,
+                date_created: new Date(),
+                date_updated: new Date()
+            }
+            $.ajax({
+                url: '/mmi-admin-dashboard/advance/store_article',
+                method: 'POST',
+                'contentType': 'application/json',
+                data: JSON.stringify(dataObj),
+                dataType: 'json',
+                beforeSend: function(xhr){
+                    $('dl').eq(0).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+                }
+            }).done(function(response){
+                console.log(response)
+                if(response.hasOwnProperty('error')){
+                    $('dl').eq(0).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-exclamation-circle" title="${response.error}"></i></a>`)
+                }else{
+                    $('dl').eq(0).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-check-circle" title="Just Added."></i></a>`)
+                }
+                
+            }).fail(function(response){
+                console.log(response)
+                $('dl').eq(0).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-times-circle"></i></a>`)
+            })
+            
+        }
+
+        const storeArticle = async () => {
+            await Promise.all(article_array.map(async (v) => await requestFunct(v)))
+        }
+
+        storeArticle()
 
     })
 

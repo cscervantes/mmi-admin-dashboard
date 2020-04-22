@@ -205,8 +205,8 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here
-                                    |             resolve('Author')
+                                    |             // insert your code here, author is array value
+                                    |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -218,8 +218,8 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here
-                                    |             resolve('Section')
+                                    |             // insert your code here, section is array value
+                                    |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -257,7 +257,7 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here
+                                    |             // insert your code here, image is array value
                                     |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
@@ -270,7 +270,7 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here
+                                    |             // insert your code here, video is array value
                                     |             resolve([])
                                     |         }catch(error){
                                     |             reject(error)
@@ -312,8 +312,8 @@ block js
         const website_url = '#{website_url}'
         const needs_https = '#{needs_https}'
         const needs_endslash = '#{needs_endslash}'
-        const sections = JSON.parse('!{JSON.stringify(main_sections)}')
-        const alexa = JSON.parse('!{JSON.stringify(alexa_rankings)}')
+        const sections = JSON.parse(`!{JSON.stringify(main_sections)}`)
+        const alexa = JSON.parse(`!{JSON.stringify(alexa_rankings)}`)
         const global_rank = alexa.global
         const local_rank = alexa.local
         const website_cost = parseInt('#{website_cost}')

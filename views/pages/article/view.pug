@@ -1,0 +1,77 @@
+extends ../../layout
+
+block content
+  .row
+    .col-sm-4
+      .card.card-primary.card-outline
+        .card-body
+            div(class="row")
+                div(class="col-sm-6")
+                    div(class="position-relative p-3 bg-blue", style="height: 105px")
+                        div(class="ribbon-wrapper ribbon-lg")
+                            div(class="ribbon bg-success text-lg") AD Value
+                        h3
+                            i(class="fas fa-ruble-sign")
+                            |  #{article_ad_value}
+                
+                div(class="col-sm-6")
+                    div(class="position-relative p-3 bg-blue", style="height: 105px")
+                        div(class="ribbon-wrapper ribbon-lg")
+                            div(class="ribbon bg-success text-lg") PR Value
+                        h3
+                            i(class="fas fa-ruble-sign")
+                            |  #{article_pr_value}
+            .col-sm-12
+                h3(class="profile-username text-center")=website.website_name
+                p(class="text-muted text-center")=website.website_category
+                    |  | #{website.website_type}
+                ul(class="list-group list-group-unbordered mb-3")
+                    li(class="list-group-item")
+                        b Home Url
+                        a(class="float-right")=website.website_url
+                    li(class="list-group-item")
+                        b FQDN
+                        a(class="float-right")=website.fqdn
+                    li(class="list-group-item")
+                        b Country
+                        a(class="float-right")=website.country
+                    li(class="list-group-item")
+                        b Website Cost
+                        a(class="float-right")=website.website_cost
+            div(class="row")
+                div(class="col-sm-6")
+                    div(class="position-relative p-3 bg-blue", style="height: 105px")
+                        div(class="ribbon-wrapper ribbon-lg")
+                            div(class="ribbon bg-success text-lg") Global
+                                i(class="fas fa-trophy")
+                        h3
+                            i(class="fas fa-globe-americas")
+                            |  #{website.alexa_rankings.global}
+                
+                div(class="col-sm-6")
+                    div(class="position-relative p-3 bg-blue", style="height: 105px")
+                        div(class="ribbon-wrapper ribbon-lg")
+                            div(class="ribbon bg-success text-lg") Local
+                                i(class="fas fa-trophy")
+                        h3
+                            i(class="fas fa-globe-asia")
+                            |  #{website.alexa_rankings.local}
+
+
+    .col-sm-8
+      .card.card-primary.card-outline
+        .card-header
+          h3.card-title=article_title
+          .card-tools
+            button(type="button", class="btn btn-tool", data-card-widget="maximize")
+              i.fas.fa-expand
+            button(type="button", class="btn btn-tool", data-card-widget="collapse")
+              i.fas.fa-minus
+        .card-body
+            if article_sections.length > 0
+                ol.breadcrumb
+                    each section in article_sections
+                        li.breadcrumb-item=section
+            blockquote(style="text-align: justify")=article_content
+            p.float-right.text-muted(title=moment(article_publish_date).format('LLLL'))=article_authors.splice(-1)[0]
+                |,  #{moment(article_publish_date).fromNow()}

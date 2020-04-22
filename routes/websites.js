@@ -52,6 +52,7 @@ router.get('/view/:id', auth.redirectLogin, function(req, res, next){
             next(error)
         }else{
             const data = body.data.shift()
+            data.path = req.originalUrl
             res.render('pages/website/view', data)
         }
     })
@@ -63,6 +64,7 @@ router.get('/edit/:id', auth.redirectLogin, function(req, res, next){
             next(error)
         }else{
             const data = body.data.shift()
+            data.path = req.originalUrl
             res.render('pages/website/edit', data)
         }
     })
@@ -75,7 +77,9 @@ router.get('/new/:id', auth.redirectLogin, function(req, res, next){
         }else{
             // res.status(200).send(body)
             // console.log(body.data.shift())
-            res.render('pages/setting/edit', body.data.shift())
+            const data = body.data.shift()
+            data.path = req.originalUrl
+            res.render('pages/setting/edit', data)
         }
     })
 })

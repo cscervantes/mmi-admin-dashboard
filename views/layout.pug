@@ -16,7 +16,7 @@ html
     link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
     block css
   //- body.hold-transition.sidebar-mini
-  body.sidebar-mini.sidebar-collapse
+  body.sidebar-mini.sidebar-collapse.layout-fixed.layout-navbar-fixed
 
     .wrapper
       nav.main-header.navbar.navbar-expand.navbar-white.navbar-light
@@ -35,7 +35,7 @@ html
 
           div(class="user-panel mt-3 pb-3 mb-3 d-flex")
             .image
-              img(src="/admin-lte-3/dist/img/user2-160x160.jpg", class="img-circle elevation-2", alt="User Image")
+              img(src=(session.user.acc_first_name+' '+session.user.acc_last_name === "Christian Cervantes") ? "/admin-lte-3/images/dp.jpeg" : "/admin-lte-3/images/unknown.jpg", class="img-circle elevation-2", alt="User Image")
             .info
               if session.user
                 a.d-block=session.user.acc_first_name+' '+session.user.acc_last_name
@@ -47,16 +47,16 @@ html
                   i.nav-icon.fas.fa-tachometer-alt
                   p Dashboard
               li(class="nav-item has-treeview")
-                a(href="/mmi-admin-dashboard/websites", class=(path === '/websites' || path === '/add-website' ) ? 'nav-link active' : 'nav-link')
+                a(href="/mmi-admin-dashboard/websites", class=(path.search(/websites/g) != -1 || path === '/add-website' ) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-globe
                   p Websites
               li(class="nav-item has-treeview")
-                a(href="/mmi-admin-dashboard/articles", class=(path === '/articles' ) ? 'nav-link active' : 'nav-link')
+                a(href="/mmi-admin-dashboard/articles", class=(path.search(/articles/g) != -1) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-newspaper
                   p Articles
               if session.user.acc_type == 'dev'
                 li(class="nav-item has-treeview")
-                  a(href="/mmi-admin-dashboard/advance-setting", class=(path === '/advance-setting' ) ? 'nav-link active' : 'nav-link')
+                  a(href="/mmi-admin-dashboard/advance-setting", class=(path.search(/advance/g) != -1 ) ? 'nav-link active' : 'nav-link')
                     i.nav-icon.fas.fa-cog
                     p Advance Setting
               li(class="nav-item has-treeview")
