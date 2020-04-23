@@ -2,7 +2,7 @@ extends ../../layout
 
 block content
   .row
-    .col-sm-4
+    .col-sm-3
       .card.card-primary.card-outline
         .card-body
             div(class="row")
@@ -10,7 +10,7 @@ block content
                     div(class="position-relative p-3 bg-blue", style="height: 105px")
                         div(class="ribbon-wrapper ribbon-lg")
                             div(class="ribbon bg-success text-lg") AD Value
-                        h3
+                        h3(style="position:absolute;bottom:0px")
                             i(class="fas fa-ruble-sign")
                             |  #{article_ad_value}
                 
@@ -18,7 +18,7 @@ block content
                     div(class="position-relative p-3 bg-blue", style="height: 105px")
                         div(class="ribbon-wrapper ribbon-lg")
                             div(class="ribbon bg-success text-lg") PR Value
-                        h3
+                        h3(style="position:absolute;bottom:0px")
                             i(class="fas fa-ruble-sign")
                             |  #{article_pr_value}
             .col-sm-12
@@ -44,7 +44,7 @@ block content
                         div(class="ribbon-wrapper ribbon-lg")
                             div(class="ribbon bg-success text-lg") Global
                                 i(class="fas fa-trophy")
-                        h3
+                        h3(style="position:absolute;bottom:0px")
                             i(class="fas fa-globe-americas")
                             |  #{website.alexa_rankings.global}
                 
@@ -53,16 +53,33 @@ block content
                         div(class="ribbon-wrapper ribbon-lg")
                             div(class="ribbon bg-success text-lg") Local
                                 i(class="fas fa-trophy")
-                        h3
+                        h3(style="position:absolute;bottom:0px")
                             i(class="fas fa-globe-asia")
                             |  #{website.alexa_rankings.local}
+        .card-footer
+            ul(class="list-group list-group-unbordered mb-3")
+                li(class="list-group-item")
+                    b System Added
+                    a(class="float-right", title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
+                li(class="list-group-item")
+                    b Created By
+                    a(class="float-right")=created_by
+                li(class="list-group-item")
+                    b Last Modified
+                    a(class="float-right", title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
+                li(class="list-group-item")
+                    b Modified By
+                    a(class="float-right")=updated_by
 
 
-    .col-sm-8
+    .col-sm-9
       .card.card-primary.card-outline
         .card-header
-          h3.card-title=article_title
+          h3.card-title
+            a(href=article_url, class="nav-link", target="_blank", title="View original article")=article_title
           .card-tools
+            button(type="button", class="btn btn-tool", onclick="location.href='/mmi-admin-dashboard/articles/edit/"+_id+"'")
+                i.fas.fa-edit
             button(type="button", class="btn btn-tool", data-card-widget="maximize")
               i.fas.fa-expand
             button(type="button", class="btn btn-tool", data-card-widget="collapse")

@@ -7,6 +7,8 @@ block content
         .card-header
           h3.card-title List of websites
           .card-tools
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/add-website'", title="New website")
+              i.fas.fa-globe
             button(type="button", class="btn btn-tool", data-card-widget="maximize")
               i.fas.fa-expand
             button(type="button", class="btn btn-tool", data-card-widget="collapse")
@@ -22,11 +24,7 @@ block content
                 th Country
                 th STATUS
                 th CREATED
-    
-    .col-sm-12
-      button.btn.btn-primary(onclick="location.href='/mmi-admin-dashboard/add-website'")
-        span.fas.fa-globe
-        |  New
+
 
 block js
   script(src="/admin-lte-3/javascripts/website/index.js")

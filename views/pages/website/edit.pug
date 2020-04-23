@@ -121,7 +121,7 @@ block content
             .form-group.row
               label(class="col-sm-2 col-form-label", for="main_sections") Section Urls
               .col-sm-10
-                textarea#main_sections(name="main_sections", cols="30", rows="5", style="resize:none;", class="form-control")=main_sections
+                textarea#main_sections(name="main_sections", cols="30", rows="5", style="resize:none;", class="form-control")=main_sections.join('\n')
 
           .card-footer
             button.btn.btn-primary(type="button", id="btnUpdate-"+_id) Save Changes

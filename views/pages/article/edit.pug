@@ -1,0 +1,76 @@
+extends ../../layout
+
+block content
+
+    form#article-update
+        .row
+            .col-sm-3
+                .card.card-primary.card-outline
+                    .card-body
+                        input(type="hidden", name="_id", value=_id)
+                        .form-group
+                            label(for="website_name") Website
+                            input#website_name.form-control(type="text", name="website_name", value=website.website_name)
+                        .form-group
+                            label(for="article_source_url") Source Url
+                            input#article_source_url.form-control(type="text", name="article_source_url", value=article_source_url)
+                        .form-group
+                            label(for="article_ad_value") AD Value
+                            input#article_ad_value.form-control(type="number", name="article_ad_value", value=article_ad_value)
+                        .form-group
+                            label(for="article_pr_value") PR Value
+                            input#article_pr_value.form-control(type="number", name="article_pr_value", value=article_pr_value)
+                    .card-footer
+                        ul(class="list-group list-group-unbordered mb-3")
+                            li(class="list-group-item")
+                                b System Added
+                                a(class="float-right", title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
+                            li(class="list-group-item")
+                                b Created By
+                                a(class="float-right")=created_by
+                            li(class="list-group-item")
+                                b Last Modified
+                                a(class="float-right", title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
+                            li(class="list-group-item")
+                                b Modified By
+                                a(class="float-right")=updated_by
+        
+            .col-sm-9
+                .card.card-primary.card-outline
+                    .card-body
+                        .form-group
+                            label(for="article_title") Title
+                            input#article_title.form-control(type="text", name="article_title", value=article_title)
+                        .form-group
+                            label(for="article_url") Article Url
+                            input#article_url.form-control(type="url", name="article_url", value=article_url)
+                        .form-group
+                            label(for="article_publish_date") Date Publish
+                            input#article_publish_date.form-control(type="datetime-local", name="article_publish_date", value=moment(article_publish_date).format('Y-MM-DDTHH:mm'))
+                        .form-group
+                            label(for="article_authors") Author(s)
+                            textarea#article_authors.form-control(name="article_authors")=article_authors.join('\n')
+                        .form-group
+                            label(for="article_sections") Section(s)
+                            textarea#article_sections.form-control(name="article_sections")=article_sections.join('\n')
+                        .form-group
+                            label(for="article_images") Images(s)
+                            textarea#article_images.form-control.article_compute(name="article_images")=article_images.join('\n')
+                        .form-group
+                            label(for="article_videos") Videos(s)
+                            textarea#article_videos.form-control.article_compute(name="article_videos")=article_videos.join('\n')
+                        .form-group
+                            label(for="article_content") Content
+                            textarea#article_content.form-control.article_compute(name="article_content", cols="30", rows="10")=article_content
+                    .card-footer
+                        button(type="button", class="btn btn-warning", id="btnUpdate") Save Changes
+
+block js
+    script.
+        const sessionObj = JSON.parse(`!{JSON.stringify(session.user)}`)
+        const userObj = sessionObj
+        const website_cost = JSON.parse(`!{website.website_cost}`)
+        const alexa = JSON.parse(`!{JSON.stringify(website.alexa_rankings)}`)
+        const global = alexa.global
+        const local = alexa.local
+    script(src="/admin-lte-3/javascripts/article/edit.js")

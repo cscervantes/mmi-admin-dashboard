@@ -75,4 +75,14 @@ router.post('/store_article', function(req, res, next){
     })
 })
 
+router.post('/media_values', function(req, res, next){
+    request.post(lambdaUrl+'article/media_values', {body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
 module.exports = router

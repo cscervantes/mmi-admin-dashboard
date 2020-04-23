@@ -30,4 +30,28 @@ router.get('/view/:id', auth.redirectLogin, function(req, res, next){
     })
 })
 
+router.get('/edit/:id', auth.redirectLogin, function(req, res, next){
+    request.get(configUrl+'article/'+req.params.id, {headers:configHeaders}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            // const data = body.data.shift()
+            const data = body.data
+            data.path = req.originalUrl
+            // console.log(data)
+            res.render('pages/article/edit', data)
+        }
+    })
+})
+
+router.post('/update/:id', function(req, res, next){
+    request.put(configUrl+'article/'+req.params.id, {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
 module.exports = router

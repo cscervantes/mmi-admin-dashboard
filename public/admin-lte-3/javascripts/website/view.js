@@ -25,3 +25,88 @@ editor3.setOptions({
     autoScrollEditorIntoView: true,
 });
 
+const overlay = $('.overlay').eq(0)
+
+$(document).on('click', 'button#btnBrowseSection', function(){
+    try {
+        const section_filters = JSON.parse(editor2.getValue())
+        const article_filters = JSON.parse(editor.getValue())
+        const url = new URL($('#section_url').val()).href
+        const request_source = $("#request_source").val()
+        const data = {
+            id, url, website_url, request_source, needs_https, needs_endslash, section_filters, article_filters
+        }
+        console.log(data)
+        $.ajax({
+            url: '/mmi-admin-dashboard/advance/test_filters',
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            dataType: 'json',
+            beforeSend: function(xhr){
+                $('#result-card').html('')
+                overlay.css({
+                    'display': 'flex'
+                })
+            }
+        }).done(function(response){
+            let articleWrapper = '<dl><dt>Article Links <button type="button" id="btnSaveArticles" class="btn btn-info btn-sm">Save Articles</button></dt>'
+            articleWrapper += response.articles.map(v=>{
+                return `<dd><a class="nav-link" href="${v}" target="_blank">${v}</a>`
+            }).join('</dd>')+'</dl>'
+
+            let sectionWrapper = '<dl><dt>Section Links <button type="button" id="btnSaveSections" class="btn btn-info btn-sm">Save Sections</button></dt>'
+            sectionWrapper += response.sections.map(v=>{
+                return `<dd><a class="nav-link" href="${v}" target="_blank">${v}</a>`
+            }).join('</dd>')+'</dl>'
+
+            $('#result-card').html(
+                `
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Filtered Links</h3>
+                        <div class="card-tools">
+                            <button class="btn btn-tool" type="button" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                            <button class="btn btn-tool" type="button" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">${sectionWrapper}</div>
+                            <div class="col-sm-6">${articleWrapper}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                `
+            )
+
+            overlay.css({
+                'display': 'none'
+            })
+        }).fail(function(response){
+            console.log(response)
+            overlay.css({
+                'display': 'none'
+            })
+            $(document).Toasts('create', {
+                class: 'bg-danger', 
+                delay: 3000,
+                autohide: true,
+                title: 'Oops!',
+                // subtitle: 'Subtitle',
+                body: response.responseText
+              })
+        })
+    } catch (error) {
+        $(document).Toasts('create', {
+            class: 'bg-warning', 
+            delay: 3000,
+            autohide: true,
+            title: 'Warning!',
+            // subtitle: 'Subtitle',
+            body: error
+          })
+    }
+})
