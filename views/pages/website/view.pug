@@ -73,11 +73,11 @@ block content
                             if (is_using_selectors || is_using_snippets)
                                 p 
                                     strong Section Filters
-                                textarea#filter-div2.form-control=JSON.stringify(section_filter, null, 4)
+                                textarea#filter-div.form-control=JSON.stringify(section_filter, null, 4)
                                 hr
                                 p 
                                     strong Article Filters
-                                textarea#filter-div.form-control=JSON.stringify(article_filter, null, 4)
+                                textarea#filter-div2.form-control=JSON.stringify(article_filter, null, 4)
                                 hr
                                 .input-group
                                     span.input-group-prepend
@@ -86,12 +86,16 @@ block content
                                     input#section_url(type="search", name="section_url", class="form-control", placeholder="Place an section link of "+website_name)
                                     span.input-group-append
                                         select#request_source.form-control(name="request_source")
-                                            option(value="request") Request
-                                            option(value="cloudscraper") Cloud Scraper
+                                            option(value="request", selected=(request_source === 'request') ? true : false) Request
+                                            option(value="cloudscraper", selected=(request_source === 'cloudscraper') ? true : false) Cloud Scrape
                                     span.input-group-append
                                         button.btn.btn-default.bg-info(id="btnBrowseSection")
                                             i.fas.fa-search
                                             |  Browse
+                                    span.input-group-append
+                                        button.btn.btn-default.bg-info(id="btnUpdateWebsiteFilters")
+                                            i.fas.fa-save
+                                            |  Save config
                             else
                                 h3.text-muted.text-center Scraper is not configured!
                                     a(class="nav-link", href="/mmi-admin-dashboard/websites/new/"+_id) Configure now?
@@ -118,12 +122,16 @@ block content
                                     input#article_url(type="search", name="article_url", class="form-control", placeholder="Place an article link of "+website_name)
                                     span.input-group-append
                                         select#request_source2.form-control(name="request_source2")
-                                            option(value="request") Request
-                                            option(value="cloudscraper") Cloud Scraper
+                                            option(value="request", selected=(request_source === 'request') ? true : false) Request
+                                            option(value="cloudscraper", selected=(request_source === 'cloudscraper') ? true : false) Cloud Scraper
                                     span.input-group-append
                                         button.btn.btn-default.bg-info(id="btnBrowseArticle")
                                             i.fas.fa-search
                                             |  Browse
+                                    span.input-group-append
+                                        button.btn.btn-default.bg-info(id="btnUpdateWebsiteScrapers")
+                                            i.fas.fa-save
+                                            |  Save config
                             else
                                 h3.text-muted.text-center Scraper is not configured!
                                     a(class="nav-link", href="/mmi-admin-dashboard/websites/new/"+_id) Configure now?
@@ -166,9 +174,19 @@ block content
 
 block js
     script.
+        const userData = JSON.parse('!{JSON.stringify(session)}')
+        const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
         const id = `#{_id}`
         const website_url = `#{website_url}`
         const needs_https = `#{needs_https}`
         const needs_endslash = `#{needs_endslash}`
+        const is_using_selectors = JSON.parse(`#{is_using_selectors}`)
+        const is_using_snippets = JSON.parse(`#{is_using_snippets}`)
+        const selectors_from_db = `!{JSON.stringify(selectors)}`
+        const code_snippet_from_db = `#{code_snippet}`
+        const alexa = JSON.parse(`!{JSON.stringify(alexa_rankings)}`)
+        const global_rank = alexa.global
+        const local_rank = alexa.local
+        const website_cost = JSON.parse(`!{website_cost}`)
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
     script(src="/admin-lte-3/javascripts/website/view.js")

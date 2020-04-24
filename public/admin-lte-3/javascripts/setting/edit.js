@@ -63,7 +63,8 @@ function editWebsite(ace){
                         })
                     }
                 }).done(function(response){
-                    let articleWrapper = '<dl><dt>Article Links <button type="button" id="btnSaveArticles" class="btn btn-info btn-sm">Save Articles</button></dt>'
+                    // let articleWrapper = '<dl><dt>Article Links <button type="button" id="btnSaveArticles" class="btn btn-info btn-sm">Save Articles</button></dt>'
+                    let articleWrapper = '<dl><dt>Article Links</dt>'
                     articleWrapper += response.articles.map(v=>{
                         return `<dd><a class="nav-link" href="${v}" target="_blank">${v}</a>`
                     }).join('</dd>')+'</dl>'
@@ -85,8 +86,8 @@ function editWebsite(ace){
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-sm-6">${articleWrapper}</div>
                                     <div class="col-sm-6">${sectionWrapper}</div>
+                                    <div class="col-sm-6">${articleWrapper}</div>
                                 </div>
                             </div>
                         </div>
@@ -360,9 +361,10 @@ function editWebsite(ace){
         }
     })
 
+    // Not using this function anymore
     $(document).on('click', '#btnSaveArticles', function(){
         const article_array = []
-        $('dl').eq(0).children('dd').each(function(i, e){
+        $('dl').eq(1).children('dd').each(function(i, e){
             article_array.push({idx:i, href:$(e).text()})
         })
         console.log(article_array)
@@ -408,7 +410,7 @@ function editWebsite(ace){
 
     $(document).on('click', '#btnSaveSections', function(){
         try {
-            const section_array =  $('dl').eq(1).children('dd').map(function(){
+            const section_array =  $('dl').eq(0).children('dd').map(function(){
                 return $(this).text()
             }).get()
             const main_sections = Array.from(new Set(sections.concat(section_array)))

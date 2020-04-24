@@ -54,4 +54,14 @@ router.post('/update/:id', function(req, res, next){
     })
 })
 
+router.post('/delete/:id', function(req, res, next){
+    request.delete(configUrl+'article/'+req.params.id, {headers:configHeaders}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
 module.exports = router
