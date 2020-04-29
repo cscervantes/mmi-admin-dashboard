@@ -238,34 +238,37 @@ $(document).on('click', '#btnSaveArticles', function(){
     })
     console.log(article_array)
     const requestFunct = async (data) => {
-        let dataObj = {
-            article_url: data.href,
-            created_by: user,
-            updated_by: user,
-            date_created: new Date(),
-            date_updated: new Date()
-        }
-        $.ajax({
-            url: '/mmi-admin-dashboard/advance/store_article',
-            method: 'POST',
-            'contentType': 'application/json',
-            data: JSON.stringify(dataObj),
-            dataType: 'json',
-            beforeSend: function(xhr){
-                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+        $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+        setTimeout(() => {
+            let dataObj = {
+                article_url: data.href,
+                created_by: user,
+                updated_by: user,
+                date_created: new Date(),
+                date_updated: new Date()
             }
-        }).done(function(response){
-            console.log(response)
-            if(response.hasOwnProperty('error')){
-                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-exclamation-circle" title="${response.error}"></i></a>`)
-            }else{
-                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-check-circle" title="Just Added."></i></a>`)
-            }
-            
-        }).fail(function(response){
-            console.log(response)
-            $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-times-circle"></i></a>`)
-        })
+            $.ajax({
+                url: '/mmi-admin-dashboard/advance/store_article',
+                method: 'POST',
+                'contentType': 'application/json',
+                data: JSON.stringify(dataObj),
+                dataType: 'json',
+                beforeSend: function(xhr){
+                    $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+                }
+            }).done(function(response){
+                console.log(response)
+                if(response.hasOwnProperty('error')){
+                    $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-exclamation-circle" title="${response.error}"></i></a>`)
+                }else{
+                    $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-check-circle" title="Just Added."></i></a>`)
+                }
+                
+            }).fail(function(response){
+                console.log(response)
+                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-times-circle"></i></a>`)
+            }) 
+        }, Math.floor(Math.random() * 10000) + 3500);
         
     }
 
@@ -535,3 +538,60 @@ $(document).on('click', 'button#btnUpdateWebsiteScrapers', function(){
     }
 })
 
+$(document).on('click', 'button#btnAddSectionsToCrawl', function(){
+    try {
+        const _sections = []
+        $('ul#main_sections li').each(function(i, e){
+            _sections.push({ idx: i, website: id, section_url: $(this).text().trim() })
+        })
+        console.log(_sections)
+        const requestFunct = async (data) => {
+            $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+            setTimeout(() => {
+                let dataObj = {
+                    website: data.id,
+                    section_url: data.section_url,
+                    date_created: new Date(),
+                    date_updated: new Date()
+                }
+                $.ajax({
+                    url: '/mmi-admin-dashboard/sections',
+                    method: 'POST',
+                    'contentType': 'application/json',
+                    data: JSON.stringify(dataObj),
+                    dataType: 'json',
+                    beforeSend: function(xhr){
+                        $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
+                    }
+                }).done(function(response){
+                    console.log(response)
+                    if(response.hasOwnProperty('error')){
+                        $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-exclamation-circle" title="${response.error.errmsg}"></i></a>`)
+                    }else{
+                        $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-check-circle" title="Just Added."></i></a>`)
+                    }
+                    
+                }).fail(function(response){
+                    console.log(response)
+                    $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-times-circle"></i></a>`)
+                }) 
+            }, Math.floor(Math.random() * 10000) + 3500);
+        }
+
+        const storeSection = async () => {
+            await Promise.all(_sections.map(async (v) => await requestFunct(v)))
+        }
+    
+        storeSection()
+
+    } catch (error) {
+        $(document).Toasts('create', {
+            class: 'bg-danger', 
+            delay: 3000,
+            autohide: true,
+            title: 'Oops!',
+            // subtitle: 'Subtitle',
+            body: error
+          })
+    }
+})

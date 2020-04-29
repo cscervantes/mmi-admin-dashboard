@@ -67,7 +67,8 @@ block content
 
                         #sections.active.tab-pane
                             - const sections = main_sections.map(v=>`<li><a href="${v}" class="nav-link" target="_blank">${v}</a>`).join('</li>')
-                            ul(style="list-style: square outside none;") !{sections}
+                            ul(style="list-style: square outside none;", id="main_sections") !{sections}
+                            button#btnAddSectionsToCrawl.btn.btn-warning Add to crawler
                             
                         #filters.tab-pane
                             if (is_using_selectors || is_using_snippets)
