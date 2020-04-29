@@ -35,7 +35,7 @@ $(document).on('click', 'button#btnBrowseSection', function(){
         const url = new URL($('#section_url').val()).href
         const request_source = $("#request_source").val()
         const data = {
-            id, url, website_url, request_source, needs_https, needs_endslash, section_filters, article_filters
+            id, url, website_url, request_source, needs_search_params, needs_https, needs_endslash, section_filters, article_filters
         }
         console.log(data)
         $.ajax({
@@ -119,7 +119,7 @@ $(document).on('click',  'button#btnBrowseArticle', function(){
         const request_source = $('#request_source2').val()
         if(is_using_selectors || is_using_snippets){
             const data = {
-                id, url, website_url, request_source, needs_https, needs_endslash, selectors, code_snippet, is_using_selectors, is_using_snippets, global_rank, local_rank, website_cost
+                id, url, website_url, request_source, needs_search_params, needs_https, needs_endslash, selectors, code_snippet, is_using_selectors, is_using_snippets, global_rank, local_rank, website_cost
             }
             console.log(data)
             $.ajax({

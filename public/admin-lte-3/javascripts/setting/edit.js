@@ -48,7 +48,7 @@ function editWebsite(ace){
             const request_source = $("#request_source").val()
             if(url.trim()){
                 const data = {
-                    id, url, website_url, request_source, needs_https, needs_endslash, section_filters, article_filters
+                    id, url, website_url, request_source, needs_search_params, needs_https, needs_endslash, section_filters, article_filters
                 }
                 console.log(data)
                 $.ajax({
@@ -149,7 +149,7 @@ function editWebsite(ace){
             if(url.trim()){
                 if(is_using_selectors || is_using_snippets){
                     const data = {
-                        id, url, website_url, request_source, needs_https, needs_endslash, selectors, code_snippet, is_using_selectors, is_using_snippets, global_rank, local_rank, website_cost
+                        id, url, website_url, request_source, needs_search_params, needs_https, needs_endslash, selectors, code_snippet, is_using_selectors, is_using_snippets, global_rank, local_rank, website_cost
                     }
                     console.log(data)
                     $.ajax({

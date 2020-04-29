@@ -112,6 +112,8 @@ $(document).on('change', 'input#website_url', function(){
             let vUrl = thisHref.href
             const startHttps = $('#needs_https').prop('checked')
             const endSlash = $('#needs_endslash').prop('checked')
+            const _includeSearch = $('#needs_search_params').prop('checked')
+            vUrl = (_includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
             vUrl = (startHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
             vUrl = (endSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
 
@@ -157,6 +159,8 @@ $(document).on('change', 'textarea#main_sections', function(){
             let vUrl = v
             const startHttps = $('#needs_https').prop('checked')
             const endSlash = $('#needs_endslash').prop('checked')
+            const _includeSearch = $('#needs_search_params').prop('checked')
+            vUrl = (_includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
             vUrl = (startHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
             vUrl = (endSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
             return vUrl
@@ -208,6 +212,7 @@ function formObject(formData){
     obj.website_language = obj.website_language || 'English'
     obj.needs_https = $('input[name="needs_https"]').prop('checked')
     obj.needs_endslash = $('input[name="needs_endslash"]').prop('checked')
+    obj.needs_search_params = $('input[name="needs_search_params"]').prop('checked')
     obj.main_sections = Array.from(new Set(obj.main_sections.split('\n').map(v=>v.trim()))).filter(v=>v)
     obj.date_created = new Date()
     obj.created_by = user

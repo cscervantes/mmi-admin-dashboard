@@ -105,6 +105,13 @@ block content
                 input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 300", value=website_cost)
             
             .form-group.row
+              label(class="col-sm-2 col-form-label", for="needs_search_params") Need Search Params?
+              .col-sm-10
+                .custom-control.custom-switch
+                  input#needs_search_params(type="checkbox", name="needs_search_params", class="custom-control-input", checked=(needs_search_params) ? true  : false)
+                  label(for="needs_search_params", class="custom-control-label") Yes or No
+            
+            .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_https") Need Https?
               .col-sm-10
                 .custom-control.custom-switch

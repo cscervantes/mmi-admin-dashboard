@@ -148,6 +148,9 @@ block content
                                     b Status
                                     a(class="float-right")=status
                                 li(class="list-group-item")
+                                    b Includes Search Params
+                                    a(class="float-right")=needs_search_params
+                                li(class="list-group-item")
                                     b Starts with https
                                     a(class="float-right")=needs_https
                                 li(class="list-group-item")
@@ -179,6 +182,7 @@ block js
         const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
         const id = `#{_id}`
         const website_url = `#{website_url}`
+        const needs_search_params = `#{needs_search_params}`
         const needs_https = `#{needs_https}`
         const needs_endslash = `#{needs_endslash}`
         const is_using_selectors = JSON.parse(`#{is_using_selectors}`)
