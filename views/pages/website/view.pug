@@ -193,5 +193,6 @@ block js
         const global_rank = alexa.global
         const local_rank = alexa.local
         const website_cost = JSON.parse(`!{website_cost}`)
+        const sections = JSON.parse(`!{JSON.stringify(main_sections)}`)
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
     script(src="/admin-lte-3/javascripts/website/view.js")

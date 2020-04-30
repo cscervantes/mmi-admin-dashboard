@@ -180,7 +180,13 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Title')
+                                    |             let selector = ''
+                                    |             let title = $(selector).eq(0).text().trim()
+                                    |             if(!title){
+                                    |                  reject('Missing title.')
+                                    |             }else{
+                                    |                  resolve(title)
+                                    |             }
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -193,7 +199,13 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Date')
+                                    |             let selector = ''
+                                    |             let date = $(selector).eq(0).text().trim()
+                                    |             if(!date){
+                                    |                   reject('Missing date.')
+                                    |             }else{
+                                    |                   resolve(new Date(date))
+                                    |             }
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -206,7 +218,12 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, author is array value
-                                    |             resolve([])
+                                    |             let selector = ''
+                                    |             let authors = $(selector).map(function(){
+                                    |                    return $(this).text().trim()
+                                    |             }).get().filter(v=>v)
+                                    |             let _uniqAuthors = (authors.length > 0) ? Array.from(new Set(authors)) : []
+                                    |             resolve(_uniqAuthors)
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -219,7 +236,12 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, section is array value
-                                    |             resolve([])
+                                    |             let selector = ''
+                                    |             let sections = $(selector).map(function(){
+                                    |                     return $(this).text().trim()
+                                    |             }).get().filter(v=>v)
+                                    |             let _uniqSections = (sections.length > 0) ? Array.from(new Set(sections)) : []
+                                    |             resolve(_uniqSections)
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -232,7 +254,13 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Html')
+                                    |             let ignoreTags = []
+                                    |             ignoreTags.map(v=>$(v).remove())
+                                    |             let selector = ''
+                                    |             let html = $(selector).map(function(){
+                                    |                      return $(this)
+                                    |             }).get().join('')
+                                    |             resolve(html)
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -242,10 +270,22 @@ block content
                                     | 
                                     | Article.prototype.ARTICLE_TEXT = async function(){
                                     |     const $ = this.ENTITY()
+                                    |     const textFromTitle = await this.ARTICLE_TITLE()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             resolve('Text')
+                                    |             let ignoreTags = []
+                                    |             ignoreTags.map(v=>$(v).remove())
+                                    |             let selector = ''
+                                    |             let text = $(selector).map(function(){
+                                    |                      return $(this).text().trim()
+                                    |             }).get().join(' ')
+                                    |             let textContent = (text.length > 0) ? text : textFromTitle
+                                    |             if(!textContent){
+                                    |                  reject('Missing text.')
+                                    |             }else{
+                                    |                  resolve(textContent)
+                                    |             }
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -258,7 +298,13 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, image is array value
-                                    |             resolve([])
+                                    |             let selector = ''
+                                    |             let image_attribute = '' // this could be src, data-src, data-original-src, etc.
+                                    |             let images = $(selector).map(function(){
+                                    |                    return $(this).attr(image_attribute)
+                                    |             }).get().filter(v=>v)
+                                    |             let _uniqImages = (images.length > 0) ? Array.from(new Set(images)) : []
+                                    |             resolve(_uniqImages)
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
@@ -271,7 +317,13 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, video is array value
-                                    |             resolve([])
+                                    |             let selector = ''
+                                    |             let video_attribute = ''
+                                    |             let videos = $(selector).map(function(){
+                                    |                    return $(this).attr(video_attribute)
+                                    |             }).get().filter(v=>v)
+                                    |             let _uniqVideos = (videos.length > 0) ? Array.from(new Set(videos)) : []
+                                    |             resolve(_uniqVideos)
                                     |         }catch(error){
                                     |             reject(error)
                                     |         }
