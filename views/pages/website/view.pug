@@ -138,39 +138,79 @@ block content
                                     a(class="nav-link", href="/mmi-admin-dashboard/websites/new/"+_id) Configure now?
                         
                         #others.tab-pane
-                            p.text-muted
-                                i.fas.fa-question-circle
-                                |  These are some of the options used in scraping.
-                                button.btn.btn-tool(type="button")
-                                    i.fas.fa-edit
-                            ul(class="list-group list-group-unbordered mb-3")
-                                li(class="list-group-item")
-                                    b Status
-                                    a(class="float-right")=status
-                                li(class="list-group-item")
-                                    b Includes Search Params
-                                    a(class="float-right")=needs_search_params
-                                li(class="list-group-item")
-                                    b Starts with https
-                                    a(class="float-right")=needs_https
-                                li(class="list-group-item")
-                                    b Ends with slash
-                                    a(class="float-right")=needs_endslash
-                                li(class="list-group-item")
-                                    b Programming Language
-                                    a(class="float-right")=programming_language || 'None'
-                                li(class="list-group-item")
-                                    b Dynamic website
-                                    a(class="float-right")=is_dynamic_website
-                                li(class="list-group-item")
-                                    b Request Source
-                                    a(class="float-right")=request_source
-                                li(class="list-group-item")
-                                    b Is using selectors
-                                    a(class="float-right")=is_using_selectors
-                                li(class="list-group-item")
-                                    b Is using snippet
-                                    a(class="float-right")=is_using_snippets
+                            form#form-config-others
+                                p.text-muted
+                                    i.fas.fa-question-circle
+                                    |  These are some of the options used in scraping.
+                                    //- button#btnEnableEdit.btn.btn-tool(type="button")
+                                    //-     i.fas.fa-edit
+                                .custom-control.custom-switch
+                                    input#btnEnableEdit(type="checkbox", name="btnEnableEdit", class="custom-control-input")
+                                    label(for="btnEnableEdit", class="custom-control-label") Toggle to modify the options
+                                ul(class="list-group list-group-unbordered mb-3")
+                                    li(class="list-group-item")
+                                        b Status
+                                        a(class="float-right hide-display-content")=status
+                                        .no-display-content.custom-control.custom-radio.col-sm-1.float-right(style="display:none")
+                                            input#expired(type="radio", name="status", class="custom-control-input", value="EXPIRED", checked=(status === 'EXPIRED') ? true : false)
+                                            label(for='expired', class="custom-control-label") EXPIRED
+                                        .no-display-content.custom-control.custom-radio.col-sm-1.float-right(style="display:none")
+                                            input#inactive(type="radio", name="status", class="custom-control-input", value="INACTIVE", checked=(status === 'INACTIVE') ? true : false)
+                                            label(for='inactive', class="custom-control-label") INACTIVE
+                                        .no-display-content.custom-control.custom-radio.col-sm-1.float-right(style="display:none")
+                                            input#active(type="radio", name="status", class="custom-control-input", value="ACTIVE", checked=(status === 'ACTIVE') ? true : false )
+                                            label(for='active', class="custom-control-label") ACTIVE
+                                        
+                                    li(class="list-group-item")
+                                        b Includes Search Params
+                                        a(class="float-right hide-display-content")=needs_search_params
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#needs_search_params(type="checkbox", name="needs_search_params", class="custom-control-input", checked=(needs_search_params) ? true  : false)
+                                            label(for="needs_search_params", class="custom-control-label") NO | YES
+                                    li(class="list-group-item")
+                                        b Starts with https
+                                        a(class="float-right hide-display-content")=needs_https
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#needs_https(type="checkbox", name="needs_https", class="custom-control-input", checked=(needs_https) ? true  : false)
+                                            label(for="needs_https", class="custom-control-label") NO | YES
+                                    li(class="list-group-item")
+                                        b Ends with slash
+                                        a(class="float-right hide-display-content")=needs_endslash
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#needs_endslash(type="checkbox", name="needs_endslash", class="custom-control-input", checked=(needs_endslash) ? true  : false)
+                                            label(for="needs_endslash", class="custom-control-label") NO | YES
+                                    li(class="list-group-item")
+                                        b Programming Language
+                                        a(class="float-right hide-display-content")=programming_language || 'None'
+                                        input#programming_language.form-control.float-right.no-display-content(type="text", name="programming_language", value=programming_language, style="display:none")
+                                    li(class="list-group-item")
+                                        b Dynamic website
+                                        a(class="float-right hide-display-content")=is_dynamic_website
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#is_dynamic_website(type="checkbox", name="is_dynamic_website", class="custom-control-input", checked=(is_dynamic_website) ? true  : false)
+                                            label(for="is_dynamic_website", class="custom-control-label") NO | YES
+                                    li(class="list-group-item")
+                                        b Request Source
+                                        a(class="float-right hide-display-content")=request_source
+                                        .no-display-content.custom-control.custom-radio.col-sm-1.float-right(style="display:none")
+                                            input#request(type="radio", name="request_source", class="custom-control-input", value="request", checked=(request_source === 'request') ? true : false)
+                                            label(for='request', class="custom-control-label") Request
+                                        .no-display-content.custom-control.custom-radio.col-sm-1.float-right(style="display:none")
+                                            input#cloudscraper(type="radio", name="request_source", class="custom-control-input", value="cloudscraper", checked=(request_source === 'cloudscraper') ? true : false)
+                                            label(for='cloudscraper', class="custom-control-label") Cloudscraper
+                                    li(class="list-group-item")
+                                        b Is using selectors
+                                        a(class="float-right hide-display-content")=is_using_selectors
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#is_using_selectors(type="checkbox", name="is_using_selectors", class="custom-control-input", checked=(is_using_selectors) ? true  : false)
+                                            label(for="is_using_selectors", class="custom-control-label") NO | YES
+                                    li(class="list-group-item")
+                                        b Is using snippet
+                                        a(class="float-right hide-display-content")=is_using_snippets
+                                        .no-display-content.custom-control.custom-switch.float-right(style="display:none")
+                                            input#is_using_snippets(type="checkbox", name="is_using_snippets", class="custom-control-input", checked=(is_using_snippets) ? true  : false)
+                                            label(for="is_using_snippets", class="custom-control-label") NO | YES
+                            button#updateOthersConfig.btn.btn-warning.no-display-content(style="display:none", type="button") Save Changes
 
                 .overlay(style="display:none;")
                     i(class="fas fa-2x fa-sync-alt fa-spin")

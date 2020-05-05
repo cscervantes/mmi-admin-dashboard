@@ -28,7 +28,7 @@ function editWebsite(ace){
 
     let editor4 = ace.edit("code_snippet")
     editor4.setTheme("ace/theme/monokai")
-    editor4.session.setMode("ace/mode/javascript")
+    editor4.session.setMode("ace/mode/typescript")
     editor4.setFontSize(16)
     editor4.setOptions({
         maxLines: 30,
@@ -284,71 +284,82 @@ function editWebsite(ace){
                 id, section_filter, article_filter, selectors, code_snippet, request_source, is_using_selectors, is_using_snippets, date_updated, updated_by
             }
             console.log(data)
-            $.ajax({
-                url: '/mmi-admin-dashboard/websites/update/'+id,
-                method: 'POST',
-                'contentType': 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json',
-                beforeSend: function(xhr){
+            if(is_using_selectors || is_using_snippets){
+                $.ajax({
+                    url: '/mmi-admin-dashboard/websites/update/'+id,
+                    method: 'POST',
+                    'contentType': 'application/json',
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    beforeSend: function(xhr){
+                        $('.overlay').css({
+                            'display': 'flex'
+                        })
+                    }
+                }).done(function(response){
+                    if(response.hasOwnProperty('data')){
+                        $(document).Toasts('create', {
+                            class: 'bg-success', 
+                            delay: 3000,
+                            autohide: true,
+                            title: 'Success.',
+                            // subtitle: 'Subtitle',
+                            body: response.data.website_name+' has been successfully updated.'
+                        })
+                        // $('form#form-website')[0].reset()
+                        setTimeout(() => {
+                            location.href = '/mmi-admin-dashboard/websites/view/'+id
+                        }, 2500);
+                        
+                    }
+                    if(response.hasOwnProperty('error')){
+                        $(document).Toasts('create', {
+                            class: 'bg-warning', 
+                            delay: 3000,
+                            autohide: true,
+                            title: 'Warning!',
+                            // subtitle: 'Subtitle',
+                            body: response.error.errmsg
+                        })
+                    }
                     $('.overlay').css({
-                        'display': 'flex'
+                        'display': 'none'
                     })
-                }
-            }).done(function(response){
-                if(response.hasOwnProperty('data')){
-                    $(document).Toasts('create', {
-                        class: 'bg-success', 
-                        delay: 3000,
-                        autohide: true,
-                        title: 'Success.',
-                        // subtitle: 'Subtitle',
-                        body: response.data.website_name+' has been successfully updated.'
-                      })
-                    // $('form#form-website')[0].reset()
-                    setTimeout(() => {
-                        location.href = '/mmi-admin-dashboard/websites/view/'+id
-                    }, 2500);
-                    
-                }
-                if(response.hasOwnProperty('error')){
-                    $(document).Toasts('create', {
-                        class: 'bg-warning', 
-                        delay: 3000,
-                        autohide: true,
-                        title: 'Warning!',
-                        // subtitle: 'Subtitle',
-                        body: response.error.errmsg
-                      })
-                }
-                $('.overlay').css({
-                    'display': 'none'
+                }).fail(function(error){
+                    if(error.hasOwnProperty('error')){
+                        $(document).Toasts('create', {
+                            class: 'bg-danger', 
+                            delay: 3000,
+                            autohide: true,
+                            title: 'Oops!',
+                            // subtitle: 'Subtitle',
+                            body: error.error.errmsg
+                        })
+                    }else{
+                        // $('span#response-status').text(error.statusText)
+                        $(document).Toasts('create', {
+                            class: 'bg-danger', 
+                            delay: 3000,
+                            autohide: true,
+                            title: 'Oops!',
+                            // subtitle: 'Subtitle',
+                            body: error.responseText
+                        })
+                    }
+                    $('.overlay').css({
+                        'display': 'none'
+                    })
                 })
-            }).fail(function(error){
-                if(error.hasOwnProperty('error')){
-                    $(document).Toasts('create', {
-                        class: 'bg-danger', 
-                        delay: 3000,
-                        autohide: true,
-                        title: 'Oops!',
-                        // subtitle: 'Subtitle',
-                        body: error.error.errmsg
-                      })
-                }else{
-                    // $('span#response-status').text(error.statusText)
-                    $(document).Toasts('create', {
-                        class: 'bg-danger', 
-                        delay: 3000,
-                        autohide: true,
-                        title: 'Oops!',
-                        // subtitle: 'Subtitle',
-                        body: error.responseText
-                      })
-                }
-                $('.overlay').css({
-                    'display': 'none'
-                })
-            })
+            }else{
+                $(document).Toasts('create', {
+                    class: 'bg-warning', 
+                    delay: 5000,
+                    autohide: true,
+                    title: 'Warning!',
+                    // subtitle: 'Subtitle',
+                    body: 'Choose what kind of scraping configuration you are going to use.'
+                  })
+            }
         } catch (error) {
             $(document).Toasts('create', {
                 class: 'bg-warning', 

@@ -2,7 +2,7 @@ const form = document.querySelector('#loginForm')
 const response_html = document.querySelector('.social-auth-links.text-center.mb-3')
 
 form.addEventListener('keypress', function(e){
-    e.preventDefault()
+    // e.preventDefault()
     e.stopImmediatePropagation()
     if(e.which == 13){
         $('#btnSignIn').click()

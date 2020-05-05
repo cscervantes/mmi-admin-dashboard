@@ -16,6 +16,10 @@ router.post('/', function(req, res, next){
     })
 })
 
+router.get('/add', auth.redirectLogin, function(req, res, next){
+    res.render('pages/article/add', { title:"New Article", path:req.originalUrl })
+})
+
 router.get('/view/:id', auth.redirectLogin, function(req, res, next){
     request.get(configUrl+'article/'+req.params.id, {headers:configHeaders}, function(error, response, body){
         if(error){

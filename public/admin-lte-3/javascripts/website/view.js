@@ -16,7 +16,7 @@ editor2.setOptions({
     autoScrollEditorIntoView: true,
 });
 
-let edit_mode = (is_using_selectors) ? "ace/mode/json" : "ace/mode/javascript"
+let edit_mode = (is_using_selectors) ? "ace/mode/json" : "ace/mode/typescript"
 let editor3 = ace.edit("scraper-div")
 editor3.setTheme("ace/theme/monokai")
 editor3.session.setMode(edit_mode)
@@ -266,7 +266,7 @@ $(document).on('click', '#btnSaveArticles', function(){
                 
             }).fail(function(response){
                 console.log(response)
-                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-times-circle"></i></a>`)
+                $('dl').eq(1).children('dd').eq(data.idx).html(`<a class="nav-link" href="${data.href}" target="_blank">${data.href} <i class="fas fa-times-circle" title="${response.responseText}"></i></a>`)
             }) 
         }, Math.floor(Math.random() * 10000) + 3500);
         
@@ -594,4 +594,103 @@ $(document).on('click', 'button#btnAddSectionsToCrawl', function(){
             body: error
           })
     }
+})
+
+$(document).on('click','#btnEnableEdit', function(e){
+    const status = $(this).prop('checked')
+    if(status){
+        $('.no-display-content').css({'display': 'block'})
+        $('.hide-display-content').css({'display': 'none'})
+    }else{
+        $('.no-display-content').css({'display': 'none'})
+        $('.hide-display-content').css({'display': 'block'})
+    }
+})
+
+$(document).on('click', '#updateOthersConfig', function(e){
+    e.preventDefault()
+    const newFdata = new FormData(document.getElementById('form-config-others'))
+    const status = newFdata.get('status')
+    const needs_search_params = $("input[name='needs_search_params']").prop('checked')
+    const needs_https = $("input[name='needs_https']").prop('checked')
+    const needs_endslash = $("input[name='needs_endslash']").prop('checked')
+    const programming_language = $("input[name='programming_language']").val()
+    const is_dynamic_website = $("input[name='is_dynamic_website']").prop('checked')
+    const request_source = newFdata.get('request_source')
+    const is_using_selectors = $("input[name='is_using_selectors']").prop('checked')
+    const is_using_snippets = $("input[name='is_using_snippets']").prop('checked')
+    const updated_by = user
+    const date_updated = new Date()
+
+    const data = {
+        status, needs_search_params, needs_https, needs_endslash, programming_language,
+        is_dynamic_website, request_source, is_using_selectors, is_using_snippets,
+        updated_by, date_updated
+    }
+    $.ajax({
+        url: '/mmi-admin-dashboard/websites/update/'+id,
+        method: 'POST',
+        'contentType': 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        beforeSend: function(xhr){
+            $('#result-card').html('')
+            $('.overlay').css({
+                'display': 'flex'
+            })
+        }
+    }).done(function(response){
+        if(response.hasOwnProperty('data')){
+            $(document).Toasts('create', {
+                class: 'bg-success', 
+                delay: 3000,
+                autohide: true,
+                title: 'Success.',
+                // subtitle: 'Subtitle',
+                body: response.data.website_name+' has been successfully updated.'
+              })
+            // $('form#form-website')[0].reset()
+            setTimeout(() => {
+                location.reload()
+            }, 2500);
+            
+        }
+        if(response.hasOwnProperty('error')){
+            $(document).Toasts('create', {
+                class: 'bg-warning', 
+                delay: 3000,
+                autohide: true,
+                title: 'Warning!',
+                // subtitle: 'Subtitle',
+                body: response.error.errmsg
+              })
+        }
+        $('.overlay').css({
+            'display': 'none'
+        })
+    }).fail(function(error){
+        if(error.hasOwnProperty('error')){
+            $(document).Toasts('create', {
+                class: 'bg-danger', 
+                delay: 3000,
+                autohide: true,
+                title: 'Oops!',
+                // subtitle: 'Subtitle',
+                body: error.error.errmsg
+              })
+        }else{
+            // $('span#response-status').text(error.statusText)
+            $(document).Toasts('create', {
+                class: 'bg-danger', 
+                delay: 3000,
+                autohide: true,
+                title: 'Oops!',
+                // subtitle: 'Subtitle',
+                body: error.responseText
+              })
+        }
+        $('.overlay').css({
+            'display': 'none'
+        })
+    })
 })
