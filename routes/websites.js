@@ -17,7 +17,6 @@ router.post('/', function(req, res, next) {
 })
 
 router.get('/term', function(req, res, next) {
-    console.log(req.query.term)
     request.get(configUrl+'web?website_name='+req.query.term, {headers:configHeaders}, function(error, response, body){
         if(error){
             next(error)

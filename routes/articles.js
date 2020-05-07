@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request').defaults({json:true})
 var auth = require('../authenticate')
 var config = require('../config')
+var franc = require('franc')
 var configUrl = (process.env.PRODUCTION) ? config.endpoints.production.url : config.endpoints.development.url
 var configHeaders = (process.env.PRODUCTION) ? config.endpoints.production.headers : config.endpoints.development.headers
 
@@ -18,6 +19,27 @@ router.post('/', function(req, res, next){
 
 router.get('/add', auth.redirectLogin, function(req, res, next){
     res.render('pages/article/add', { title:"New Article", path:req.originalUrl })
+})
+
+router.get('/count', function(req, res, next){
+    request.get(configUrl+'article/count?article_url='+req.query.article_url+'&article_status='+req.query.article_status, {headers:configHeaders}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
+router.post('/store', function(req, res, next){
+    req.body.article_language = franc(req.body.article_content)
+    request.post(configUrl+'article', {headers:configHeaders, body: req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
 })
 
 router.get('/view/:id', auth.redirectLogin, function(req, res, next){
@@ -49,6 +71,7 @@ router.get('/edit/:id', auth.redirectLogin, function(req, res, next){
 })
 
 router.post('/update/:id', function(req, res, next){
+    req.body.article_language = franc(req.body.article_content)
     request.put(configUrl+'article/'+req.params.id, {headers:configHeaders, body:req.body}, function(error, response, body){
         if(error){
             next(error)

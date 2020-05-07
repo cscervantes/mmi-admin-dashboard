@@ -1,0 +1,87 @@
+extends ../../layout
+block css
+    link(rel="stylesheet", href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+block content
+    .row
+        .col-sm-12
+            .card.card-primary.card-outline
+                .card-header
+                    ul.nav.nav-pills
+                        li.nav-item
+                            a(href="#online-upload", data-toggle="tab", class="nav-link active") Online Upload
+                        li.nav-item
+                            a(href="#manual-upload", data-toggle="tab", class="nav-link") Manual Upload
+                .card-body
+                    .tab-content
+                        #online-upload.active.tab-pane
+                            .row
+                                .col-sm-12
+                                    .form-group
+                                        label(for="urls") Article Urls
+                                        textarea#urls.form-control(name="urls", cols="30", rows="10", style="resize:none")
+                                    .form-group
+                                        button#addMultipleArticles.btn.btn-primary(type="button") Add articles
+                                #article_results.col-sm-12
+                        #manual-upload.tab-pane
+                            .row
+                                .col-sm-3
+                                    input#website_id.form-control(type="hidden", name="website_id")
+                                    input#needs_search_params.form-control(type="hidden", name="needs_search_params")
+                                    input#needs_https.form-control(type="hidden", name="needs_https")
+                                    input#needs_endslash.form-control(type="hidden", name="needs_endslash")
+                                    .form-group
+                                        label(for="website_name") Website
+                                        input#website_name.form-control(type="text", name="website_name")
+                                    .form-group
+                                        label(for="article_source_url") Source Url
+                                        input#article_source_url.form-control.disable-on-empty(type="text", name="article_source_url", disabled)
+                                    .form-group
+                                        label(for="global") Global Rank
+                                        input#global.form-control.disable-on-empty(type="number", name="global", disabled)
+                                    .form-group
+                                        label(for="local") Local Rank
+                                        input#local.form-control.disable-on-empty(type="number", name="local", disabled)
+                                    .form-group
+                                        label(for="website_cost") Website Cost
+                                        input#website_cost.form-control.disable-on-empty(type="number", name="website_cost", disabled)
+                                    .form-group
+                                        label(for="article_ad_value") AD Value
+                                        input#article_ad_value.form-control.disable-on-empty(type="number", name="article_ad_value", disabled)
+                                    .form-group
+                                        label(for="article_pr_value") PR Value
+                                        input#article_pr_value.form-control.disable-on-empty(type="number", name="article_pr_value", disabled)
+                                .col-sm-9
+                                    .form-group
+                                        label(for="article_title") Title
+                                        input#article_title.form-control.disable-on-empty(type="text", name="article_title", disabled)
+                                    .form-group
+                                        label(for="article_url") Url
+                                        input#article_url.form-control.disable-on-empty(type="text", name="article_url", disabled)
+                                    .form-group
+                                        label(for="article_publish_date") Date Publish
+                                        input#article_publish_date.form-control.disable-on-empty(type="datetime-local", name="article_publish_date", disabled)
+                                    .form-group
+                                        label(for="article_authors") Author(s)
+                                        textarea#article_authors.form-control.disable-on-empty(name="article_authors", style="resize:none;", disabled)
+                                    .form-group
+                                        label(for="article_sections") Section(s)
+                                        textarea#article_sections.form-control.disable-on-empty(name="article_sections", style="resize:none;", disabled)
+                                    .form-group
+                                        label(for="article_images") Image(s)
+                                        textarea#article_images.form-control.disable-on-empty.article_compute(name="article_images", style="resize:none;", disabled)
+                                    .form-group
+                                        label(for="article_videos") Video(s)
+                                        textarea#article_videos.form-control.disable-on-empty.article_compute(name="article_videos", style="resize:none;", disabled)
+                                    .form-group
+                                        label(for="article_content") Content
+                                        textarea#article_content.form-control.disable-on-empty.article_compute(name="article_content", cols="30", rows="10", style="resize:none;", disabled)
+                                    .form-group
+                                        button#btnAddNewArticle.btn.btn-primary.disable-on-empty(type="button", disabled) Add Article
+
+block js
+    script.
+        const userData = JSON.parse('!{JSON.stringify(session)}')
+        const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
+    script(src="https://code.jquery.com/jquery-migrate-3.0.0.min.js")
+    script(src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js")
+    script(src="/admin-lte-3/javascripts/article/add.js")
