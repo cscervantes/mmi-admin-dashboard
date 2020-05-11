@@ -549,8 +549,9 @@ $(document).on('click', 'button#btnAddSectionsToCrawl', function(){
             $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
             setTimeout(() => {
                 let dataObj = {
-                    website: data.id,
+                    website: data.website,
                     section_url: data.section_url,
+                    updated_by: user,
                     date_created: new Date(),
                     date_updated: new Date()
                 }
