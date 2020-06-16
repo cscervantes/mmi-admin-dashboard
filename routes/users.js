@@ -28,7 +28,7 @@ router.post('/login', function(req, res, next) {
 
 router.get('/logout', function(req, res, next) {
   req.session.destroy()
-  res.redirect('/')
+  res.redirect('/mmi-admin-dashboard')
 })
 
 module.exports = router;
