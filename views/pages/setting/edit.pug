@@ -152,10 +152,11 @@ block content
                                 textarea#code_snippet.form-control(name="code_snippet", cols="30", rows="10", readonly)
                                     | // this will be configure later
                                     | class Article {
-                                    |     constructor($wrapper, $string, $moment){
+                                    |     constructor($wrapper, $string, $moment, $article_url){
                                     |         this._cheerio = $wrapper;
                                     |         this._string = $string;
                                     |         this._moment = $moment;
+                                    |         this._url = $article_url;
                                     |     }
                                     | }
                                     | 
