@@ -7,7 +7,10 @@ block content
                 .card-body.box-profile
                     .text-center
                         a(href=website_url, title="Visit "+website_url+" in the browser", target="_blank")
-                            span(class="fas fa-globe", style="font-size:50px")
+                            if status == "INACTIVE"
+                                span(class="fas fa-globe", style="font-size:50px; color:grey;")
+                            else
+                                span(class="fas fa-globe", style="font-size:50px;")
                     h3(class="profile-username text-center")=website_name
                     p(class="text-muted text-center")=website_category
                         |  | #{website_type}
@@ -27,6 +30,9 @@ block content
                         li(class="list-group-item")
                             b Language
                             a(class="float-right")=website_language
+                        li(class="list-group-item")
+                            b Website Status
+                            a(class="float-right")=status
             .card
                 .card-body.box-profile
                     h3(class="profile-username text-center") History
@@ -38,7 +44,7 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Created
-                    p.text-muted(title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
+                    p.text-muted(title=moment(date_created).format('LLLL'))=moment(date_created).utcOffset(8).fromNow()
                     hr
                     strong
                         i.fas.fa-user
@@ -48,7 +54,7 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Updated
-                    p.text-muted(title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
+                    p.text-muted(title=moment(date_updated).format('LLLL'))=moment(date_updated).utcOffset(8).fromNow()
         
         .col-sm-9
             .card

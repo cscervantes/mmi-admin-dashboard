@@ -70,7 +70,7 @@ $(document).ready(function(){
             },
             {
                 targets: [3, 7], render: function(data, type, row){
-                    return moment(data).format('LLLL')
+                    return moment(data).utcOffset(8).format('LLLL')
                 }
             }
         ],

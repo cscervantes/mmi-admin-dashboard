@@ -72,6 +72,11 @@ function websiteTable(account_type){
                     targets:1, render:function(data, type, row){
                         return `<a class="nav-link" href="${row.website_url}" data-toggle="tooltip" title="Go to ${data}" target="_blank">${data}</a>`
                     }
+                },
+                {
+                    targets: 6, render: function(data, type, row){
+                        return moment(data).utcOffset(8).format('LLLL')
+                    }
                 }
                 
             ],
