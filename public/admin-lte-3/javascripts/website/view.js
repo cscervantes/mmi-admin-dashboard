@@ -28,6 +28,42 @@ editor3.setOptions({
 
 const overlay = $('.overlay').eq(0)
 
+async function fetching(url, method, data){
+    const response = await fetch(url, {
+        method: method || 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json()
+}
+
+$(document).ready(async () => {
+    let q = await fetching('/mmi-admin-dashboard/articles/count/'+id, 'POST', {
+        article_status: "Queued",
+        website: id
+    })
+    console.log(q)
+    $('a[href="#queued_articles"]').text(`Queued Articles(${q.length})`)
+
+    let wrapper = '<dl><dt><button id="scrapeArticles" class="btn btn-success">Scrape Articles</button></dt>'
+    wrapper += q.articles.data.map(v=>{
+        return `<dd id="${v._id}" data-url=${v.article_url}>${v.article_url}<textarea style="display:none;" id="${v._id}">${JSON.stringify(v.website,null,4)}</textarea>`
+    }).join('</dd>')
+    if(q.articles.data.length > 0){
+        $('div#queued_articles').html(wrapper)
+    }else{
+        $('div#queued_articles').html('No queued Articles.')
+    }
+    
+})
+
+$(document).on('click', 'button[id="scrapeArticles"]', function(){
+    let txtAreas = $('dl textarea')
+    console.log(txtAreas.length)
+})
+
 $(document).on('click', 'button#btnBrowseSection', function(){
     try {
         const section_filters = JSON.parse(editor.getValue())

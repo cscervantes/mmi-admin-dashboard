@@ -69,6 +69,8 @@ block content
                         if session.user.acc_type == 'dev'
                             li.nav-item
                                 a(href="#others", data-toggle="tab", class="nav-link", aria-expanded="false") Others
+                        li.nav-item
+                            a(href="#queued_articles", data-toggle="tab", class="nav-link", aria-expanded="false") Queued Articles(0)
                 .card-body
                     .tab-content
 
@@ -221,7 +223,9 @@ block content
                                                 input#is_using_snippets(type="checkbox", name="is_using_snippets", class="custom-control-input", checked=(is_using_snippets) ? true  : false)
                                                 label(for="is_using_snippets", class="custom-control-label") NO | YES
                                 button#updateOthersConfig.btn.btn-warning.no-display-content(style="display:none", type="button") Save Changes
-
+                        #queued_articles.tab-pane
+                            h3 Wew
+                
                 .overlay(style="display:none;")
                     i(class="fas fa-2x fa-sync-alt fa-spin")
             .card#result-card                             

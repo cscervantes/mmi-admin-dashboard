@@ -91,4 +91,54 @@ router.post('/delete/:id', function(req, res, next){
     })
 })
 
+router.post('/count/:website', async function(req, res, next){
+   try {
+       let count = await countQueued(req)
+       let articles = await listArticles(req, count.data.result)
+       let data = {
+           length: count.data.result,
+           articles
+       }
+       res.status(200).send(data)
+   } catch (error) {
+       next(error)
+   }
+    
+})
+
+async function countQueued(req) {
+    const promise = new Promise(async(resolve, reject) => {
+        try {
+             request.post(configUrl+'article/count', {headers:configHeaders, body:req.body}, function(error, response, body){
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(body)
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    })
+    return promise
+}
+
+async function listArticles(req, limit) {
+    const promise = new Promise(async(resolve, reject) => {
+        try {
+             request.get(`${configUrl}article?website=${req.params.website}&article_status=Queued&limit=${limit}`, {headers:configHeaders}, function(error, response, body){
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(body)
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    })
+    return promise
+}
 module.exports = router
