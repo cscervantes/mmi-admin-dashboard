@@ -44,24 +44,215 @@ $(document).ready(async () => {
         article_status: "Queued",
         website: id
     })
-    console.log(q)
+    
+    let e = await fetching('/mmi-admin-dashboard/articles/count/'+id, 'POST', {
+        article_status: "Error",
+        website: id
+    })
+
     $('a[href="#queued_articles"]').text(`Queued Articles(${q.length})`)
 
-    let wrapper = '<dl><dt><button id="scrapeArticles" class="btn btn-success">Scrape Articles</button></dt>'
-    wrapper += q.articles.data.map(v=>{
-        return `<dd id="${v._id}" data-url=${v.article_url}>${v.article_url}<textarea style="display:none;" id="${v._id}">${JSON.stringify(v.website,null,4)}</textarea>`
-    }).join('</dd>')
+    $('a[href="#error_articles"]').text(`Error Articles(${e.length})`)
+    
+    let wrapper = ''
+    wrapper += `<table><tbody>
+        <tr>
+            <td>
+                <div class="form-group clearfix">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="tickall">
+                        <label for="tickall" class="custom-control-label">Tick all</label>
+                        <button id="scrapeQueuedArticles" class="btn btn-success btn-sm" disabled="disabled">Scrape now</button>
+                    </div>
+                </div>
+            </td>
+        </tr>    
+    `
+        wrapper += q.articles.data.map(v=>{
+            return `
+                <tr id="${v._id}">
+                    <td>
+                        <div class="form-group clearfix">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="input-${v._id}"/>
+                                <label for="input-${v._id}" class="custom-control-label">${v.article_url.substring(0,50)}...</label>
+                                <a href="${v.article_url}" target="_blank"><i class="fas fa-link"></i> </a>
+                                <i class="fas fa-spinner fa-pulse" style="display:none;" title="Fetching..." id=${v._id}></i>
+                            </div>
+                            <textarea style="display:none;" id="${v._id}">${JSON.stringify({article_id: v._id, article_url: v.article_url, ...v.website},null,4)}</textarea>
+                        </div>
+                    </td>
+            `
+        }).join('</tr>')
+    wrapper += '</tbody></table>'
+
     if(q.articles.data.length > 0){
         $('div#queued_articles').html(wrapper)
     }else{
         $('div#queued_articles').html('No queued Articles.')
     }
+
+    let wrapper2 = ''
+    wrapper2 += `<table><tbody>
+        <tr>
+            <td>
+                <div class="form-group clearfix">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="tickall2">
+                        <label for="tickall2" class="custom-control-label">Tick all</label>
+                        <button id="scrapeErrorArticles" class="btn btn-success btn-sm" disabled="disabled">Reprocess(es)</button>
+                        <button id="removeErrorArticles" class="btn btn-warning btn-sm" disabled="disabled">Remove(s)</button>
+                    </div>
+                </div>
+            </td>
+        </tr>    
+    `
+        wrapper2 += e.articles.data.map(v=>{
+            return `
+                <tr id="${v._id}">
+                    <td>
+                        <div class="form-group clearfix">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox" id="input2-${v._id}"/>
+                                <label for="input2-${v._id}" class="custom-control-label">${v.article_url.substring(0,50)}...</label>
+                                <a href="${v.article_url}" target="_blank"><i class="fas fa-link"></i> </a>
+                                <i class="fas fa-spinner fa-pulse" style="display:none;" title="Fetching..." id=${v._id}></i>
+                            </div>
+                            <textarea style="display:none;" id="${v._id}">${JSON.stringify({article_id: v._id, article_url: v.article_url, ...v.website},null,4)}</textarea>
+                        </div>
+                    </td>
+                    <td id="error-${v.article_id}">${v.article_error_status}</td>
+                    <td>${moment(v.date_created).subtract(8, 'hours').fromNow()}</td>
+            `
+        }).join('</tr>')
+    wrapper2 += '</tbody></table>'
+    if(e.articles.data.length > 0){
+        $('div#error_articles').html(wrapper2)
+    }else{
+        $('div#error_articles').html('No error Articles.')
+    }
     
 })
 
-$(document).on('click', 'button[id="scrapeArticles"]', function(){
-    let txtAreas = $('dl textarea')
-    console.log(txtAreas.length)
+$(document).on('change', 'input#tickall', function(){
+    let t_state = $(this).prop('checked')
+    if(t_state) {
+        $('input[id^="input-"]').prop('checked', true)
+        $('#scrapeQueuedArticles').prop('disabled', false)
+    }else{
+        $('input[id^="input-"]').prop('checked', false)
+        $('#scrapeQueuedArticles').prop('disabled', true)
+    }
+    
+})
+
+$(document).on('change', 'input[id^="input-"]', function(){
+    let t_state = $(this).prop('checked')
+    let count_status = $('input[id^="input-"]:checkbox:checked').length
+    if(t_state || count_status > 0){
+        $('#scrapeQueuedArticles').prop('disabled', false)
+    }else{
+        $('#scrapeQueuedArticles').prop('disabled', true)
+    }
+})
+
+$(document).on('click', 'button#scrapeQueuedArticles', function(){
+    let getCheckBoxes = $('input[id^="input-"]:checked').map(function(){
+        let txtBoxID = $(this).attr('id').split('input-')[1]
+        return JSON.parse($(`textarea[id=${txtBoxID}]`).val())
+    }).get()
+    Promise.allSettled(getCheckBoxes.map(async v=>{
+        let _loader = $(`i[id=${v.article_id}]`)
+        let _tr = $(`tr[id=${v.article_id}]`)
+        _loader.show()
+        setTimeout(async() => {
+            fetching('/mmi-admin-dashboard/advance/'+v.article_id, 'PUT', v)
+            .then(v=>{
+                _loader.hide()
+                _tr.remove()
+                console.log(v)
+            })
+            .catch(e=>{
+                _loader.hide()
+                console.log(e)
+            })
+        }, Math.floor(Math.random() * 10000) + 3500);
+    }))
+})
+
+$(document).on('change', 'input#tickall2', function(){
+    let t_state = $(this).prop('checked')
+    if(t_state) {
+        $('input[id^="input2-"]').prop('checked', true)
+        $('#scrapeErrorArticles').prop('disabled', false)
+        $('#removeErrorArticles').prop('disabled', false)
+    }else{
+        $('input[id^="input2-"]').prop('checked', false)
+        $('#scrapeErrorArticles').prop('disabled', true)
+        $('#removeErrorArticles').prop('disabled', true)
+    }
+    
+})
+
+$(document).on('change', 'input[id^="input2-"]', function(){
+    let t_state = $(this).prop('checked')
+    let count_status = $('input[id^="input2-"]:checkbox:checked').length
+    if(t_state || count_status > 0){
+        $('#scrapeErrorArticles').prop('disabled', false)
+        $('#removeErrorArticles').prop('disabled', false)
+    }else{
+        $('#scrapeErrorArticles').prop('disabled', true)
+        $('#removeErrorArticles').prop('disabled', true)
+    }
+})
+
+$(document).on('click', 'button#scrapeErrorArticles', function(){
+    let getCheckBoxes = $('input[id^="input2-"]:checked').map(function(){
+        let txtBoxID = $(this).attr('id').split('input2-')[1]
+        return JSON.parse($(`textarea[id=${txtBoxID}]`).val())
+    }).get()
+    Promise.allSettled(getCheckBoxes.map(async v=>{
+        let _loader = $(`i[id=${v.article_id}]`)
+        let _tr = $(`tr[id=${v.article_id}]`)
+        let _error = $(`td[id="error-${v.article_id}"]`)
+        _loader.show()
+        setTimeout(async() => {
+            fetching('/mmi-admin-dashboard/advance/'+v.article_id, 'PUT', v)
+            .then(v=>{
+                _loader.hide()
+                _tr.remove()
+                console.log(JSON.stringify(v))
+            })
+            .catch(e=>{
+                _loader.hide()
+                _error.html(e)
+            })
+        }, Math.floor(Math.random() * 10000) + 3500);
+    }))
+})
+
+$(document).on('click', 'button#removeErrorArticles', function(){
+    let getCheckBoxes = $('input[id^="input2-"]:checked').map(function(){
+        let txtBoxID = $(this).attr('id').split('input2-')[1]
+        return JSON.parse($(`textarea[id=${txtBoxID}]`).val())
+    }).get()
+    Promise.allSettled(getCheckBoxes.map(async v=>{
+        let _loader = $(`i[id=${v.article_id}]`)
+        let _tr = $(`tr[id=${v.article_id}]`)
+        _loader.show()
+        setTimeout(async() => {
+            fetching('/mmi-admin-dashboard/articles/delete/'+v.article_id, 'POST', v)
+            .then(v=>{
+                _loader.hide()
+                _tr.remove()
+                console.log(v)
+            })
+            .catch(e=>{
+                _loader.hide()
+                console.log(e)
+            })
+        }, Math.floor(Math.random() * 10000) + 3500);
+    }))
 })
 
 $(document).on('click', 'button#btnBrowseSection', function(){

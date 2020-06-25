@@ -127,7 +127,7 @@ async function countQueued(req) {
 async function listArticles(req, limit) {
     const promise = new Promise(async(resolve, reject) => {
         try {
-             request.get(`${configUrl}article?website=${req.params.website}&article_status=Queued&limit=${limit}`, {headers:configHeaders}, function(error, response, body){
+             request.get(`${configUrl}article?website=${req.params.website}&article_status=${req.body.article_status}&limit=${limit}`, {headers:configHeaders}, function(error, response, body){
                 if(error){
                     reject(error)
                 }else{

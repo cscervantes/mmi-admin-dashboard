@@ -85,4 +85,20 @@ router.post('/media_values', function(req, res, next){
     })
 })
 
+router.put('/:article_id', function(req, res, next){
+    try {
+        request.put(lambdaUrl+'article/'+req.params.article_id, {body:req.body}, function(error, response, body){
+            if(error){
+                console.log(error)
+                next(error)
+            }else{
+                res.status(200).send(body)
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+})
+
 module.exports = router

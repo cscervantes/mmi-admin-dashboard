@@ -60,13 +60,13 @@ block content
             ul(class="list-group list-group-unbordered mb-3")
                 li(class="list-group-item")
                     b System Added
-                    a(class="float-right", title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
+                    a(class="float-right", title=moment(date_created).subtract(8, 'hours').format('LLLL'))=moment(date_created).subtract(8, 'hours').fromNow()
                 li(class="list-group-item")
                     b Created By
                     a(class="float-right")=created_by
                 li(class="list-group-item")
                     b Last Modified
-                    a(class="float-right", title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
+                    a(class="float-right", title=moment(date_updated).subtract(8, 'hours').format('LLLL'))=moment(date_updated).subtract(8, 'hours').fromNow()
                 li(class="list-group-item")
                     b Modified By
                     a(class="float-right")=updated_by

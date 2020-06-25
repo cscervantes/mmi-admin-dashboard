@@ -44,7 +44,7 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Created
-                    p.text-muted(title=moment(date_created).format('LLLL'))=moment(date_created).utcOffset(8).fromNow()
+                    p.text-muted(title=moment(date_created).subtract(8, 'hours').format('LLLL'))=moment(date_created).subtract(8, 'hours').fromNow()
                     hr
                     strong
                         i.fas.fa-user
@@ -54,7 +54,7 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Updated
-                    p.text-muted(title=moment(date_updated).format('LLLL'))=moment(date_updated).utcOffset(8).fromNow()
+                    p.text-muted(title=moment(date_updated).subtract(8, 'hours').format('LLLL'))=moment(date_updated).subtract(8, 'hours').fromNow()
         
         .col-sm-9
             .card
@@ -71,6 +71,8 @@ block content
                                 a(href="#others", data-toggle="tab", class="nav-link", aria-expanded="false") Others
                         li.nav-item
                             a(href="#queued_articles", data-toggle="tab", class="nav-link", aria-expanded="false") Queued Articles(0)
+                        li.nav-item
+                            a(href="#error_articles", data-toggle="tab", class="nav-link", aria-expanded="false") Error Articles(0)
                 .card-body
                     .tab-content
 
@@ -224,7 +226,9 @@ block content
                                                 label(for="is_using_snippets", class="custom-control-label") NO | YES
                                 button#updateOthersConfig.btn.btn-warning.no-display-content(style="display:none", type="button") Save Changes
                         #queued_articles.tab-pane
-                            h3 Wew
+                            h3 Queued here
+                        #error_articles.tab-pane
+                            h3 Error here
                 
                 .overlay(style="display:none;")
                     i(class="fas fa-2x fa-sync-alt fa-spin")
@@ -249,4 +253,5 @@ block js
         const website_cost = JSON.parse(`!{website_cost}`)
         const sections = JSON.parse(`!{JSON.stringify(main_sections)}`)
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
+    script(src="/admin-lte-3/javascripts/moment.min.js")
     script(src="/admin-lte-3/javascripts/website/view.js")
