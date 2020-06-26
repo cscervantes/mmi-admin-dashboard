@@ -82,6 +82,8 @@ $(document).ready(async () => {
                             <textarea style="display:none;" id="${v._id}">${JSON.stringify({article_id: v._id, article_url: v.article_url, ...v.website},null,4)}</textarea>
                         </div>
                     </td>
+                    <td id="error-${v._id}"></td>
+                    <td>${moment(v.date_created).subtract(8, 'hours').fromNow()}</td>
             `
         }).join('</tr>')
     wrapper += '</tbody></table>'
@@ -121,7 +123,7 @@ $(document).ready(async () => {
                             <textarea style="display:none;" id="${v._id}">${JSON.stringify({article_id: v._id, article_url: v.article_url, ...v.website},null,4)}</textarea>
                         </div>
                     </td>
-                    <td id="error-${v.article_id}">${v.article_error_status}</td>
+                    <td id="error-${v._id}">${v.article_error_status}</td>
                     <td>${moment(v.date_created).subtract(8, 'hours').fromNow()}</td>
             `
         }).join('</tr>')
@@ -164,6 +166,7 @@ $(document).on('click', 'button#scrapeQueuedArticles', function(){
     Promise.allSettled(getCheckBoxes.map(async v=>{
         let _loader = $(`i[id=${v.article_id}]`)
         let _tr = $(`tr[id=${v.article_id}]`)
+        let _error = $(`td[id="error-${v.article_id}"]`)
         _loader.show()
         setTimeout(async() => {
             fetching('/mmi-admin-dashboard/advance/'+v.article_id, 'PUT', v)
@@ -174,6 +177,7 @@ $(document).on('click', 'button#scrapeQueuedArticles', function(){
             })
             .catch(e=>{
                 _loader.hide()
+                _error.html(e)
                 console.log(e)
             })
         }, Math.floor(Math.random() * 10000) + 3500);

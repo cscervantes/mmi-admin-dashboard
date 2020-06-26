@@ -75,7 +75,7 @@ function websiteTable(account_type){
                 },
                 {
                     targets: 6, render: function(data, type, row){
-                        return moment(data).utcOffset(8).format('LLLL')
+                        return moment(data).subtract(8, 'hours').format('LLLL')
                     }
                 }
                 
