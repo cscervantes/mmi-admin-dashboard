@@ -432,7 +432,7 @@ $(document).on('click',  'button#btnBrowseArticle', function(){
                 })
                 $(document).Toasts('create', {
                     class: 'bg-danger', 
-                    delay: 3000,
+                    delay: 180000,
                     autohide: true,
                     title: 'Oops!',
                     // subtitle: 'Subtitle',
@@ -453,7 +453,7 @@ $(document).on('click',  'button#btnBrowseArticle', function(){
         console.log(error)
         $(document).Toasts('create', {
             class: 'bg-warning', 
-            delay: 3000,
+            delay: 180000,
             autohide: true,
             title: 'Warning!',
             // subtitle: 'Subtitle',

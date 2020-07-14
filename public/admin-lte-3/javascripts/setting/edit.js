@@ -230,7 +230,7 @@ function editWebsite(ace){
                         })
                         $(document).Toasts('create', {
                             class: 'bg-danger', 
-                            delay: 3000,
+                            delay: 180000,
                             autohide: true,
                             title: 'Oops!',
                             // subtitle: 'Subtitle',
@@ -240,7 +240,7 @@ function editWebsite(ace){
                 }else{
                     $(document).Toasts('create', {
                         class: 'bg-warning', 
-                        delay: 3000,
+                        delay: 180000,
                         autohide: true,
                         title: 'Warning!',
                         // subtitle: 'Subtitle',
@@ -260,7 +260,7 @@ function editWebsite(ace){
         } catch (error) {
             $(document).Toasts('create', {
                 class: 'bg-warning', 
-                delay: 3000,
+                delay: 180000,
                 autohide: true,
                 title: 'Warning!',
                 // subtitle: 'Subtitle',

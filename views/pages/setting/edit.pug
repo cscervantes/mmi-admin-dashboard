@@ -181,8 +181,17 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             let selector = ''
-                                    |             let title = $(selector).eq(0).text().trim()
+                                    |             let selectors = [
+                                    |                {
+                                    |                   "selector": "title",
+                                    |                   "attribute": null
+                                    |                }
+                                    |             ]
+                                    |
+                                    |             let select = (selectors.length > 0) ? selectors.filter(v=>$(v.selector).length > 0) : reject('(Title) No selectors')
+                                    |             let selector = select.splice(-1)[0]
+                                    |             let title = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).eq(0).text().trim()
+                                    |
                                     |             if(!title){
                                     |                  reject('Missing title.')
                                     |             }else{
@@ -200,8 +209,17 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here
-                                    |             let selector = ''
-                                    |             let date = $(selector).eq(0).text().trim()
+                                    |             let selectors = [
+                                    |               {
+                                    |                   "selector": "meta[property=\"article:published_time\"]",
+                                    |                   "attribute": "content"
+                                    |               }
+                                    |             ]
+                                    |            
+                                    |             let select = (selectors.length > 0) ? selectors.filter(v=>$(v.selector).length > 0) : reject('(Date) No selectors.')
+                                    |             let selector = select.splice(-1)[0]
+                                    |             let date = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).eq(0).text().trim()
+                                    |
                                     |             if(!date){
                                     |                   reject('Missing date.')
                                     |             }else{
@@ -219,11 +237,19 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, author is array value
-                                    |             let selector = ''
-                                    |             let authors = $(selector).map(function(){
-                                    |                    return $(this).text().trim()
-                                    |             }).get().filter(v=>v)
-                                    |             let _uniqAuthors = (authors.length > 0) ? Array.from(new Set(authors)) : []
+                                    |             let authors = []
+                                    |             let selectors = []
+                                    |
+                                    |             if(selectors.length > 0){
+                                    |               let select = selectors.filter(v=>$(v.selector).length > 0)
+                                    |               let selector = select.splice(-1)[0]
+                                    |               let _authors = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   return $(this).text().trim()
+                                    |               }).get().filter(v=>v)
+                                    |               authors.push(_authors.join(', '))                   
+                                    |             }                
+                                    |
+                                    |             let _uniqAuthors = (authors.length > 0) ? Array.from(new Set(authors)) : ["No - Author"]
                                     |             resolve(_uniqAuthors)
                                     |         }catch(error){
                                     |             reject(error)
@@ -237,11 +263,19 @@ block content
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
                                     |             // insert your code here, section is array value
-                                    |             let selector = ''
-                                    |             let sections = $(selector).map(function(){
-                                    |                     return $(this).text().trim()
-                                    |             }).get().filter(v=>v)
-                                    |             let _uniqSections = (sections.length > 0) ? Array.from(new Set(sections)) : []
+                                    |             let sections = []
+                                    |             let selectors = []
+                                    |
+                                    |             if(selectors.length > 0){
+                                    |               let select = selectors.filter(v=>$(v.selector).length > 0)
+                                    |               let selector = select.splice(-1)[0]
+                                    |               let _sections = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   return $(this).text().trim()
+                                    |               }).get().filter(v=>v)
+                                    |               sections.push(_sections.join(', '))
+                                    |             }
+                                    |
+                                    |             let _uniqSections = (sections.length > 0) ? Array.from(new Set(sections)) : ["#{website_category}"]
                                     |             resolve(_uniqSections)
                                     |         }catch(error){
                                     |             reject(error)
@@ -277,10 +311,18 @@ block content
                                     |             // insert your code here
                                     |             let ignoreTags = []
                                     |             ignoreTags.map(v=>$(v).remove())
-                                    |             let selector = ''
-                                    |             let text = $(selector).map(function(){
-                                    |                      return $(this).text().trim()
-                                    |             }).get().join(' ')
+                                    |             let selectors = [
+                                    |               {
+                                    |                   "selector": "article p",
+                                    |                   "attribute": null
+                                    |               }
+                                    |             ]
+                                    |             let select = selectors.filter(v=>$(v.selector).length > 0)
+                                    |             let selector = select.splice(-1)[0]
+                                    |             let text = (selector) ? $(selector.selector).map(function(){
+                                    |                        return $(this).text().trim()
+                                    |             }).get().join(' ') : ''
+                                    |
                                     |             let textContent = (text.length > 0) ? text : textFromTitle
                                     |             if(!textContent){
                                     |                  reject('Missing text.')
