@@ -17,3 +17,6 @@ admin-dashboard
     * node v12 or higher
     * npm v6 or higher
     * pm2 system process management (https://pm2.keymetrics.io/docs/usage/quick-start/)
+
+- PM2 Startup
+    *  PRODUCTION=true pm2 start bin/mmi-admin-dashboard-server --name admin-server
