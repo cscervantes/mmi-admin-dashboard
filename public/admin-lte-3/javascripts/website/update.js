@@ -121,7 +121,7 @@ $(document).on('change', 'input#website_url', function(){
             const newUrl = new URL(vUrl)
             const webUrl = newUrl.protocol+'//'+newUrl.hostname
             $(this).val(webUrl)
-            $('input#fqdn').val(newUrl.hostname)
+            $('input#fqdn').val(newUrl.hostname.replace(/^www./g, ''))
 
             let sections = $('#main_sections').val().split('\n')
             sections.push(webUrl)

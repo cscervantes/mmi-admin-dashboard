@@ -1,5 +1,58 @@
 extends ../layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .row
+    .col-md-6
+      //- h1= title
+      //- p Welcome to #{title}
+      .card.card-primary
+        .card-header
+          h3.card-title Website Status
+          .card-tools
+            button(type="button" class="btn btn-tool" data-card-widget="collapse")
+              i.fas.fa-minus
+            button(type="button" class="btn btn-tool" data-card-widget="maximize")
+              i.fas.fa-expand
+        .card-body
+          .chart
+            canvas(id="website-status", style="height:230px; min-height:230px")
+    .col-md-6
+      .card.card-success
+        .card-header
+          h3.card-title Article Status
+          .card-tools
+            button(type="button" class="btn btn-tool" data-card-widget="collapse")
+              i.fas.fa-minus
+            button(type="button" class="btn btn-tool" data-card-widget="maximize")
+              i.fas.fa-expand
+        .card-body
+          .chart
+            canvas(id="article-status", style="height:230px; min-height:230px")
+    .col-md-6
+      .card.card-warning
+        .card-header
+          h3.card-title Website Category
+          .card-tools
+            button(type="button" class="btn btn-tool" data-card-widget="collapse")
+              i.fas.fa-minus
+            button(type="button" class="btn btn-tool" data-card-widget="maximize")
+              i.fas.fa-expand
+        .card-body
+          .chart
+            canvas(id="website-category", style="height:230px; min-height:230px")
+    .col-md-6
+      .card.card-danger
+        .card-header
+          h3.card-title Website Type
+          .card-tools
+            button(type="button" class="btn btn-tool" data-card-widget="collapse")
+              i.fas.fa-minus
+            button(type="button" class="btn btn-tool" data-card-widget="maximize")
+              i.fas.fa-expand
+        .card-body
+          .chart
+            canvas(id="website-type", style="height:230px; min-height:230px")
+            
+block js
+  script(src="/admin-lte-3/plugins/chart.js/Chart.min.js")
+  script(src="/admin-lte-3/javascripts/dashboard/index.js")
