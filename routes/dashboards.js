@@ -7,10 +7,20 @@ var configHeaders = (process.env.PRODUCTION) ? config.endpoints.production.heade
 
 router.get('/:name', function(req, res, next){
     let _uri = configUrl+'dashboard/'+req.params.name
-    if(req.params.duration){
+    if(req.query.duration){
         _uri += '?duration='+req.query.duration
     }
     request.get(_uri, {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
+router.post('/article_metrics', function(req, res, next){
+    request.post(configUrl+'dashboard/article_metrics', {headers:configHeaders, body:req.body}, function(error, response, body){
         if(error){
             next(error)
         }else{

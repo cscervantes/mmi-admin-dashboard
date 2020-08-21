@@ -61,7 +61,10 @@ block content
                 .card-header.p-2
                     ul.nav.nav-pills
                         li.nav-item
-                            a(href="#sections", data-toggle="tab", class="nav-link active") Sections
+                            a(href="#metrics", data-toggle="tab", class="nav-link active", aria-expanded="false") Metrics
+                        li.nav-item
+                            //- a(href="#sections", data-toggle="tab", class="nav-link active") Sections
+                            a(href="#sections", data-toggle="tab", class="nav-link") Sections
                         li.nav-item
                             a(href="#filters", data-toggle="tab", class="nav-link") Filters
                         li.nav-item
@@ -76,7 +79,8 @@ block content
                 .card-body
                     .tab-content
 
-                        #sections.active.tab-pane
+                        //- #sections.active.tab-pane
+                        #sections.tab-pane
                             - const sections = main_sections.map(v=>`<li><a href="${v}" class="nav-link" target="_blank">${v}</a>`).join('</li>')
                             ul(style="list-style: square outside none;", id="main_sections") !{sections}
                             button#btnAddSectionsToCrawl.btn.btn-warning Add to crawler
@@ -229,6 +233,21 @@ block content
                             h3 Queued here
                         #error_articles.tab-pane
                             h3 Error here
+                        #metrics.active.tab-pane
+                            h3 Metrics (Done / Error)
+                            .row
+                                .col-md-12
+                                    .form-inline.float-right
+                                        .form-group
+                                            label(for="frequency") Frequency
+                                            input(type="number", class="form-control", id="frequency", value="2")
+                                        .form-group
+                                            label(for="today") Date
+                                            input(type="date", class="form-control", id="today")
+                                        .form-group
+                                            button#btnSubmit.btn.btn-default Send
+                                .col-md-12
+                                    table#metrics-table.table.table-bordered
                 
                 .overlay(style="display:none;")
                     i(class="fas fa-2x fa-sync-alt fa-spin")
@@ -253,5 +272,7 @@ block js
         const website_cost = JSON.parse(`!{website_cost}`)
         const sections = JSON.parse(`!{JSON.stringify(main_sections)}`)
     script(src="/admin-lte-3/javascripts/ace/src-noconflict/ace.js")
+    script(src="/admin-lte-3/plugins/lodash/lodash.min.js")
     script(src="/admin-lte-3/javascripts/moment.min.js")
     script(src="/admin-lte-3/javascripts/website/view.js")
+    script(src="/admin-lte-3/javascripts/website/metric.js")

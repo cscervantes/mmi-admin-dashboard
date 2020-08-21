@@ -21,6 +21,13 @@ block content
         .card-header
           h3.card-title Article Status
           .card-tools
+            select#duration(name="duration", class="btn btn-tool")
+              option(value="1day") 1 day
+              option(value="1week") 1 week
+              option(value="1month") 1 month
+              option(value="3month") 3 month
+              option(value="6month") 6 month
+              option(value="1year") 1 Year
             button(type="button" class="btn btn-tool" data-card-widget="collapse")
               i.fas.fa-minus
             button(type="button" class="btn btn-tool" data-card-widget="maximize")
@@ -52,6 +59,25 @@ block content
         .card-body
           .chart
             canvas(id="website-type", style="height:230px; min-height:230px")
+    .col-md-6
+      .card.card-success
+        .card-header
+          h3.card-title Social Media Status
+          .card-tools
+            select#duration2(name="duration2", class="btn btn-tool")
+              option(value="1day") 1 day
+              option(value="1week") 1 week
+              option(value="1month") 1 month
+              option(value="3month") 3 month
+              option(value="6month") 6 month
+              option(value="1year") 1 Year
+            button(type="button" class="btn btn-tool" data-card-widget="collapse")
+              i.fas.fa-minus
+            button(type="button" class="btn btn-tool" data-card-widget="maximize")
+              i.fas.fa-expand
+        .card-body
+          .chart
+            canvas(id="social-media-status", style="height:230px; min-height:230px")
             
 block js
   script(src="/admin-lte-3/plugins/chart.js/Chart.min.js")

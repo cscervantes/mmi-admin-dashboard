@@ -24,147 +24,66 @@ async function rq(url){
     return p
 }
 
-async function websiteStatus(){
-    try {
-        let r = await rq('/mmi-admin-dashboard/dashboards/website_status')
-        let labels = []
-        let data = []
-        r.forEach(element => {
-            labels.push(element._id)
-            data.push(element.count)
-        });
+class DashboardChart{
+  constructor(ctx, chartType){
+    this.chartType = chartType
+    this.myChart = new Chart(ctx, {
+      type: this.chartType || 'pie',
+      data: {},
+      options: {}
+    })
+  }
 
-        let donutData        = {
-            labels: labels,
-            datasets: [
-              {
-                data: data,
-                backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-              }
-            ]
-          }
-        
-        let donutOptions     = {
-            maintainAspectRatio : false,
-            responsive : true,
-          }
-        var donutChartCanvas = $('#website-status').get(0).getContext('2d')
-        new Chart(donutChartCanvas, {
-            type: 'doughnut',
-            data: donutData,
-            options: donutOptions      
-        })
-    } catch (error) {
-        console.log(error)
+  async draw(status, duration){
+    let _uri = '/mmi-admin-dashboard/dashboards/'+status
+    if(duration){
+      _uri += '?duration='+duration
     }
+    let r = await rq(_uri)
+    console.log(r)
+    let labels = []
+    let data = []
+    r.forEach(element => {
+        labels.push(element._id)
+        data.push(element.count)
+    });
+    this.myChart.type = this.chartType
+    this.myChart.data = {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#92b57d', '#473d94', '#631963', '#48635d'],
+        }
+      ]
+    }
+    this.myChart.update()
+  }
 }
 
-async function articleStatus(){
-    try {
-        let r = await rq('/mmi-admin-dashboard/dashboards/article_status')
-        let labels = []
-        let data = []
-        r.forEach(element => {
-            labels.push(element._id)
-            data.push(element.count)
-        });
+let websiteStatusChart = new DashboardChart(document.getElementById('website-status').getContext('2d'), 'doughnut')
+websiteStatusChart.draw('website_status')
 
-        let donutData        = {
-            labels: labels,
-            datasets: [
-              {
-                data: data,
-                backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-              }
-            ]
-          }
-        
-        let donutOptions     = {
-            maintainAspectRatio : false,
-            responsive : true,
-          }
-        var donutChartCanvas = $('#article-status').get(0).getContext('2d')
-        new Chart(donutChartCanvas, {
-            type: 'pie',
-            data: donutData,
-            options: donutOptions      
-        })
-    } catch (error) {
-        console.log(error)
-    }
-}
+let websiteTypeChart = new DashboardChart(document.getElementById('website-type').getContext('2d'), 'pie')
+websiteTypeChart.draw('website_type')
 
-async function websiteType(){
-    try {
-        let r = await rq('/mmi-admin-dashboard/dashboards/website_type')
-        let labels = []
-        let data = []
-        r.forEach(element => {
-            labels.push(element._id)
-            data.push(element.count)
-        });
+let websiteCategoryChart = new DashboardChart(document.getElementById('website-category').getContext('2d'), 'doughnut')
+websiteCategoryChart.draw('website_category')
 
-        let donutData        = {
-            labels: labels,
-            datasets: [
-              {
-                data: data,
-                backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-              }
-            ]
-          }
-        
-        let donutOptions     = {
-            maintainAspectRatio : false,
-            responsive : true,
-          }
-        var donutChartCanvas = $('#website-type').get(0).getContext('2d')
-        new Chart(donutChartCanvas, {
-            type: 'pie',
-            data: donutData,
-            options: donutOptions      
-        })
-    } catch (error) {
-        console.log(error)
-    }
-}
+let articleStatusChart = new DashboardChart(document.getElementById('article-status').getContext('2d'), 'pie')
+articleStatusChart.draw('article_status', '1day')
 
-async function websiteCategory(){
-    try {
-        let r = await rq('/mmi-admin-dashboard/dashboards/website_category')
-        let labels = []
-        let data = []
-        r.forEach(element => {
-            labels.push(element._id)
-            data.push(element.count)
-        });
+let socialstatusChart = new DashboardChart(document.getElementById('social-media-status').getContext('2d'), 'doughnut')
+socialstatusChart.draw('social_media_status', '1day')
 
-        let donutData        = {
-            labels: labels,
-            datasets: [
-              {
-                data: data,
-                backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-              }
-            ]
-          }
-        
-        let donutOptions     = {
-            maintainAspectRatio : false,
-            responsive : true,
-          }
-        var donutChartCanvas = $('#website-category').get(0).getContext('2d')
-        new Chart(donutChartCanvas, {
-            type: 'doughnut',
-            data: donutData,
-            options: donutOptions      
-        })
-    } catch (error) {
-        console.log(error)
-    }
-}
+$(document).on('change', 'select#duration', function(e){
+  e.preventDefault()
+  e.stopPropagation()
+  articleStatusChart.draw('article_status', $(this).val())
+})
 
-websiteStatus()
-articleStatus()
-websiteCategory()
-websiteType()
+$(document).on('change', 'select#duration2', function(e){
+  e.preventDefault()
+  e.stopPropagation()
+  socialstatusChart.draw('social_media_status', $(this).val())
+})
