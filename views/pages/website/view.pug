@@ -247,7 +247,12 @@ block content
                                         .form-group
                                             button#btnSubmit.btn.btn-default Send
                                 .col-md-12
-                                    table#metrics-table.table.table-bordered
+                                    .table-responsive
+                                        table#metrics-table.table.table-bordered
+                                #done-articles.col-md-6.table-responsive
+                                    h3 Done
+                                #error-articles.col-md-6.table-responsive
+                                    h3 Error
                 
                 .overlay(style="display:none;")
                     i(class="fas fa-2x fa-sync-alt fa-spin")

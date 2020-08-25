@@ -28,19 +28,30 @@ const hours = [
 
 async function rq(url='', method='GET', data={}){
     // Default options are marked with *
-  const response = await fetch(url, {
-    method: method, // *GET, POST, PUT, DELETE, etc.
+  let opts = {}
+  if(method==='POST'){
+    opts.method =  method // *GET, POST, PUT, DELETE, etc.
     // mode: 'cors', // no-cors, *cors, same-origin
     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     // credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
+    opts.headers = {
       'Content-Type': 'application/json'
       // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    }
     // redirect: 'follow', // manual, *follow, error
     // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
+    opts.body = JSON.stringify(data) // body data type must match "Content-Type" header
+  }else{
+    opts.method =  method // *GET, POST, PUT, DELETE, etc.
+    // mode: 'cors', // no-cors, *cors, same-origin
+    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    // credentials: 'same-origin', // include, *same-origin, omit
+    opts.headers = {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    }
+  }
+  const response = await fetch(url, opts);
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
@@ -119,9 +130,41 @@ async function metrics(every, date){
     $(`th[id="done-error"]`).text(_.sum(totalDone)+ ' / '+_.sum(totalError))
 }
 
+async function articles(website, status, fields, date){
+    try {
+        let from = moment(date+'T00:00:00').utc().format()
+        let to = moment(date+'T23:59:59').utc().format()
+        let _uri = `/mmi-admin-dashboard/dashboards/article_per_website?fields=${JSON.stringify(fields)}&from=${from}&to=${to}&article_status=${status}&website=${website}`
+        let article = await rq(_uri, 'GET')
+        if(status === "Done"){
+            let tableWrapper = '<table class="table table-bordered">'
+            tableWrapper+= `<thead><tr><th>Done (${article.length})</th></tr></thead>`
+            tableWrapper+= article.map(function(a){
+                return `<tr><td><a href="${a.article_url}">${a.article_title}</a></td>`
+            }).join('</tr>')
+            tableWrapper+= '</table>'
+            $('#done-articles').html(tableWrapper)
+        }
+        if(status === 'Error'){
+            let tableWrapper = '<table class="table table-bordered">'
+            tableWrapper+= `<thead><tr><th colspan="2">Error (${article.length})</th></tr></thead>`
+            tableWrapper+= article.map(function(a){
+                return `<tr><td><a href="${a.article_url}">${a.article_url}</a></td><td>${a.article_error_status}</td>`
+            }).join('</tr>')
+            tableWrapper+= '</table>'
+            $('#error-articles').html(tableWrapper)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 metrics(2, moment().format('Y-MM-DD'))
+articles(id, 'Done', {"article_title":1,"article_url": 1}, moment().format('Y-MM-DD'))
+articles(id, 'Error', {"article_url":1,"article_error_status": 1}, moment().format('Y-MM-DD'))
 
 $('button#btnSubmit').click(function(){
     console.log($('input[type="date"]').val())
     metrics($('input[id="frequency"]').val(), $('input[type="date"]').val() || moment().format('Y-MM-DD'))
+    articles(id, 'Done', {"article_title":1,"article_url": 1}, $('input[type="date"]').val())
+    articles(id, 'Error', {"article_url":1,"article_error_status": 1}, $('input[type="date"]').val())
 })
