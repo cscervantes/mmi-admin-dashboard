@@ -351,12 +351,24 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here, image is array value
-                                    |             let selector = ''
-                                    |             let image_attribute = '' // this could be src, data-src, data-original-src, etc.
-                                    |             let images = $(selector).map(function(){
-                                    |                    return $(this).attr(image_attribute)
-                                    |             }).get().filter(v=>v)
+                                    |             // insert your code here, section is array value
+                                    |             let images = []
+                                    |             let selectors = []
+                                    |
+                                    |             if(selectors.length > 0){
+                                    |               let select = selectors.filter(v=>$(v.selector).length > 0)
+                                    |               if(select.length > 0){
+                                    |                   let selector = select.splice(-1)[0]
+                                    |                   let _images = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                       return $(this).text().trim()
+                                    |                   }).get().filter(v=>v)
+                                    |                   // this block kapag nasa attribute value
+                                    |                   // images.push(_images)
+                                    |                   // this block kapag nasa innerText
+                                    |                   images = _images
+                                    |               }
+                                    |             }
+                                    |
                                     |             let _uniqImages = (images.length > 0) ? Array.from(new Set(images)) : []
                                     |             resolve(_uniqImages)
                                     |         }catch(error){
@@ -370,12 +382,24 @@ block content
                                     |     const $ = this.ENTITY()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
-                                    |             // insert your code here, video is array value
-                                    |             let selector = ''
-                                    |             let video_attribute = ''
-                                    |             let videos = $(selector).map(function(){
-                                    |                    return $(this).attr(video_attribute)
-                                    |             }).get().filter(v=>v)
+                                    |             // insert your code here, section is array value
+                                    |             let videos = []
+                                    |             let selectors = []
+                                    |
+                                    |             if(selectors.length > 0){
+                                    |               let select = selectors.filter(v=>$(v.selector).length > 0)
+                                    |               if(select.length > 0){
+                                    |                   let selector = select.splice(-1)[0]
+                                    |                   let _videos = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                       return $(this).text().trim()
+                                    |                   }).get().filter(v=>v)
+                                    |                   // this block kapag nasa attribute value
+                                    |                   // videos.push(_videos)
+                                    |                   // this block kapag nasa innerText
+                                    |                   videos = _videos
+                                    |               }
+                                    |             }
+                                    |
                                     |             let _uniqVideos = (videos.length > 0) ? Array.from(new Set(videos)) : []
                                     |             resolve(_uniqVideos)
                                     |         }catch(error){

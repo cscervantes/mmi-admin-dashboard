@@ -7,7 +7,7 @@ var configHeaders = (process.env.PRODUCTION) ? config.endpoints.production.heade
 
 
 router.get('/article_per_website', function(req, res, next){
-    console.log('Wew', req.query)
+    // console.log('Wew', req.query)
     request.get(configUrl+`dashboard/article_per_website?fields=${req.query.fields}&from=${req.query.from}&to=${req.query.to}&website=${req.query.website}&article_status=${req.query.article_status}`, {headers:configHeaders, body:req.body}, function(error, response, body){
         if(error){
             next(error)

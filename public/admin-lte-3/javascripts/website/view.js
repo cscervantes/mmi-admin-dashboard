@@ -22,7 +22,7 @@ editor3.setTheme("ace/theme/monokai")
 editor3.session.setMode(edit_mode)
 editor3.setFontSize(16)
 editor3.setOptions({
-    maxLines: 30,
+    maxLines: 43,
     autoScrollEditorIntoView: true,
 });
 
