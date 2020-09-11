@@ -208,7 +208,7 @@ function formObject(formData){
     obj.needs_endslash = $('input[name="needs_endslash"]').prop('checked')
     obj.needs_search_params = $('input[name="needs_search_params"]').prop('checked')
     obj.main_sections = Array.from(new Set(obj.main_sections.split('\n').map(v=>v.trim()))).filter(v=>v)
-    obj.date_created = new Date()
+    // obj.date_created = new Date()
     obj.created_by = user
     obj.updated_by = user
     return obj

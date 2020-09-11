@@ -97,14 +97,14 @@ $(document).on('click', '#btnAddNewArticle', function(e){
     const article_status = 'Done'
     const created_by = user
     const updated_by = user
-    const date_created = new Date()
-    const date_updated = new Date()
+    // const date_created = new Date()
+    // const date_updated = new Date()
 
     const data = {
       article_url, article_title, article_source_url, article_publish_date, 
       article_authors, article_sections, article_images, article_videos,
       article_content, article_ad_value, article_pr_value, created_by, updated_by,
-      date_updated, date_created, website, article_status
+      website, article_status
     }
 
     if(!article_title.trim()){

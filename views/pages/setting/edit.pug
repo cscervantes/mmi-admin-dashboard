@@ -242,11 +242,13 @@ block content
                                     |
                                     |             if(selectors.length > 0){
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
-                                    |               let selector = select.splice(-1)[0]
-                                    |               let _authors = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
-                                    |                   return $(this).text().trim()
-                                    |               }).get().filter(v=>v)
-                                    |               authors.push(_authors.join(', '))                   
+                                    |               if(select.length > 0){
+                                    |                   let selector = select.splice(-1)[0]
+                                    |                   let _authors = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                       return $(this).text().trim()
+                                    |                   }).get().filter(v=>v)
+                                    |                   authors.push(_authors.join(', '))
+                                    |               }
                                     |             }                
                                     |
                                     |             let _uniqAuthors = (authors.length > 0) ? Array.from(new Set(authors)) : ["No - Author"]
@@ -268,11 +270,13 @@ block content
                                     |
                                     |             if(selectors.length > 0){
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
-                                    |               let selector = select.splice(-1)[0]
-                                    |               let _sections = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
-                                    |                   return $(this).text().trim()
-                                    |               }).get().filter(v=>v)
-                                    |               sections.push(_sections.join(', '))
+                                    |               if(select.length > 0){
+                                    |                   let selector = select.splice(-1)[0]
+                                    |                   let _sections = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                       return $(this).text().trim()
+                                    |                   }).get().filter(v=>v)
+                                    |                   sections.push(_sections.join(', '))
+                                    |               }
                                     |             }
                                     |
                                     |             let _uniqSections = (sections.length > 0) ? Array.from(new Set(sections)) : ["#{website_category}"]
@@ -305,6 +309,7 @@ block content
                                     | 
                                     | Article.prototype.ARTICLE_TEXT = async function(){
                                     |     const $ = this.ENTITY()
+                                    |     const S = this.STRING()
                                     |     const textFromTitle = await this.ARTICLE_TITLE()
                                     |     const p = new Promise(async (resolve, reject) => {
                                     |         try{
@@ -320,8 +325,8 @@ block content
                                     |             let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |             let selector = select.splice(-1)[0]
                                     |             let text = (selector) ? $(selector.selector).map(function(){
-                                    |                        return $(this).text().trim()
-                                    |             }).get().join(' ') : ''
+                                    |                        return S($(this).text()).stripTags().s.trim()
+                                    |             }).get().join('\n\n') : ''
                                     |
                                     |             let textContent = (text.length > 0) ? text : textFromTitle
                                     |             if(!textContent){

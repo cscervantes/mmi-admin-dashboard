@@ -49,11 +49,11 @@ $(document).on('click', 'button#btnUpdate', function(){
         const article_id = fData.get('_id')
 
         const updated_by = user
-        const date_updated = new Date()
+        // const date_updated = new Date()
         
         const data = {
             article_title, article_url, article_publish_date, article_images, article_videos, article_content, 
-            updated_by, date_updated, article_authors, article_sections, article_pr_value, article_ad_value
+            updated_by, article_authors, article_sections, article_pr_value, article_ad_value
         }
         // console.log(data)
         $.ajax({
