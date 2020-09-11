@@ -247,7 +247,10 @@ block content
                                     |                   let _authors = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   authors.push(_authors.join(', '))
+                                    |                   // this block kapag galing sa attribute value
+                                    |                   // authors.push(_authors)
+                                    |                   // this block kapag galing sa innerText
+                                    |                   authors = _authors
                                     |               }
                                     |             }                
                                     |
@@ -275,7 +278,10 @@ block content
                                     |                   let _sections = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   sections.push(_sections.join(', '))
+                                    |                   // this block kapag nasa attribute value
+                                    |                   // sections.push(_sections)
+                                    |                   // this block kapag nasa innerText
+                                    |                   sections = _sections
                                     |               }
                                     |             }
                                     |
