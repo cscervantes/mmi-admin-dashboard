@@ -219,3 +219,16 @@ function formObject(formData){
     obj.updated_by = user
     return obj
 }
+
+$(document).on('click', 'input[type="radio"].web-cat', function(e){
+    let category = $(this).val()
+    if(category === "News"){
+        $('input[value$="LOCAL_NEWS"].web-type').prop("checked", true)
+        $('input[value$="_NEWS"].web-type').prop("disabled", false)
+        $('input[value$="_BLOG"].web-type').prop("disabled", true)
+    }else{
+        $('input[value$="LOCAL_BLOG"].web-type').prop("checked", true)
+        $('input[value$="_NEWS"].web-type').prop("disabled", true)
+        $('input[value$="_BLOG"].web-type').prop("disabled", false)
+    }
+})

@@ -43,38 +43,38 @@ block content
               label(class="col-sm-2 col-form-label", for="website_category") Website Category
               .col-sm-10
                   .custom-control.custom-radio.col-sm-1.float-left
-                    input#news(type="radio", name="website_category", class="custom-control-input", value="News", checked=(website_category === 'News') ? true : false )
+                    input#news(type="radio", name="website_category", class="custom-control-input web-cat", value="News", checked=(website_category === 'News') ? true : false )
                     label(for='news', class="custom-control-label") News
                   .custom-control.custom-radio.col-sm-1.float-left
-                    input#blog(type="radio", name="website_category", class="custom-control-input", value="Blog", checked=(website_category === 'Blog') ? true : false)
+                    input#blog(type="radio", name="website_category", class="custom-control-input web-cat", value="Blog", checked=(website_category === 'Blog') ? true : false)
                     label(for='blog', class="custom-control-label") Blog
 
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_category") Website Type
               .col-sm-10
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#local_news(type="radio", name="website_type", class="custom-control-input", value="LOCAL_NEWS", checked=(website_type === 'LOCAL_NEWS') ? true : false)
+                    input#local_news(type="radio", name="website_type", class="custom-control-input web-type", value="LOCAL_NEWS", checked=(website_type === 'LOCAL_NEWS') ? true : false)
                     label(for='local_news', class="custom-control-label") Local News
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#local_blog(type="radio", name="website_type", class="custom-control-input", value="LOCAL_BLOG", checked=(website_type === 'LOCAL_BLOG') ? true : false)
+                    input#local_blog(type="radio", name="website_type", class="custom-control-input web-type", value="LOCAL_BLOG", checked=(website_type === 'LOCAL_BLOG') ? true : false)
                     label(for='local_blog', class="custom-control-label") Local Blog
+                  //- .custom-control.custom-radio.col-sm-2.float-left
+                  //-   input#provincial_news(type="radio", name="website_type", class="custom-control-input", value="PROVINCIAL_NEWS", checked=(website_type === 'PROVINCIAL_NEWS') ? true : false)
+                  //-   label(for='provincial_news', class="custom-control-label") Provincial News
+                  //- .custom-control.custom-radio.col-sm-2.float-left
+                  //-   input#news_compilation(type="radio", name="website_type", class="custom-control-input", value="NEWS_COMPILATION", checked=(website_type === 'NEWS_COMPILATION') ? true : false)
+                  //-   label(for='news_compilation', class="custom-control-label") News Compilation
+                  //- .custom-control.custom-radio.col-sm-2.float-left
+                  //-   input#tabloid(type="radio", name="website_type", class="custom-control-input", value="TABLOID", checked=(website_type === 'TABLOID') ? true : false)
+                  //-   label(for='tabloid', class="custom-control-label") Tabloid
+                  //- .custom-control.custom-radio.col-sm-2.float-left
+                  //-   input#magazine(type="radio", name="website_type", class="custom-control-input", value="MAGAZINE", checked=(website_type === 'MAGAZINE') ? true : false)
+                  //-   label(for='magazine', class="custom-control-label") Magazine
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#provincial_news(type="radio", name="website_type", class="custom-control-input", value="PROVINCIAL_NEWS", checked=(website_type === 'PROVINCIAL_NEWS') ? true : false)
-                    label(for='provincial_news', class="custom-control-label") Provincial News
-                  .custom-control.custom-radio.col-sm-2.float-left
-                    input#news_compilation(type="radio", name="website_type", class="custom-control-input", value="NEWS_COMPILATION", checked=(website_type === 'NEWS_COMPILATION') ? true : false)
-                    label(for='news_compilation', class="custom-control-label") News Compilation
-                  .custom-control.custom-radio.col-sm-2.float-left
-                    input#tabloid(type="radio", name="website_type", class="custom-control-input", value="TABLOID", checked=(website_type === 'TABLOID') ? true : false)
-                    label(for='tabloid', class="custom-control-label") Tabloid
-                  .custom-control.custom-radio.col-sm-2.float-left
-                    input#magazine(type="radio", name="website_type", class="custom-control-input", value="MAGAZINE", checked=(website_type === 'MAGAZINE') ? true : false)
-                    label(for='magazine', class="custom-control-label") Magazine
-                  .custom-control.custom-radio.col-sm-2.float-left
-                    input#international_news(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_NEWS", checked=(website_type === 'INTERNATIONAL_NEWS') ? true : false)
+                    input#international_news(type="radio", name="website_type", class="custom-control-input web-type", value="INTERNATIONAL_NEWS", checked=(website_type === 'INTERNATIONAL_NEWS') ? true : false)
                     label(for='international_news', class="custom-control-label") International News
                   .custom-control.custom-radio.col-sm-2.float-left
-                    input#international_blog(type="radio", name="website_type", class="custom-control-input", value="INTERNATIONAL_BLOG", checked=(website_type === 'INTERNATIONAL_BLOG') ? true : false)
+                    input#international_blog(type="radio", name="website_type", class="custom-control-input web-type", value="INTERNATIONAL_BLOG", checked=(website_type === 'INTERNATIONAL_BLOG') ? true : false)
                     label(for='international_blog', class="custom-control-label") International Blog
             
             .form-group.row
