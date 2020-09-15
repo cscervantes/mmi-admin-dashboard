@@ -185,12 +185,33 @@ block content
                                     |                {
                                     |                   "selector": "title",
                                     |                   "attribute": null
+                                    |                },
+                                    |                {
+                                    |                   "selector": "meta[property=\"og:title\"]",
+                                    |                   "attribute": "content"
+                                    |                },
+                                    |                {
+                                    |                   "selector": "article header .entry-title",
+                                    |                   "attribute": null
+                                    |                },
+                                    |                {
+                                    |                   "selector": "article header .post-title",
+                                    |                   "attribute": null
                                     |                }
                                     |             ]
+                                    |
+                                    |             let findReplaces = [] // {find: "string or regex", replace:""}
                                     |
                                     |             let select = (selectors.length > 0) ? selectors.filter(v=>$(v.selector).length > 0) : reject('(Title) No selectors')
                                     |             let selector = select.splice(-1)[0]
                                     |             let title = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).eq(0).text().trim()
+                                    |
+                                    |             if(findReplaces.length > 0){
+                                    |               for(let i = 0; i < findReplaces.length; i++){
+                                    |                   let fr = findReplaces[i]
+                                    |                   title = S(title).replaceAll(fr.find, fr.replace).s
+                                    |               }
+                                    |             }
                                     |
                                     |             if(!title){
                                     |                  reject('Missing title.')
@@ -244,12 +265,9 @@ block content
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |               if(select.length > 0){
                                     |                   let selector = select.splice(-1)[0]
-                                    |                   let _authors = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   let _authors = (selector.attribute) ? $(selector.selector).map(function(){ return $(this).attr(selector.attribute) }).get().filter(v=>v) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   // this block kapag galing sa attribute value
-                                    |                   // authors.push(_authors)
-                                    |                   // this block kapag galing sa innerText
                                     |                   authors = _authors
                                     |               }
                                     |             }                
@@ -275,12 +293,9 @@ block content
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |               if(select.length > 0){
                                     |                   let selector = select.splice(-1)[0]
-                                    |                   let _sections = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   let _sections = (selector.attribute) ? $(selector.selector).map(function(){ return $(this).attr(selector.attribute) }).get().filter(v=>v) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   // this block kapag nasa attribute value
-                                    |                   // sections.push(_sections)
-                                    |                   // this block kapag nasa innerText
                                     |                   sections = _sections
                                     |               }
                                     |             }
@@ -326,8 +341,21 @@ block content
                                     |               {
                                     |                   "selector": "article p",
                                     |                   "attribute": null
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .entry-content p",
+                                    |                   "attribute": null
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .post-content p",
+                                    |                   "attribute": null
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .post-body p",
+                                    |                   "attribute": null
                                     |               }
                                     |             ]
+                                    |             let findReplaces = [] // {find: "string or regex", replace:""}
                                     |             let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |             let selector = select.splice(-1)[0]
                                     |             let text = (selector) ? $(selector.selector).map(function(){
@@ -335,6 +363,14 @@ block content
                                     |             }).get().join('\n\n') : ''
                                     |
                                     |             let textContent = (text.length > 0) ? text : textFromTitle
+                                    |
+                                    |             if(findReplaces.length > 0){
+                                    |               for(let i = 0; i < findReplaces.length; i++){
+                                    |                   let fr = findReplaces[i]
+                                    |                   textContent = S(textContent).replaceAll(fr.find, fr.replace).s
+                                    |               }
+                                    |             }
+                                    |
                                     |             if(!textContent){
                                     |                  reject('Missing text.')
                                     |             }else{
@@ -353,18 +389,36 @@ block content
                                     |         try{
                                     |             // insert your code here, section is array value
                                     |             let images = []
-                                    |             let selectors = []
+                                    |             let selectors = [
+                                    |               {
+                                    |                   "selector": "meta[property=\"og:image\"]",
+                                    |                   "attribute": "content"
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article header img",
+                                    |                   "attribute": "src"
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .entry-content img",
+                                    |                   "attribute": "src"
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .post-content img",
+                                    |                   "attribute": "src"
+                                    |               },
+                                    |               {
+                                    |                   "selector": "article .post-body img",
+                                    |                   "attribute": "src"
+                                    |               }
+                                    |             ]
                                     |
                                     |             if(selectors.length > 0){
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |               if(select.length > 0){
                                     |                   let selector = select.splice(-1)[0]
-                                    |                   let _images = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   let _images = (selector.attribute) ? $(selector.selector).map(function(){ return $(this).attr(selector.attribute) }).get().filter(v=>v) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   // this block kapag nasa attribute value
-                                    |                   // images.push(_images)
-                                    |                   // this block kapag nasa innerText
                                     |                   images = _images
                                     |               }
                                     |             }
@@ -390,12 +444,9 @@ block content
                                     |               let select = selectors.filter(v=>$(v.selector).length > 0)
                                     |               if(select.length > 0){
                                     |                   let selector = select.splice(-1)[0]
-                                    |                   let _videos = (selector.attribute) ? $(selector.selector).eq(0).attr(selector.attribute) : $(selector.selector).map(function(){
+                                    |                   let _videos = (selector.attribute) ? $(selector.selector).map(function(){ return $(this).attr(selector.attribute) }).get().filter(v=>v) : $(selector.selector).map(function(){
                                     |                       return $(this).text().trim()
                                     |                   }).get().filter(v=>v)
-                                    |                   // this block kapag nasa attribute value
-                                    |                   // videos.push(_videos)
-                                    |                   // this block kapag nasa innerText
                                     |                   videos = _videos
                                     |               }
                                     |             }
