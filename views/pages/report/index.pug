@@ -1,0 +1,53 @@
+extends ../../layout
+
+block content            
+    form(role="form", id="extract-website")
+        .row
+            .col-sm-6
+                h3 Include Columns on Export
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#name.custom-control-input(type="checkbox", name="website_name", value=1, checked=true)
+                        label.custom-control-label(for="name") Website Name
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#url.custom-control-input(type="checkbox", name="website_url", value=1, checked=true)
+                        label.custom-control-label(for="url") Website Url
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#fqdn.custom-control-input(type="checkbox", name="fqdn", value=1, checked=true)
+                        label.custom-control-label(for="fqdn") Website FQDN
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#status.custom-control-input(type="checkbox", name="status", value=1)
+                        label.custom-control-label(for="status") Website Status
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#category.custom-control-input(type="checkbox", name="website_category", value=1)
+                        label.custom-control-label(for="category") Website Category
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#type.custom-control-input(type="checkbox", name="website_type", value=1)
+                        label.custom-control-label(for="type") Website Type
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#alexa.custom-control-input(type="checkbox", name="alexa_rankings", value=1)
+                        label.custom-control-label(for="alexa") Alexa Rankings
+                .form-group
+                    .custom-control.custom-checkbox
+                        input#country.custom-control-input(type="checkbox", name="country", value=1, checked=true)
+                        label.custom-control-label(for="country") Country
+                .form-group
+                    label(for="limit") Size of Data
+                    input#limit.form-control(type="number", value=10)
+                    
+
+            .col-sm-12
+                .form-group
+                    button#preview(type="button") Send
+                    a#extract.btn(href="", target="_blank") Download Excel
+
+
+
+block js
+    script(src="/admin-lte-3/javascripts/reports/index.js")

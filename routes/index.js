@@ -4,7 +4,7 @@ var auth = require('../authenticate')
 
 /* GET home page. */
 router.get('/', auth.redirectHome, function(req, res, next) {
-  res.render('pages/login', { title: 'Admin' });
+  res.render('pages/login', { title: 'Admin Login' });
 });
 
 router.get('/dashboard', auth.redirectLogin, function(req, res, next) {
@@ -25,6 +25,10 @@ router.get('/add-website', auth.redirectLogin, function(req, res, next){
 
 router.get('/advance-setting', auth.redirectLogin, function(req, res, next){
   res.render('pages/setting', { title: 'Advance Setting', path: req.path})
+})
+
+router.get('/report', auth.redirectLogin, function(req, res, next){
+  res.render('pages/report', {title: "Download", path: req.path})
 })
 
 module.exports = router;

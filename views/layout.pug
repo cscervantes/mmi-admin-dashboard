@@ -8,6 +8,7 @@ html
     //- title= title
     title MMI - ADMIN
     link(rel='stylesheet', href='/admin-lte-3/plugins/fontawesome-free/css/all.css')
+    link(rel="shortcut icon", href="https://thumbs.gfycat.com/SpottedPositiveAmericanlobster-size_restricted.gif", type="image/x-icon")
 
     link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
     link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
@@ -59,6 +60,10 @@ html
                   a(href="/mmi-admin-dashboard/advance-setting", class=(path.search(/advance/g) != -1 ) ? 'nav-link active' : 'nav-link')
                     i.nav-icon.fas.fa-cog
                     p Advance Setting
+              li(class="nav-item has-treeview")
+                a(href="/mmi-admin-dashboard/report", class=(path.search(/report/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                  i.nav-icon.fas.fa-download
+                  p Download Report
               li(class="nav-item has-treeview")
                 a(href="/mmi-admin-dashboard/users/logout").nav-link
                   i.nav-icon.fas.fa-sign-out-alt
