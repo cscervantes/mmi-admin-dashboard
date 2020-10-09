@@ -14,10 +14,11 @@ html
     link(rel="stylesheet", href="/admin-lte-3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
 
     link(rel="stylesheet", href="/admin-lte-3/dist/css/adminlte.min.css")
-    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
+    //- link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" )
     block css
   //- body.hold-transition.sidebar-mini
-  body.sidebar-mini.sidebar-collapse.layout-fixed.layout-navbar-fixed
+  //- body.sidebar-mini.sidebar-collapse.layout-fixed.layout-navbar-fixed
+  body.sidebar-mini.layout-fixed.layout-navbar-fixed
 
     .wrapper
       nav.main-header.navbar.navbar-expand.navbar-white.navbar-light
@@ -60,10 +61,23 @@ html
                   a(href="/mmi-admin-dashboard/advance-setting", class=(path.search(/advance/g) != -1 ) ? 'nav-link active' : 'nav-link')
                     i.nav-icon.fas.fa-cog
                     p Advance Setting
-              li(class="nav-item has-treeview")
-                a(href="/mmi-admin-dashboard/report", class=(path.search(/report/g) != -1 ) ? 'nav-link active' : 'nav-link')
-                  i.nav-icon.fas.fa-download
-                  p Download Report
+              li.nav-item.has-treeview(class=(path.search(/artem/g) != -1 ) ? 'menu-open' : 'nav-item has-treeview')
+                a.nav-link(href='#')
+                  i.nav-icon.fas.fa-caret-right
+                  p
+                    | Artems Links
+                    i.right.fas.fa-angle-left
+                ul.nav.nav-treeview
+                  li.nav-item
+                    a.nav-link(href='/mmi-admin-dashboard/artem-link-dashboard', class=(path.search(/artem-link/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                      i.far.fa-circle.nav-icon
+                      p Link Dashboard
+                  //- li.nav-item.has-treeview
+                  //-   a.nav-link(href='/mmi-admin-dashboard/artem-article-dashboard', class=(path.search(/artem-article/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                  //-     i.far.fa-circle.nav-icon
+                  //-     p
+                  //-       | Article Dashboard
+
               li(class="nav-item has-treeview")
                 a(href="/mmi-admin-dashboard/users/logout").nav-link
                   i.nav-icon.fas.fa-sign-out-alt

@@ -12,6 +12,7 @@ var advanceRouter = require('./routes/advance_setting');
 var articlesRouter = require('./routes/articles');
 var sectionsRouter = require('./routes/sections');
 var dashboardsRouter = require('./routes/dashboards');
+var artemsRouter = require('./routes/artem');
 
 var app = express();
 
@@ -55,6 +56,7 @@ app.use('/mmi-admin-dashboard/advance', advanceRouter);
 app.use('/mmi-admin-dashboard/articles', articlesRouter);
 app.use('/mmi-admin-dashboard/sections', sectionsRouter);
 app.use('/mmi-admin-dashboard/dashboards', dashboardsRouter);
+app.use('/mmi-admin-dashboard/artems', artemsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

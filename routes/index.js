@@ -27,8 +27,12 @@ router.get('/advance-setting', auth.redirectLogin, function(req, res, next){
   res.render('pages/setting', { title: 'Advance Setting', path: req.path})
 })
 
-router.get('/report', auth.redirectLogin, function(req, res, next){
-  res.render('pages/report', {title: "Download", path: req.path})
+router.get('/artem-link-dashboard', auth.redirectLogin, function(req, res, next){
+  res.render('pages/artems/link-dashboard', { title: 'Artem Link Dashboard', path: req.path})
 })
+
+// router.get('/artem-article-dashboard', auth.redirectLogin, function(req, res, next){
+//   res.render('pages/artems/article-dashboard', { title: 'Artem Article Dashboard', path: req.path})
+// })
 
 module.exports = router;
