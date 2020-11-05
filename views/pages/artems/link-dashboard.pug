@@ -7,7 +7,7 @@ block content
         .col-sm-6
             .card.card-success
                 .card-header
-                    h3.card-title Artem's Links
+                    h3.card-title Newscatcher's Crawled Links
                     .card-tools
                         input#date(type="date", name="date", class="btn btn-tool")
                         button(type="button" class="btn btn-tool" data-card-widget="collapse")
@@ -20,7 +20,7 @@ block content
         .col-sm-6
             .card.card-primary
                 .card-header
-                    h3.card-title Artem's parsed Links
+                    h3.card-title Newscatcher's Parsed Links
                     .card-tools
                         input#date2(type="date", name="date2", class="btn btn-tool")
                         button(type="button" class="btn btn-tool" data-card-widget="collapse")
@@ -30,6 +30,34 @@ block content
                 .card-body
                     .chart
                         canvas(id="artem-parse-link", style="height:230px; min-height:230px")
+    
+    .row
+        .col-sm-6
+            .card.card-success
+                .card-header
+                    h3.card-title Client Keywords' Crawled Links
+                    .card-tools
+                        input#date3(type="date", name="date3", class="btn btn-tool")
+                        button(type="button" class="btn btn-tool" data-card-widget="collapse")
+                            i.fas.fa-minus
+                        button(type="button" class="btn btn-tool" data-card-widget="maximize")
+                            i.fas.fa-expand
+                .card-body
+                    .chart
+                        canvas(id="client-crawl-link", style="height:230px; min-height:230px")
+        //- .col-sm-6
+        //-     .card.card-primary
+        //-         .card-header
+        //-             h3.card-title Client Keywords' Parsed Links
+        //-             .card-tools
+        //-                 input#date2(type="date", name="date2", class="btn btn-tool")
+        //-                 button(type="button" class="btn btn-tool" data-card-widget="collapse")
+        //-                     i.fas.fa-minus
+        //-                 button(type="button" class="btn btn-tool" data-card-widget="maximize")
+        //-                     i.fas.fa-expand
+        //-         .card-body
+        //-             .chart
+        //-                 canvas(id="client-parse-link", style="height:230px; min-height:230px")
 
 block js
     script(src="/admin-lte-3/plugins/chart.js/Chart.min.js")

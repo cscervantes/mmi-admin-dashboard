@@ -1,0 +1,32 @@
+extends ../../layout
+
+block content
+  .row
+    .col-sm-12
+      .card
+        .card-header
+          h3.card-title List of Articles
+          .card-tools
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/articles/add'", title="New article")
+              i.fas.fa-book
+            button(type="button", class="btn btn-tool", data-card-widget="maximize")
+              i.fas.fa-expand
+            button(type="button", class="btn btn-tool", data-card-widget="collapse")
+              i.fas.fa-minus
+        .card-body
+          table#article-datatable(class="table table-bordered table-hover table-condensed")
+            thead
+              tr
+                th Title
+                th Status
+                th Website
+                th Publish Date
+                th Google Keyword
+                th System Added
+
+block js
+  script.
+    const userJSON = JSON.parse(`!{JSON.stringify(session)}`)
+    const account_type = userJSON.user.acc_type
+  script(src="/admin-lte-3/javascripts/moment.min.js")
+  script(src="/admin-lte-3/javascripts/artem/article.js")

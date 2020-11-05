@@ -92,6 +92,9 @@ artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', new Date())
 let artemArticle = new DashboardChart(document.getElementById('artem-parse-link').getContext('2d'), 'horizontalBar')
 artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', new Date())
 
+let clientArticle = new DashboardChart(document.getElementById('client-crawl-link').getContext('2d'), 'horizontalBar')
+clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', new Date())
+
 $(document).on('change', '#date', function(){
     // console.log($(this).val())
     artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', $(this).val())
@@ -100,6 +103,11 @@ $(document).on('change', '#date', function(){
 $(document).on('change', '#date2', function(){
   // console.log($(this).val())
   artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', $(this).val())
+})
+
+$(document).on('change', '#date3', function(){
+  // console.log($(this).val())
+  clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', $(this).val())
 })
 
 function endOfWeek(date)
