@@ -39,7 +39,7 @@ class DashboardChart{
   }
 
   async draw(url, method, date){
-    let dt = moment(endOfWeek(new Date(date))).format('Y-MM-DD')+'T23:59:59+08:00'
+    let dt = moment(endOfWeek(new Date(date))).format('Y-MM-DD')
     // console.log(dt)
     let frequencies = []
     for(let i = 0; i < 7; i++){
@@ -49,8 +49,8 @@ class DashboardChart{
         return {
                 label: moment(v[0]).format(),
                 date_created:{
-                    "$lte": moment(v[0]).format(),
-                    "$gte": moment(v[0]).subtract(1, 'day').format()
+                    "$lte": moment(v[0]).format('Y-MM-DD')+'T23:59:59.999Z',
+                    "$gte": moment(v[0]).subtract(1, 'day').format('Y-MM-DD')+'T23:59:59.999Z'
                 }
         }
     })
