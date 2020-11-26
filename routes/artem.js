@@ -69,6 +69,16 @@ router.post('/client-crawl-links', auth.redirectLogin, async (req, res, next) =>
     }
 })
 
+router.post('/client-parse-links', auth.redirectLogin, async (req, res, next) => {
+    try {
+        let result = await fetch(configUrl+'article/count_custom_query', 'POST', configHeaders, req.body)
+        // console.log(result)
+        res.status(200).send(result)
+    } catch (error) {
+        next(error)
+    }
+})
+
 router.post('/client-datatables', auth.redirectLogin, async (req, res, next) => {
     try {
         let result = await fetch(configUrl+'global-link/datatables', 'POST', configHeaders, req.body)

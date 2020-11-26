@@ -38,8 +38,8 @@ class DashboardChart{
     })
   }
 
-  async draw(url, method, date){
-    let dt = moment(endOfWeek(new Date(date))).format('Y-MM-DD')
+  async draw(url, method, obj){
+    let dt = moment(endOfWeek(new Date(obj.date_created))).format('Y-MM-DD')
     // console.log(dt)
     let frequencies = []
     for(let i = 0; i < 7; i++){
@@ -58,7 +58,8 @@ class DashboardChart{
     let labels = []
     let data = []
     let mapDates = Promise.allSettled(dates.map(async (v)=>{
-        let r = await rq(url, method, {date_created: v.date_created})
+        obj.date_created = v.date_created
+        let r = await rq(url, method, obj)
         r.label = v.label
         return r
     }))
@@ -87,28 +88,37 @@ class DashboardChart{
 
 // let artemLink = new DashboardChart(document.getElementById('artem-link').getContext('2d'), 'horizontalBar')
 let artemLink = new DashboardChart(document.getElementById('artem-link').getContext('2d'), 'horizontalBar')
-artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', new Date())
+artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', {"date_created": new Date()})
 
 let artemArticle = new DashboardChart(document.getElementById('artem-parse-link').getContext('2d'), 'horizontalBar')
-artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', new Date())
+artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', {"date_created": new Date()})
 
 let clientArticle = new DashboardChart(document.getElementById('client-crawl-link').getContext('2d'), 'horizontalBar')
-clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', new Date())
+clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', {"date_created": new Date()})
+
+let clientParsedArticle = new DashboardChart(document.getElementById('client-parse-link').getContext('2d'), 'horizontalBar')
+clientParsedArticle.draw('/mmi-admin-dashboard/artems/client-parse-links', 'POST', {"date_created": new Date(), "created_by": "Python Global Scraper"})
 
 $(document).on('change', '#date', function(){
     // console.log($(this).val())
-    artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', $(this).val())
+    artemLink.draw('/mmi-admin-dashboard/artems/link', 'POST', {"date_created":$(this).val()})
 })
 
 $(document).on('change', '#date2', function(){
   // console.log($(this).val())
-  artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', $(this).val())
+  artemArticle.draw('/mmi-admin-dashboard/artems/article', 'POST', {"date_created":$(this).val()})
 })
 
 $(document).on('change', '#date3', function(){
   // console.log($(this).val())
-  clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', $(this).val())
+  clientArticle.draw('/mmi-admin-dashboard/artems/client-crawl-links', 'POST', {"date_created":$(this).val()})
 })
+
+$(document).on('change', '#date4', function(){
+  // console.log($(this).val())
+  clientParsedArticle.draw('/mmi-admin-dashboard/artems/client-parse-links', 'POST', {"date_created":$(this).val(), "created_by": "Python Global Scraper"})
+})
+
 
 function endOfWeek(date)
 {

@@ -31,11 +31,12 @@ router.get('/artem-link-dashboard', auth.redirectLogin, function(req, res, next)
   res.render('pages/artems/link-dashboard', { title: 'Artem Link Dashboard', path: req.path})
 })
 
-router.get('/client-link-dashboard', auth.redirectLogin, function(req, res, next){
+router.get('/artem-client-link-dashboard', auth.redirectLogin, function(req, res, next){
   res.render('pages/artems/client-link-dashboard', { title: 'Artem Link Dashboard', path: req.path})
 })
-// router.get('/artem-article-dashboard', auth.redirectLogin, function(req, res, next){
-//   res.render('pages/artems/article-dashboard', { title: 'Artem Article Dashboard', path: req.path})
-// })
+
+router.get('/artem-global-article-dashboard', auth.redirectLogin, function(req, res, next){
+  res.render('pages/artems/global-article-dashboard', { title: 'Global Article Dashboard', path: req.path})
+})
 
 module.exports = router;

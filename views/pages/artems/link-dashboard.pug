@@ -45,19 +45,19 @@ block content
                 .card-body
                     .chart
                         canvas(id="client-crawl-link", style="height:230px; min-height:230px")
-        //- .col-sm-6
-        //-     .card.card-primary
-        //-         .card-header
-        //-             h3.card-title Client Keywords' Parsed Links
-        //-             .card-tools
-        //-                 input#date2(type="date", name="date2", class="btn btn-tool")
-        //-                 button(type="button" class="btn btn-tool" data-card-widget="collapse")
-        //-                     i.fas.fa-minus
-        //-                 button(type="button" class="btn btn-tool" data-card-widget="maximize")
-        //-                     i.fas.fa-expand
-        //-         .card-body
-        //-             .chart
-        //-                 canvas(id="client-parse-link", style="height:230px; min-height:230px")
+        .col-sm-6
+            .card.card-primary
+                .card-header
+                    h3.card-title Client Keywords' Parsed Links
+                    .card-tools
+                        input#date4(type="date", name="date4", class="btn btn-tool")
+                        button(type="button" class="btn btn-tool" data-card-widget="collapse")
+                            i.fas.fa-minus
+                        button(type="button" class="btn btn-tool" data-card-widget="maximize")
+                            i.fas.fa-expand
+                .card-body
+                    .chart
+                        canvas(id="client-parse-link", style="height:230px; min-height:230px")
 
 block js
     script(src="/admin-lte-3/plugins/chart.js/Chart.min.js")

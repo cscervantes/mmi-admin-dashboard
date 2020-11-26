@@ -73,9 +73,13 @@ html
                       i.far.fa-circle.nav-icon
                       p Link Dashboard
                   li.nav-item
-                    a.nav-link(href='/mmi-admin-dashboard/client-link-dashboard', class=(path.search(/client-link/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                    a.nav-link(href='/mmi-admin-dashboard/artem-client-link-dashboard', class=(path.search(/artem-client/g) != -1 ) ? 'nav-link active' : 'nav-link')
                       i.far.fa-circle.nav-icon
                       p Article Dashboard
+                  li.nav-item
+                    a.nav-link(href='/mmi-admin-dashboard/artem-global-article-dashboard', class=(path.search(/artem-global/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                      i.far.fa-circle.nav-icon
+                      p Global Article Dashboard
                   //- li.nav-item.has-treeview
                   //-   a.nav-link(href='/mmi-admin-dashboard/artem-article-dashboard', class=(path.search(/artem-article/g) != -1 ) ? 'nav-link active' : 'nav-link')
                   //-     i.far.fa-circle.nav-icon
