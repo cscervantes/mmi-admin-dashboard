@@ -6,6 +6,9 @@ var config = require('../config')
 var configUrl = (process.env.PRODUCTION) ? config.endpoints.production.url : config.endpoints.development.url
 var configHeaders = (process.env.PRODUCTION) ? config.endpoints.production.headers : config.endpoints.development.headers
 var excel = require('exceljs');
+var fs = require('fs')
+var _ = require('lodash')
+var countries = JSON.parse(fs.readFileSync(process.cwd()+'/routes/country.json', 'utf-8'))
 
 async function fetch(uri, method, headers, body) {
     const p = new Promise((resolve, reject) => {
@@ -168,6 +171,33 @@ router.get('/new/:id', auth.redirectLogin, function(req, res, next){
             res.render('pages/setting/edit', data)
         }
     })
+})
+
+router.post('/custom_query', function(req, res, next){
+    let endpoint = configUrl+'web/custom_query'
+    if(req.query){
+        let query = []
+        for(let key in req.query){
+            query.push(`${key}=${req.query[key]}`)
+        }
+        endpoint += '?'+query.join('&')
+    }
+    request.post(endpoint, {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
+router.get('/country_lists', function(req, res, next){
+    // let country = countries.find(({country}) => country.search(new RegExp(`^${req.query.country}`, 'gi')) != -1)
+    let country = _.uniqBy(countries, "country").map(({country, iso_codes})=>{
+        country_code = iso_codes[1]
+        return {"label":country, "value": country_code}
+    })
+    res.status(200).send(country)
 })
 
 module.exports = router

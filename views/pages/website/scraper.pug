@@ -1,0 +1,111 @@
+extends ../../layout
+block css
+    link(rel="stylesheet", href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+block content
+  .row
+    .col-sm-12
+      .card
+        .card-header
+          h3.card-title List of websites
+          .card-tools
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/add-website'", title="New website")
+              i.fas.fa-globe
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/websites/download'", title="Download Excel")
+              i.fas.fa-download
+            button(type="button", class="btn btn-tool", data-card-widget="maximize")
+              i.fas.fa-expand
+            button(type="button", class="btn btn-tool", data-card-widget="collapse")
+              i.fas.fa-minus
+        .card-body
+          .table-responsive
+            table#website-datatable(class="table table-bordered table-hover")
+              thead
+                tr
+                  th 
+                    input#website_name.form-control(type="text", name="website_name")
+                  th 
+                    input#fqdn.form-control(type="text", name="fqdn")
+                  th 
+                    select#website_category.form-control(name="website_category")
+                      option(value="") All
+                      option(value="News") News
+                      option(value="Blog") Blog
+                  //- th 
+                  //-   select#website_type.form-control(name="website_type")
+                  //-     option(value="") All
+                  //-     option(value="LOCAL_NEWS") Local News
+                  //-     option(value="LOCAL_BLOG") Local Blog
+                  //-     option(value="INTERNATIONAL_NEWS") International News
+                  //-     option(value="INTERNATIONAL_BLOG") International Blog
+                  th 
+                    input#country.form-control(type="text", name="country")
+                  th 
+                    select#region.form-control(name="region")
+                      option(value="") All
+                      option(value="Africa") Africa
+                      option(value="Asia") Asia
+                      option(value="The Caribbean") The Caribbean
+                      option(value="Central America") Central America
+                      option(value="Europe") Europe
+                      option(value="North America") North America
+                      option(value="Oceania") Oceania
+                      option(value="South America") South America
+                      option(value="Unknown") Unknown
+                  th
+                    //- .custom-control.custom-switch.custom-switch-on-success
+                    //-   input#is_aggregator(type="checkbox", name="is_aggregator", class="custom-control-input")
+                    //-   label(for="is_aggregator", class="custom-control-label") (No/Yes)
+                    select#is_aggregator.form-control(name="is_aggregator")
+                      option(value="") All
+                      option(value="false") False
+                      option(value="true") True
+                  th
+                    //- .custom-control.custom-switch.custom-switch-on-success
+                    //-   input#is_to_be_scraped(type="checkbox", name="is_to_be_scraped", class="custom-control-input")
+                    //-   label(for="is_to_be_scraped", class="custom-control-label") (No/Yes)
+                    select#is_to_be_scraped.form-control(name="is_to_be_scraped")
+                      option(value="") All
+                      option(value="false") False
+                      option(value="true") True
+                  th
+                    //- .custom-control.custom-switch.custom-switch-on-success
+                    //-   input#status(type="checkbox", name="status", class="custom-control-input")
+                    //-   label(for="status", class="custom-control-label") (No/Yes)
+                    select#status.form-control(name="status")
+                      option(value="") All
+                      option(value="INACTIVE") Inactive
+                      option(value="ACTIVE") Active
+                  th 
+                    input#global.form-control(type="number", name="global")
+                  th 
+                    input#local.form-control(type="number", name="local")
+                  th
+                    input#date_created.form-control(type="date", name="date_created")
+                    //- value=moment().format('YYYY-MM-DD')
+                tr
+                  th Name
+                  th FQDN
+                  th Category
+                  //- th Type
+                  th Country
+                  th Region
+                  th Aggregator?
+                  th Scraped?
+                  th Status?
+                  th Global Ranking
+                  th Local Ranking
+                  th Date Created
+              tbody
+          button(id="btnSearch", class="btn btn-primary", style="position:fixed; right:10px; bottom:10px") Search
+
+
+block js
+  script.
+        const userData = JSON.parse('!{JSON.stringify(session)}')
+        const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
+  script(src="https://code.jquery.com/jquery-migrate-3.0.0.min.js")
+  script(src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js")
+  script(src="/admin-lte-3/javascripts/moment.min.js")
+  script(src="/admin-lte-3/javascripts/website/scraper.js")
+  script.
+    websiteTable('#{session.user.acc_type}')
