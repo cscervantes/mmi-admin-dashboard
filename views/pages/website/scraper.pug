@@ -1,6 +1,6 @@
 extends ../../layout
 block css
-    link(rel="stylesheet", href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+    link(rel="stylesheet", href="/admin-lte-3/plugins/jquery-ui/jquery-ui.css")
 block content
   .row
     .col-sm-12
@@ -103,8 +103,8 @@ block js
   script.
         const userData = JSON.parse('!{JSON.stringify(session)}')
         const user = userData.user.acc_first_name+' '+userData.user.acc_last_name
-  script(src="https://code.jquery.com/jquery-migrate-3.0.0.min.js")
-  script(src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js")
+  script(src="/admin-lte-3/plugins/jquery-ui/jquery-migrate-3.0.0.min.js")
+  script(src = "/admin-lte-3/plugins/jquery-ui/jquery-ui.js")
   script(src="/admin-lte-3/javascripts/moment.min.js")
   script(src="/admin-lte-3/javascripts/website/scraper.js")
   script.

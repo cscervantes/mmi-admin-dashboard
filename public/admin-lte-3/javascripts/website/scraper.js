@@ -1070,7 +1070,7 @@ btnSearch.addEventListener('click', async function(e){
     }
   }
 
-  console.log(rawData)
+  // console.log(rawData)
   let data = rawData
   let fields = {
     "website_name": 1,
@@ -1215,6 +1215,8 @@ $(document).on('click', '.btn-group button:first-child', async function(e){
   }else{
     data[input.eq(0).attr('data-id')] = input.eq(0).val()
   }
+  data.updated_by = user
+  data.date_updated = new Date()
   let _id = $(this).parent('div').parent('td').parent('tr').attr('id')
   await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', data)
   $(this).parent().css({"display": "none"})
@@ -1276,6 +1278,8 @@ $(document).on('change', 'input[type="checkbox"]', async function(e){
   }else{
     data[key] = val
   }
+  data.updated_by = user
+  data.date_updated = new Date()
   await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', data)
   $(this).closest('div').after(`<div class="alert alert-success alert-dismissible">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
