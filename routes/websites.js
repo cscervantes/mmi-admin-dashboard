@@ -8,6 +8,7 @@ var configHeaders = (process.env.PRODUCTION) ? config.endpoints.production.heade
 var excel = require('exceljs');
 var fs = require('fs')
 var _ = require('lodash')
+var moment = require('moment')
 var countries = JSON.parse(fs.readFileSync(process.cwd()+'/routes/country.json', 'utf-8'))
 
 async function fetch(uri, method, headers, body) {
@@ -198,6 +199,91 @@ router.get('/country_lists', function(req, res, next){
         return {"label":country, "value": country_code}
     })
     res.status(200).send(country)
+})
+
+router.post('/website-article-lists', async function(req, res, next){
+    // console.log(req.body)
+    let offSize = req.body.start
+    let tableSize = req.body.length
+    let orderCol = req.body['order[0][column]']
+    let column = req.body[`columns[${orderCol}][data]`]
+    let orderDir = req.body['order[0][dir]'] || 'desc'
+    let queryString = req.body['search[value]']
+    let endpoint2 = configUrl+'media/query_builder'
+    let bodyContent = {
+        sql: `SELECT media_web.pub_id, publication.pub_name, publication.alexa_global_rank AS global_rank, publication.alexa_local_rank AS local_rank, country.cnt_name AS country, COUNT(mwe_id) AS article_hits FROM media_web
+        RIGHT JOIN publication
+        ON media_web.pub_id = publication.pub_id
+        RIGHT JOIN country
+        ON media_web.cnt_id = country.cnt_id
+        WHERE media_web.mwe_datetime BETWEEN "${moment().subtract(1, 'week').format('YYYY-MM-DD')} 00:00:00" AND "${moment().format('YYYY-MM-DD')} 23:59:59"
+        AND publication.mty_id IN(4,11)
+        GROUP BY media_web.pub_id
+        ORDER BY ${column} ${orderDir} LIMIT ${offSize}, ${tableSize}`
+    }
+    if(queryString){
+        bodyContent = {
+            sql: `SELECT media_web.pub_id, publication.pub_name, publication.alexa_global_rank AS global_rank, publication.alexa_local_rank AS local_rank, country.cnt_name AS country, COUNT(mwe_id) AS article_hits FROM media_web
+            RIGHT JOIN publication
+            ON media_web.pub_id = publication.pub_id
+            RIGHT JOIN country
+            ON media_web.cnt_id = country.cnt_id
+            WHERE media_web.mwe_datetime BETWEEN "${moment().subtract(1, 'week').format('YYYY-MM-DD')} 00:00:00" AND "${moment().format('YYYY-MM-DD')} 23:59:59"
+            AND ( publication.pub_name LIKE '%${queryString}%' OR country.cnt_name LIKE '%${queryString}%' )
+            AND publication.mty_id IN(4,11)
+            GROUP BY media_web.pub_id
+            ORDER BY ${column} ${orderDir} LIMIT ${offSize}, ${tableSize}`
+        }
+    }
+    // console.log(bodyContent.sql)
+    let pubContent = {
+        sql : `SELECT COUNT(*) as total FROM publication WHERE publication.mty_id IN(4,11)`
+    }
+    let pubHits = await fetch(endpoint2, 'POST', configHeaders, pubContent)
+    let articleHits = await fetch(endpoint2, 'POST', configHeaders, bodyContent)
+
+    let recordsFiltered = (queryString) ? articleHits.length  : pubHits[0].total
+    let total = (queryString) ? articleHits.length  : pubHits[0].total
+    let result = {
+        "recordsFiltered": recordsFiltered,
+        "recordsTotal": pubHits[0].total,
+        "total": total,
+        "data": articleHits
+    }
+    res.status(200).send(result)
+})
+
+router.get('/download-lists', auth.redirectLogin, async function(req, res, next){
+    let endpoint2 = configUrl+'media/query_builder'
+    let bodyContent = {
+        sql: `SELECT publication.pub_name, publication.alexa_global_rank AS global_rank, publication.alexa_local_rank AS local_rank, country.cnt_name AS country, COUNT(mwe_id) AS article_hits FROM publication
+        LEFT JOIN media_web
+        ON media_web.pub_id = publication.pub_id
+        LEFT JOIN country
+        ON media_web.cnt_id = country.cnt_id
+        WHERE media_web.mwe_datetime BETWEEN "${moment().subtract(1, 'week').format('YYYY-MM-DD')} 00:00:00" AND "${moment().format('YYYY-MM-DD')} 23:59:59"
+        AND publication.mty_id IN(4,11)
+        GROUP BY media_web.pub_id
+        ORDER BY article_hits DESC`
+    }
+    console.log(bodyContent.sql)
+    let articleHits = await fetch(endpoint2, 'POST', configHeaders, bodyContent)
+    let workbook = new excel.Workbook();
+    let worksheet = workbook.addWorksheet("Website Lists")
+    worksheet.columns = [
+        {header:"Name", key: "pub_name"}, 
+        {header:"Country", key:"country"},
+        {header:"Global Rank", key:"global_rank"},
+        {header:"Local Rank", key:"local_rank"},
+        {header:"Article Hits", key:"article_hits"}
+    ]
+    worksheet.addRows(articleHits)
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=' + 'Websites.xlsx');
+    return workbook.xlsx.write(res)
+            .then(function() {
+                res.status(200).end();
+            });
 })
 
 module.exports = router

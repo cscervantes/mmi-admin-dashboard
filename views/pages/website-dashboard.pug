@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  .row
+    .col-sm-12
+      .card
+        .card-header
+          h3.card-title List of websites
+          .card-tools
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/add-website'", title="New website")
+              i.fas.fa-globe
+            button.btn.btn-tool(onclick="location.href='/mmi-admin-dashboard/websites/download-lists'", title="Download Excel")
+              i.fas.fa-download
+            button(type="button", class="btn btn-tool", data-card-widget="maximize")
+              i.fas.fa-expand
+            button(type="button", class="btn btn-tool", data-card-widget="collapse")
+              i.fas.fa-minus
+        .card-body
+          table#website-datatable(class="table table-bordered table-hover")
+            thead
+              tr
+                th NAME
+                th COUNTRY
+                th GLOBAL RANK
+                th LOCAL RANK
+                th ARTICLE HITS
+
+block js
+    script(src="/admin-lte-3/javascripts/dashboard/website-dashboard.js")

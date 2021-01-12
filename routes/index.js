@@ -11,6 +11,10 @@ router.get('/dashboard', auth.redirectLogin, function(req, res, next) {
   res.render('pages/dashboard', { title: 'Dashboard', path: req.path })
 })
 
+router.get('/website-dashboard', auth.redirectLogin, function(req, res, next) {
+  res.render('pages/website-dashboard', { title: 'Website Dashboard', path: req.path })
+})
+
 router.get('/websites', auth.redirectLogin, function(req, res, next) {
   res.render('pages/website', { title: 'Websites', path: req.path })
 })

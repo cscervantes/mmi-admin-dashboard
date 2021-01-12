@@ -7,6 +7,7 @@
     "dev": "DEBUG=mmi-admin-dashboard:* node ./bin/mmi-admin-dashboard-server"
   },
   "dependencies": {
+    "async": "^3.2.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "exceljs": "^4.1.1",
