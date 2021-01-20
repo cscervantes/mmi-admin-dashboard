@@ -53,6 +53,10 @@ html
                   i.nav-icon.fas.fa-tachometer-alt
                   p Website Dashboard
               li(class="nav-item has-treeview")
+                a(href="/mmi-admin-dashboard/raw-web", class=(path.search(/raw-web/g) != -1 ) ? 'nav-link active' : 'nav-link')
+                  i.nav-icon.fas.fa-industry
+                  p Raw Websites
+              li(class="nav-item has-treeview")
                 a(href="/mmi-admin-dashboard/websites", class=(path.search(/websites/g) != -1 || path === '/add-website' ) ? 'nav-link active' : 'nav-link')
                   i.nav-icon.fas.fa-globe
                   p Websites

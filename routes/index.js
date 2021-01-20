@@ -19,6 +19,10 @@ router.get('/websites', auth.redirectLogin, function(req, res, next) {
   res.render('pages/website', { title: 'Websites', path: req.path })
 })
 
+router.get('/raw-web', auth.redirectLogin, function(req, res, next) {
+  res.render('pages/website/raw-website', { title: 'Raw Websites', path: req.path })
+})
+
 router.get('/scraper', auth.redirectLogin, function(req, res, next) {
   res.render('pages/website/scraper', { title: 'Scraper Websites', path: req.path })
 })

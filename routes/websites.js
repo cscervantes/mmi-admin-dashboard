@@ -286,4 +286,93 @@ router.get('/download-lists', auth.redirectLogin, async function(req, res, next)
             });
 })
 
+router.post('/raw-website-datatables', function(req, res, next) {
+    request.post(configUrl+'raw-website/datatables', {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
+router.get('/raw-website-lists', async function(req, res, next){
+    let filename = req.query.filename || 'Document'
+    let q = (req.query.hasOwnProperty("query")) ? JSON.parse(req.query.query) : {}
+    let query = {}
+    
+    if(q.hasOwnProperty('fqdn')){
+
+        query.fqdn = { "$regex": q.fqdn }
+
+    }
+
+    if(q.hasOwnProperty('global')){
+
+        let k = q.global.split(':')[1]
+
+        let v = parseInt(q.global.split(':')[0])
+
+        let kv = {}
+
+        kv[k] = v
+        
+        query["alexa_rankings.global"] = kv
+
+    }
+    
+    if(q.hasOwnProperty('local')){
+
+        let k = req.body.local.split(':')[1]
+
+        let v = parseInt(q.local.split(':')[0])
+
+        let kv = {}
+
+        kv[k] = v
+
+        query["alexa_rankings.local"] = kv
+
+    }
+
+    if(q.hasOwnProperty('name')){
+
+        query.name = {"$regex": new RegExp(q.name, "i")}
+
+    }
+
+    if(q.hasOwnProperty('country')){
+
+        query.country = {"$regex": new RegExp(q.country, "i")}
+        
+    }
+
+    let body = {
+        "query": query,
+        "fields": {}
+    }
+
+    let countDocs = await fetch(configUrl+'raw-website/count', 'POST', configHeaders, query)
+    let result = await fetch(configUrl+'raw-website/query?limit='+countDocs.data, 'POST', configHeaders, body)
+    let workbook = new excel.Workbook();
+    let worksheet = workbook.addWorksheet(filename)
+    worksheet.columns = [
+        {header:"Name", key: "name", width: 25}, 
+        {header:"FQDN", key:"fqdn", width:25}, 
+        {header:"Country", key:"country", width:20},
+        {header:"Alexa Global Ranking", width: 25},
+        {header:"Alexa Local Ranking", width: 25},
+    ]
+    // worksheet.addRows(result.data)
+    result.data.forEach(element=>{
+        worksheet.addRow([element.name, element.fqdn, element.country, element.alexa_rankings.global, element.alexa_rankings.local])
+    })
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}.xlsx`);
+    return workbook.xlsx.write(res)
+            .then(function() {
+                res.status(200).end();
+            });
+})
+
 module.exports = router
