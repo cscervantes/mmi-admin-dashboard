@@ -317,7 +317,7 @@ router.get('/raw-website-lists', async function(req, res, next){
 
         kv[k] = v
 
-        kv["$ne"] = 0
+        // kv["$ne"] = 0
         
         query["alexa_rankings.global"] = kv
 
@@ -333,7 +333,7 @@ router.get('/raw-website-lists', async function(req, res, next){
 
         kv[k] = v
 
-        kv["$ne"] = 0
+        // kv["$ne"] = 0
 
         query["alexa_rankings.local"] = kv
 
