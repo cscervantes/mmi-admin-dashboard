@@ -303,7 +303,7 @@ router.get('/raw-website-lists', async function(req, res, next){
     
     if(q.hasOwnProperty('fqdn')){
 
-        query.fqdn = { "$regex": q.fqdn }
+        query.fqdn = { "$regex": q.fqdn, "$options": "i"}
 
     }
 
@@ -316,6 +316,8 @@ router.get('/raw-website-lists', async function(req, res, next){
         let kv = {}
 
         kv[k] = v
+
+        kv["$ne"] = 0
         
         query["alexa_rankings.global"] = kv
 
@@ -323,7 +325,7 @@ router.get('/raw-website-lists', async function(req, res, next){
     
     if(q.hasOwnProperty('local')){
 
-        let k = req.body.local.split(':')[1]
+        let k = q.local.split(':')[1]
 
         let v = parseInt(q.local.split(':')[0])
 
@@ -331,19 +333,21 @@ router.get('/raw-website-lists', async function(req, res, next){
 
         kv[k] = v
 
+        kv["$ne"] = 0
+
         query["alexa_rankings.local"] = kv
 
     }
 
     if(q.hasOwnProperty('name')){
 
-        query.name = {"$regex": new RegExp(q.name, "i")}
+        query.name = {"$regex": q.name, "$options": "i"}
 
     }
 
     if(q.hasOwnProperty('country')){
 
-        query.country = {"$regex": new RegExp(q.country, "i")}
+        query.country = {"$regex": q.country, "$options":"i" }
         
     }
 

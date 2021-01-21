@@ -78,7 +78,7 @@ $(document).ready(function(){
             return obj
         }).get()
 
-        delete fields[0]
+        // delete fields[0]
 
         fields = fields.reduce(function(a, b){
             return Object.assign(a, b)
