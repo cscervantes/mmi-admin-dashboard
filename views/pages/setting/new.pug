@@ -16,21 +16,21 @@ block content
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_name") Website Name
               .col-sm-10
-                input#website_name(type="text", name="website_name", class="form-control", placeholder="(Required)", value=title)
+                input#website_name(type="text", name="website_name", class="form-control", placeholder="(Required)", value=alexa_rankings.name || title)
                 //- small
                 //-   i This is required field
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="website_url") Website Url
               .col-sm-10
-                input#website_url(type="url", name="website_url", class="form-control", placeholder="(Required)", value=home_url)
+                input#website_url(type="url", name="website_url", class="form-control", placeholder="(Required)", value=alexa_rankings.home_url || home_url)
                 //- small
                 //-   i This is required field
 
             .form-group.row
               label(class="col-sm-2 col-form-label", for="fqdn") FQDN
               .col-sm-10
-                input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)", value=fqdn)
+                input#fqdn(type="text", name="fqdn", class="form-control", placeholder="(Required)", value=alexa_rankings.fqdn || fqdn)
                 //- small
                 //-   i This is required field
 
