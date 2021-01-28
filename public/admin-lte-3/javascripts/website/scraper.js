@@ -896,7 +896,7 @@ const countries = [
     "value": "TUV"
   },
   {
-    "label": "U.S. Virgin Islands",
+    "label": "United States Virgin Islands",
     "value": "VIR"
   },
   {
@@ -920,7 +920,7 @@ const countries = [
     "value": "GBR"
   },
   {
-    "label": "United States",
+    "label": "United States Of America",
     "value": "USA"
   },
   {
