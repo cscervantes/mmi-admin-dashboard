@@ -1,7 +1,4 @@
-console.log('Loading Script')
-
-let btnSearch = document.querySelector('#btnSearch')
-
+console.log('Loading...', user)
 const countries = [
   {
     "label": "Afghanistan",
@@ -969,320 +966,452 @@ const countries = [
   }
 ]
 
-const regions = [
-  "Africa",
-  "Asia",
-  "The Caribbean",
-  "Central America",
-  "Europe",
-  "North America",
-  "Oceania",
-  "South America",
-  "Unknown",
-]
+$(document).ready(function(){
+    $('table#website-datatable thead:last-child th').each( function () {
+        var title = $(this).text();
+        // console.log(title)
+        if(title == "Website Name" || title == "Country Code" || title == "Website Category"){
+          var tagName = title.toLowerCase().replace(' ', '_').trim()
+          $(this).html( '<input class="form-control" type="text" name="'+tagName+'" placeholder="Search '+title+'" />' );
+        }else if(title == "Date Created"){
+          var tagName = title.toLowerCase().replace(' ', '_').trim()
+          $(this).html( '<input class="form-control" type="date" name="'+tagName+'" placeholder="Search '+title+'" />' );
+        }else{
+          var tagName = title.toLowerCase().split(' ')[0]
+          if(tagName === 'global' || tagName === 'local'){
+              $(this).html( `
+              <div class="input-group">
+                      <input class="form-control" type="number" name="${tagName}" placeholder="Search ${title}" />
+                      <div class="input-group-append">
+                          <select name="validate" class="form-control">
+                              <option value="$eq">=</option>
+                              <option value="$gt">></option>
+                              <option value="$lt"><</option>
+                              <option value="$gte">>=</option>
+                              <option value="$lte"><=</option>
+                              <option value="$ne">!=</option>
+                          </select>
+                      </div>
+              </div>
+              ` );
+          }else{
+              $(this).html( '<input class="form-control" type="text" name="'+tagName+'" placeholder="Search '+title+'" />' );
+          }
+        }
+    });
 
-async function websiteTable(userId){
-    console.log(userId)
-    let data = {}
-    let fields = {
-      "website_name": 1,
-      "fqdn": 1,
-      "website_category": 1,
-      "website_type": 1,
-      "country": 1,
-      "country_code": 1,
-      "region": 1,
-      "is_aggregator": 1,
-      "is_to_be_scraped": 1,
-      "alexa_rankings": 1,
-      "status": 1,
-      "date_created": 1
-    }
-    // $('table#website-datatable').dataTable().fnDestroy()
-    loadData(data, fields, 100)
-}
+    var draw = new dataDraw('table#website-datatable',
+    {
+        "responsive": true,
+        "autoWidth": false,
+        "processing": true,
+        "serverSide": true,
+        "deferRender": true,
+        "searchDelay": 500,
+        "searching": false,
+        "ajax": {
+            "url": "/mmi-admin-dashboard/websites/lists",
+            "type": "POST",
+        },
+        "columns": [
+            { "data": "website_name" },
+            { "data": "fqdn" },
+            { "data": "country" },
+            { "data": "country_code" },
+            { "data": "website_category" },
+            { "data": "alexa_rankings.global" },
+            { "data": "alexa_rankings.local" },
+            { "data": "verified" },
+            { "data": "date_created" },
+            { "data": "_id"}
+        ],
+        columnDefs:[
+            {
+                targets:0, render:function(data, type, row){
+                    return `<a class="nav-link" href="${row.url}" data-toggle="tooltip" title="Go to ${data}" target="_blank">${data}</a>`
+                    // return `<input type="text" id="update-website_name-${row._id}" class="form-control" value=${data}>`
+                }
+            },
+            {
+              targets:1, render:function(data, type, row){
+                  return `<input type="text" id="update-fqdn-${row._id}" class="form-control" value=${data}>`
+              }
+            },
+            {
+              targets:2, render:function(data, type, row){
+                  const cnt = countries.map(v=>{
+                    let wrp = ''
+                    if(v.label === data){
+                      wrp += `<option selected>${data}</option>`
+                    }else{
+                      wrp += `<option>${v.label}</option>`
+                    }
+                    return wrp
+                  }).join('')
+                  return `<select class="form-control update-country" id="update-country-${row._id}">
+                    ${cnt}
+                  </select>`
+              }
+            },
+            {
+              targets:3, render:function(data, type, row){
+                  const cnt = countries.map(v=>{
+                    let wrp = ''
+                    if(v.value === data){
+                      wrp += `<option selected>${data}</option>`
+                    }else{
+                      wrp += `<option>${v.value}</option>`
+                    }
+                    return wrp
+                  }).join('')
+                  return `<select class="form-control update-country-code" id="update-country_code-${row._id}">
+                    ${cnt}
+                  </select>`
+              }
+            },
+            {
+              targets:4, render:function(data, type, row){
+                  const categories = ["News", "Blog"]
+                  const cat = categories.map(v=>{
+                    let wrp = ''
+                    if(v === data){
+                      wrp += `<option selected>${data}</option>`
+                    }else{
+                      wrp += `<option>${v}</option>`
+                    }
+                    return wrp
+                  }).join('')
+                  return `<select class="form-control" id="update-website_category-${row._id}">
+                    ${cat}
+                  </select>`
+              }
+            },
+            {
+              targets:5, render:function(data, type, row){
+                  return `<input type="number" id="update-global_rank-${row._id}" class="form-control" value=${data}>`
+              }
+            },
+            {
+              targets:6, render:function(data, type, row){
+                  return `<input type="number" id="update-local_rank-${row._id}" class="form-control" value=${data}>`
+              }
+            },
+            {
+              targets:7, render:function(data, type, row){
+                  const verified = [true, false]
+                  const ver = verified.map(v=>{
+                    let wrp = ''
+                    if(v === data){
+                      wrp += `<option selected>${data}</option>`
+                    }else{
+                      wrp += `<option>${v}</option>`
+                    }
+                    return wrp
+                  }).join('')
+                  return `<select class="form-control" id="update-verified-${row._id}">
+                    ${ver}
+                  </select>`
+              }
+            },
+            {
+              targets: 8, render:function(data, type, row){
+                return moment(data).format('LLLL')
+              }
+            },
+            {
+              targets: 9, render:function(data, type, row){
+                return `<div class="btn-group">
+                  <button id="btn-update-${data}" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                  <a href="/mmi-admin-dashboard/websites/view/${data}" title="View More" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                  <a href="${row.website_url}" title="Visit Site" class="btn btn-success"><i class="fas fa-link"></i></a>
+                </div>`
+              }
+            }
+        ],
+        "order": [[ 8, "desc" ]]
+    })
 
-btnSearch.addEventListener('click', async function(e){
-  e.preventDefault()
-  e.stopImmediatePropagation()
-  let website_name = $('#website_name').val().trim()
-  let fqdn = $('#fqdn').val().trim()
-  let website_category = $('#website_category').val()
-  let website_type = $('#website_type').val()
-  let country = $('#country').val()
-  let region = $('#region').val()
-  // let is_aggregator = $('#is_aggregator').prop('checked')
-  // let is_to_be_scraped = $('#is_to_be_scraped').prop('checked')
-  // let status = $('#status').prop('checked')
-  let is_aggregator = $('#is_aggregator').val()
-  let is_to_be_scraped = $('#is_to_be_scraped').val()
-  let status = $('#status').val()
-  let global = $('#global').val()
-  let local = $('#local').val()
-  let date_created = $('#date_created').val()
-  let rawData = {}
-  if(website_name){
-    rawData.website_name = {
-      "$regex": website_name
-    }
-  }
-  if(fqdn){
-    rawData.fqdn = {
-      "$regex": fqdn
-    }
-  }
-  if(website_category){
-    rawData.website_category = website_category
-  }
-  if(website_type){
-    rawData.website_type = website_type
-  }
-  if(country){
-    rawData.country = {
-      "$regex": country
-    }
-  }
-  if(region){
-    rawData.region = { "$regex": region }
-  }
-  if(date_created){
-    rawData.date_created = {
-      "$lte":date_created
-    }
-  }
-  if(is_aggregator){
-    rawData.is_aggregator = is_aggregator
-  }
-  if(is_to_be_scraped){
-    rawData.is_to_be_scraped = is_to_be_scraped
-  }
-  if(status){
-    rawData.status = status
-  }
-  if(global){
-    rawData["alexa_rankings.global"] = {
-      "$eq": parseInt(global)
-    }
-  }
-  if(local){
-    rawData["alexa_rankings.local"]  = {
-      "$eq": parseInt(local)
-    }
-  }
+    draw.create()
 
-  // console.log(rawData)
-  let data = rawData
-  let fields = {
-    "website_name": 1,
-    "fqdn": 1,
-    "website_category": 1,
-    "website_type": 1,
-    "country": 1,
-    "country_code": 1,
-    "region": 1,
-    "is_aggregator": 1,
-    "is_to_be_scraped": 1,
-    "alexa_rankings": 1,
-    "status": 1,
-    "date_created": 1
-  }
-  reinitTable('table#website-datatable')
-  let totalCount = await rq('/mmi-admin-dashboard/websites/count', 'POST', rawData)
-  let defaultCount = totalCount.data
-  if(totalCount.data > 5000){
-    defaultCount = 5000
-  }
-  loadData(data, fields, defaultCount)
+    $(document).on('change', 'input:not([id^=update-]),select:not([name="website-datatable_length"],[id^=update-])', function(){
+        let fields = $('input').map(function(i,e){
+            let obj = {}
+            
+            let inputName = $(e).attr('name')
+
+            if(inputName){
+              obj[inputName] = $(e).val()
+            
+              if(inputName === 'global'){
+                  let $eq = $(e).siblings('div').children('select').val()
+                  let $va = $(e).val()
+                  obj[inputName] = ($va) ? $va+':'+$eq : ''
+              }
+              if(inputName === 'local'){
+                  let $eq = $(e).siblings('div').children('select').val()
+                  let $va = $(e).val()
+                  obj[inputName] = ($va) ? $va+':'+$eq : ''
+              }
+              return obj
+            }
+        }).get()
+
+        // console.log(fields, '1')
+
+        // delete fields[0]
+
+        fields = fields.reduce(function(a, b){
+            return Object.assign(a, b)
+        }, {})
+        
+        $.each(fields, function(key, value){
+            if (value === "" || value === null || key === undefined){
+                delete fields[key];
+            }
+        });
+
+        // console.log(fields,'2')
+
+        draw.update({
+            "responsive": true,
+            "autoWidth": false,
+            "processing": true,
+            "serverSide": true,
+            "deferRender": true,
+            "searching": false,
+            "searchDelay": 500,
+            "ajax": {
+                "url": "/mmi-admin-dashboard/websites/lists",
+                "type": "POST",
+                "data": fields
+            },
+            "columns": [
+                { "data": "website_name" },
+                { "data": "fqdn" },
+                { "data": "country" },
+                { "data": "country_code" },
+                { "data": "website_category" },
+                { "data": "alexa_rankings.global" },
+                { "data": "alexa_rankings.local" },
+                { "data": "verified" },
+                { "data": "date_created" },
+                { "data": "_id"}
+            ],
+            columnDefs:[
+                {
+                    targets:0, render:function(data, type, row){
+                        return `<a class="nav-link" href="${row.url}" data-toggle="tooltip" title="Go to ${data}" target="_blank">${data}</a>`
+                        // return `<input type="text" id="update-website_name-${row._id}" class="form-control" value=${data}>`
+                    }
+                },
+                {
+                  targets:1, render:function(data, type, row){
+                      return `<input type="text" id="update-fqdn-${row._id}" class="form-control" value=${data}>`
+                  }
+                },
+                {
+                  targets:2, render:function(data, type, row){
+                      const cnt = countries.map(v=>{
+                        let wrp = ''
+                        if(v.label === data){
+                          wrp += `<option selected>${data}</option>`
+                        }else{
+                          wrp += `<option>${v.label}</option>`
+                        }
+                        return wrp
+                      }).join('')
+                      return `<select class="form-control update-country" id="update-country-${row._id}">
+                        ${cnt}
+                      </select>`
+                  }
+                },
+                {
+                  targets:3, render:function(data, type, row){
+                      const cnt = countries.map(v=>{
+                        let wrp = ''
+                        if(v.value === data){
+                          wrp += `<option selected>${data}</option>`
+                        }else{
+                          wrp += `<option>${v.value}</option>`
+                        }
+                        return wrp
+                      }).join('')
+                      return `<select class="form-control update-country-code" id="update-country_code-${row._id}">
+                        ${cnt}
+                      </select>`
+                  }
+                },
+                {
+                  targets:4, render:function(data, type, row){
+                      const categories = ["News", "Blog"]
+                      const cat = categories.map(v=>{
+                        let wrp = ''
+                        if(v === data){
+                          wrp += `<option selected>${data}</option>`
+                        }else{
+                          wrp += `<option>${v}</option>`
+                        }
+                        return wrp
+                      }).join('')
+                      return `<select class="form-control" id="update-website_category-${row._id}">
+                        ${cat}
+                      </select>`
+                  }
+                },
+                {
+                  targets:5, render:function(data, type, row){
+                      return `<input type="number" id="update-global_rank-${row._id}" class="form-control" value=${data}>`
+                  }
+                },
+                {
+                  targets:6, render:function(data, type, row){
+                      return `<input type="number" id="update-local_rank-${row._id}" class="form-control" value=${data}>`
+                  }
+                },
+                {
+                  targets:7, render:function(data, type, row){
+                      const verified = [true, false]
+                      const ver = verified.map(v=>{
+                        let wrp = ''
+                        if(v === data){
+                          wrp += `<option selected>${data}</option>`
+                        }else{
+                          wrp += `<option>${v}</option>`
+                        }
+                        return wrp
+                      }).join('')
+                      return `<select class="form-control" id="update-verified-${row._id}">
+                        ${ver}
+                      </select>`
+                  }
+                },
+                {
+                  targets: 8, render:function(data, type, row){
+                    return moment(data).format('LLLL')
+                  }
+                },
+                {
+                  targets: 9, render:function(data, type, row){
+                    return `<div class="btn-group">
+                      <button id="btn-update-${data}" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                      <a href="/mmi-admin-dashboard/websites/view/${data}" title="View More" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                      <a href="${row.website_url}" title="Visit Site" class="btn btn-success"><i class="fas fa-link"></i></a>
+                    </div>`
+                  }
+                }
+            ],
+            "order": [[ 8, "desc" ]]
+        })
+    })
+
 })
 
-async function rq(url='', method='GET', data={}){
-  let opts = {}
-  opts.headers = {
-    'Content-Type': 'application/json'
-  }
-  if(method==='POST'){
-    opts.method =  method
-    opts.body = JSON.stringify(data)
+
+
+class dataDraw{
+
+    constructor(element, options){
+        this.options = options
+        this.$element = $(element)
+    }
+
+    create(){
+        this.$element.DataTable(this.options)
+    }
+
+    update(options){
+        this.$element.DataTable().destroy()
+        this.$element.DataTable(options).draw()
+    }
+
+}
+
+async function download(){
+    let filename = prompt('Enter file name', 'Document')
+    let fields = $('input').map(function(i,e){
+      let obj = {}
+      
+      let inputName = $(e).attr('name')
+
+      if(inputName){
+        obj[inputName] = $(e).val()
+      
+        if(inputName === 'global'){
+            let $eq = $(e).siblings('div').children('select').val()
+            let $va = $(e).val()
+            obj[inputName] = ($va) ? $va+':'+$eq : ''
+        }
+        if(inputName === 'local'){
+            let $eq = $(e).siblings('div').children('select').val()
+            let $va = $(e).val()
+            obj[inputName] = ($va) ? $va+':'+$eq : ''
+        }
+        return obj
+      }
+  }).get()
+
+  // console.log(fields, '1')
+
+  // delete fields[0]
+
+  fields = fields.reduce(function(a, b){
+      return Object.assign(a, b)
+  }, {})
+  
+  $.each(fields, function(key, value){
+      if (value === "" || value === null || key === undefined){
+          delete fields[key];
+      }
+  });
+    // console.log(fields)
+    let query = JSON.stringify(fields)
+    // console.log(query)
+    // await rq(`/mmi-admin-dashboard/websites/raw-website-lists?query=${query}&filename=${filename}`, 'GET')
+    return location.href = `/mmi-admin-dashboard/websites/website-lists?query=${query}&filename=${filename}`
+}
+
+$(document).on('click', 'button[id^=btn-update-]', async function(e){
+  e.preventDefault()
+  let _id = $(this).attr('id').split('-').splice(-1)
+  let fields = $(this).parent('div').parent('td').siblings('td').children('input, select')
+  let obj = {}
+  $.each(fields, function(i, e){
+    let id = $(e).attr('id').split('-').splice(-1)
+    obj.fqdn = $(`#update-fqdn-${id}`).val()
+    obj.country = $(`#update-country-${id}`).val()
+    obj.country_code = $(`#update-country_code-${id}`).val()
+    obj.website_category = $(`#update-website_category-${id}`).val()
+    obj.alexa_rankings = {
+      "global": $(`#update-global_rank-${id}`).val(),
+      "local": $(`#update-local_rank-${id}`).val()
+    }
+    obj.verified = $(`#update-verified-${id}`).val()
+    obj.updated_by = user
+    obj.date_updated = new Date()
+  })
+  let c = confirm('You are editing this row, make sure you know what you are doing!')
+  if(c){
+    let updateData = await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', obj)
+    alert('Successfully updated '+updateData.data.website_name)
+    $(this).parent('div').parent('td').parent('tr').remove()
   }else{
-    opts.method =  method
+    return false
   }
-  const response = await fetch(url, opts);
-  return response.json();
-}
 
-async function loadData(data, fields, limit){
-  let f = await rq(`/mmi-admin-dashboard/websites/custom_query?limit=${limit}&fields=${JSON.stringify(fields)}`, 'POST', data)
-  let wrapper = f.data.map(v=>{
-    let aggregrator = `
-    <div class="custom-control custom-switch custom-switch-on-success">
-      <input type="checkbox" name="is_aggregator" class="custom-control-input" id="${v._id}-aggregator" />
-      <label for="${v._id}-aggregator" class="custom-control-label"> No</label>
-    </div>
-    `
-    if (v.is_aggregator){
-      aggregrator = `
-      <div class="custom-control custom-switch custom-switch-on-success">
-        <input type="checkbox" name="is_aggregator" class="custom-control-input" id="${v._id}-aggregator" checked/>
-        <label for="${v._id}-aggregator" class="custom-control-label"> Yes</label>
-      </div>
-      `
-    }
-
-    let scraped = `
-    <div class="custom-control custom-switch custom-switch-on-success">
-      <input type="checkbox" name="is_to_be_scraped" class="custom-control-input" id="${v._id}-scraped" />
-      <label for="${v._id}-scraped" class="custom-control-label"> No</label>
-    </div>
-    `
-    if (v.is_to_be_scraped){
-      scraped = `
-      <div class="custom-control custom-switch custom-switch-on-success">
-        <input type="checkbox" name="is_to_be_scraped" class="custom-control-input" id="${v._id}-scraped" checked/>
-        <label for="${v._id}-scraped" class="custom-control-label"> Yes</label>
-      </div>
-      `
-    }
-
-    let status = `
-    <div class="custom-control custom-switch custom-switch-on-success">
-      <input type="checkbox" name="status" class="custom-control-input" id="${v._id}-status" />
-      <label for="${v._id}-status" class="custom-control-label"> Inactive</label>
-    </div>
-    `
-    if (v.status === 'ACTIVE'){
-      status = `
-      <div class="custom-control custom-switch custom-switch-on-success">
-        <input type="checkbox" name="status" class="custom-control-input" id="${v._id}-status" checked/>
-        <label for="${v._id}-status" class="custom-control-label"> Active</label>
-      </div>
-      `
-    }
-
-    return `<tr id='${v._id}'>
-      <td><a class="nav-link" href="/mmi-admin-dashboard/websites/view/${v._id}" data-toggle="tooltip" title="View details" target="_blank">${v.website_name}</a></td>
-      <td><a class="nav-link" href="http://${v.fqdn}" target="_blank" title="Original Source">${v.fqdn}</a></td>
-      <td>${v.website_category}</td>
-      <td><input type="text" value="${v.country}" class="autocomplete-country" data-id="country"><input type="text" value="${v.country_code}" data-id="country_code"><div class="btn-group" role="group" aria-label="Basic example" style="display:none;">
-      <button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-times"></i></button>
-    </div></td>
-      <td><input type="text" value="${v.region}" class="autocomplete-region" data-id="region"><div class="btn-group" role="group" aria-label="Basic example" style="display:none;">
-      <button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-times"></i></button>
-    </div></td>
-      <td>${aggregrator}</td>
-      <td>${scraped}</td>
-      <td>${status}</td>
-      <td><input type="number" value="${v.alexa_rankings.global}" data-id="alexa_rankings.global"><div class="btn-group" role="group" aria-label="Basic example" style="display:none;">
-      <button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-times"></i></button>
-    </div></td>
-      <td><input type="number" value="${v.alexa_rankings.local}" data-id="alexa_rankings.local"><div class="btn-group" role="group" aria-label="Basic example" style="display:none;">
-      <button type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-      <button type="button" class="btn btn-secondary"><i class="fas fa-times"></i></button>
-    </div></td>
-      <td>${moment(v.date_created).format('LLL')}</td>
-    </tr>`
-  }).join('')
-  document.querySelector('#website-datatable tbody').innerHTML = wrapper
-  $('table#website-datatable').DataTable({
-    "order": [[10, 'asc']]
-  })
-}
-
-async function reinitTable(el){
-  $(el).DataTable().clear().destroy();
-}
-
-$(document).on('click', '#website-datatable tbody tr td', function(e){
-  $(this).children('div.btn-group').css({'display': 'flex'})
 })
 
-$(document).on('click', '.btn-group button:last-child', function(e){
+$(document).on('change', 'select.update-country', function(e){
   e.preventDefault()
-  e.stopImmediatePropagation()
-  $(this).parent('div').css({'display':'none'})
+  let needle = $(this).val()
+  let id = $(this).attr('id').split('-').splice(-1)
+  let iso = countries.find(({label}) => label.search(new RegExp(`^${needle}`, 'gi')) != -1)
+  $(`select#update-country_code-${id}`).val(iso.value)
 })
 
-$(document).on('click', '.btn-group button:first-child', async function(e){
+$(document).on('change', 'select.update-country-code', function(e){
   e.preventDefault()
-  e.stopImmediatePropagation()
-  let input = $(this).parent('div').siblings('input')
-  let data = {}
-  if (input.length > 1) {
-    data[input.eq(0).attr('data-id')] = input.eq(0).val()
-    data[input.eq(1).attr('data-id')] = input.eq(1).val()
-  }else{
-    data[input.eq(0).attr('data-id')] = input.eq(0).val()
-  }
-  data.updated_by = user
-  data.date_updated = new Date()
-  let _id = $(this).parent('div').parent('td').parent('tr').attr('id')
-  await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', data)
-  $(this).parent().css({"display": "none"})
-  $(this).closest('div.btn-group').after(`<div class="alert alert-success alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  <h5><i class="icon fas fa-check"></i> Success!</h5>
-</div>`)
-})
-
-$(document).on('input', '.autocomplete-country', function(e){
-  e.preventDefault()
-  e.stopImmediatePropagation()
-  var _t = $(this)
-  _t.autocomplete({
-    source: countries,
-    change :showResult,
-    minLength: 2
-
-  })
-})
-
-$(document).on('input', '#country', function(e){
-  e.preventDefault()
-  e.stopImmediatePropagation()
-  var _t = $(this)
-  _t.autocomplete({
-    source: countries,
-    change: function(event, ui){
-      event.target.value = ui.item.label
-    },
-    minLength: 2
-
-  })
-})
-
-function showResult(event, ui){
-  event.target.value = ui.item.label
-  event.target.nextElementSibling.value = ui.item.value
-}
-
-$(document).on('input', '.autocomplete-region', function(e){
-  $(this).autocomplete({
-    source: regions,
-    minLength: 2
-  })
-})
-
-$(document).on('change', 'input[type="checkbox"]', async function(e){
-  e.preventDefault()
-  e.stopImmediatePropagation()
-  let _id = $(this).parent('div').parent('td').parent('tr').attr('id')
-  let key = $(this).attr('name')
-  let val = $(this).prop('checked')
-  let data = {}
-  if (key === "status" && val === false){
-    data[key] = "INACTIVE"
-  }else if(key === "status" && val === true){
-    data[key] = "ACTIVE"
-  }else{
-    data[key] = val
-  }
-  data.updated_by = user
-  data.date_updated = new Date()
-  await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', data)
-  $(this).closest('div').after(`<div class="alert alert-success alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  <h5><i class="icon fas fa-check"></i> Success!</h5>
-</div>`)
+  let needle = $(this).val()
+  let id = $(this).attr('id').split('-').splice(-1)
+  let iso = countries.find(({value}) => value.search(new RegExp(`^${needle}`, 'gi')) != -1)
+  $(`select#update-country-${id}`).val(iso.label)
 })

@@ -57,7 +57,7 @@ $(document).ready(function(){
 
     draw.create()
 
-    $(document).on('change', 'input,select', function(){
+    $(document).on('change', 'input,select:not([name="website-datatable_length"])', function(){
         let fields = $('input').map(function(i,e){
             let obj = {}
             

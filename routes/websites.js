@@ -379,4 +379,135 @@ router.get('/raw-website-lists', async function(req, res, next){
             });
 })
 
+router.post('/lists', function(req, res, next) {
+    request.post(configUrl+'web/lists', {headers:configHeaders, body:req.body}, function(error, response, body){
+        if(error){
+            next(error)
+        }else{
+            res.status(200).send(body)
+        }
+    })
+})
+
+router.get('/website-lists', async function(req, res, next){
+    let filename = req.query.filename || 'Document'
+    let q = (req.query.hasOwnProperty("query")) ? JSON.parse(req.query.query) : {}
+    let query = {}
+
+    // console.log(q)
+    
+    if(q.hasOwnProperty('fqdn')){
+
+        query.fqdn = { "$regex": q.fqdn, "$options": "i"}
+
+    }
+
+    if(q.hasOwnProperty('global')){
+
+        let k = q.global.split(':')[1]
+
+        let v = parseInt(q.global.split(':')[0])
+
+        let kv = {}
+
+        kv[k] = v
+
+        // kv["$ne"] = 0
+        
+        query["alexa_rankings.global"] = kv
+
+    }
+    
+    if(q.hasOwnProperty('local')){
+
+        let k = q.local.split(':')[1]
+
+        let v = parseInt(q.local.split(':')[0])
+
+        let kv = {}
+
+        kv[k] = v
+
+        // kv["$ne"] = 0
+
+        query["alexa_rankings.local"] = kv
+
+    }
+
+    if(q.hasOwnProperty('website_name')){
+
+        query.website_name = {"$regex": q.website_name, "$options": "i"}
+
+    }
+
+    if(q.hasOwnProperty('country')){
+
+        query.country = {"$regex": q.country, "$options":"i" }
+        
+    }
+
+    if(q.hasOwnProperty('country_code')){
+
+        query.country_code = {"$regex": q.country_code, "$options":"i"}
+
+    }
+
+    if(q.hasOwnProperty('website_category')){
+
+        query.website_category = {"$regex": q.website_category, "$options":"i"}
+
+    }
+
+    if(q.hasOwnProperty('verified')){
+
+        query.verified = JSON.parse(q.verified)
+
+    }
+
+    if(q.hasOwnProperty('date_created')){
+
+        query.date_created = {"$gte": moment(q.date_created).subtract(1, 'day').format('YYYY-MM-DD')+"T16:00:00.000Z", "$lte": q.date_created+"T16:00:00.000Z" }
+
+    }
+
+    // console.log(query)
+
+    let countDocs = await fetch(configUrl+'web/count_custom_query', 'POST', configHeaders, query)
+    // console.log(countDocs)
+    let result = await fetch(configUrl+'web/custom_query?fields={"website_name":1, "fqdn":1, "country":1, "country_code":1, "alexa_rankings":1, "website_category":1, "verified":1}&limit='+countDocs.data, 'POST', configHeaders, query)
+    // console.log(result)
+    let workbook = new excel.Workbook();
+    let worksheet = workbook.addWorksheet(filename)
+    worksheet.columns = [
+        {header:"Name", key: "name", width: 25}, 
+        {header:"FQDN", key:"fqdn", width:25}, 
+        {header:"Country", key:"country", width:20},
+        {header:"Country Code", key:"country_code", width:20},
+        {header:"Category", key:"website_category", width:20},
+        {header:"Alexa Global Ranking", width: 25},
+        {header:"Alexa Local Ranking", width: 25},
+        {header:"Verified", key:"verified", width:20},
+    ]
+    // worksheet.addRows(result.data)
+    result.data.forEach(element=>{
+        worksheet.addRow(
+            [
+                element.website_name, 
+                element.fqdn, 
+                element.country, 
+                element.country_code, 
+                element.website_category, 
+                element.alexa_rankings.global, 
+                element.alexa_rankings.local, 
+                element.verified
+            ])
+    })
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}.xlsx`);
+    return workbook.xlsx.write(res)
+            .then(function() {
+                res.status(200).end();
+            });
+})
+
 module.exports = router
