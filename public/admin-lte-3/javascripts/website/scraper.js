@@ -970,12 +970,35 @@ $(document).ready(function(){
     $('table#website-datatable thead:last-child th').each( function () {
         var title = $(this).text();
         // console.log(title)
-        if(title == "Website Name" || title == "Country Code" || title == "Website Category"){
+        if(title == "Website Name"){
           var tagName = title.toLowerCase().replace(' ', '_').trim()
           $(this).html( '<input class="form-control" type="text" name="'+tagName+'" placeholder="Search '+title+'" />' );
         }else if(title == "Date Created"){
           var tagName = title.toLowerCase().replace(' ', '_').trim()
           $(this).html( '<input class="form-control" type="date" name="'+tagName+'" placeholder="Search '+title+'" />' );
+        }else if(title == "Country"){
+          var tagName = title.toLowerCase().trim()
+          var cnt = countries.map(v=>`<option>${v.label}</option>`).join('')
+          $(this).html(`<select class="form-control" name="${tagName}"><option value="" selected>All</option>${cnt}</select>`)
+        }else if(title == "Country Code"){
+          var tagName = title.toLowerCase().replace(' ', '_').trim()
+          var iso = countries.map(v=>`<option>${v.value}</option>`).join('')
+          $(this).html(`<select class="form-control" name="${tagName}"><option value="" selected>All</option>${iso}</select>`)
+        }else if(title == "Website Category"){
+          var tagName = title.toLowerCase().replace(' ', '_').trim()
+          var categories = ["News", "Blog"]
+          var cat = categories.map(v=>`<option>${v}</option>`).join('')
+          $(this).html(`<select class="form-control" name="${tagName}"><option value="" selected>All</option>${cat}</select>`)
+        }else if(title == "Verified"){
+          var tagName = title.toLowerCase().trim()
+          var verifies = [{"label": 'True', "value": true}, {"label":'False', "value": false}]
+          var ver = verifies.map(v=>`<option value=${v.value}>${v.label}</option>`).join('')
+          $(this).html(`<select class="form-control" name="${tagName}"><option value="" selected>All</option>${ver}</select>`)
+        }else if(title == "Status"){
+          var tagName = title.toLowerCase().trim()
+          var statuses = ["ACTIVE", "INACTIVE", "EXPIRED"]
+          var stats = statuses.map(v=>`<option>${v}</option>`).join('')
+          $(this).html(`<select class="form-control" name="${tagName}"><option value="" selected>All</option>${stats}</select>`)
         }else{
           var tagName = title.toLowerCase().split(' ')[0]
           if(tagName === 'global' || tagName === 'local'){
@@ -1023,6 +1046,7 @@ $(document).ready(function(){
             { "data": "alexa_rankings.local" },
             { "data": "verified" },
             { "data": "date_created" },
+            { "data": "status"},
             { "data": "_id"}
         ],
         columnDefs:[
@@ -1119,7 +1143,24 @@ $(document).ready(function(){
               }
             },
             {
-              targets: 9, render:function(data, type, row){
+              targets:9, render:function(data, type, row){
+                  const status = ["ACTIVE", "INACTIVE"]
+                  const stat = status.map(v=>{
+                    let wrp = ''
+                    if(v === data){
+                      wrp += `<option selected>${data}</option>`
+                    }else{
+                      wrp += `<option>${v}</option>`
+                    }
+                    return wrp
+                  }).join('')
+                  return `<select class="form-control" id="update-status-${row._id}">
+                    ${stat}
+                  </select>`
+              }
+            },
+            {
+              targets: 10, render:function(data, type, row){
                 return `<div class="btn-group">
                   <button id="btn-update-${data}" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                   <a href="/mmi-admin-dashboard/websites/view/${data}" title="View More" class="btn btn-info"><i class="fas fa-eye"></i></a>
@@ -1134,7 +1175,7 @@ $(document).ready(function(){
     draw.create()
 
     $(document).on('change', 'input:not([id^=update-]),select:not([name="website-datatable_length"],[id^=update-])', function(){
-        let fields = $('input').map(function(i,e){
+        let fields = $('input:not([id^=update-]),select:not([name="website-datatable_length"],[id^=update-],[name="validate"]').map(function(i,e){
             let obj = {}
             
             let inputName = $(e).attr('name')
@@ -1195,6 +1236,7 @@ $(document).ready(function(){
                 { "data": "alexa_rankings.local" },
                 { "data": "verified" },
                 { "data": "date_created" },
+                { "data": "status"},
                 { "data": "_id"}
             ],
             columnDefs:[
@@ -1291,7 +1333,24 @@ $(document).ready(function(){
                   }
                 },
                 {
-                  targets: 9, render:function(data, type, row){
+                  targets:9, render:function(data, type, row){
+                      const status = ["ACTIVE", "INACTIVE"]
+                      const stat = status.map(v=>{
+                        let wrp = ''
+                        if(v === data){
+                          wrp += `<option selected>${data}</option>`
+                        }else{
+                          wrp += `<option>${v}</option>`
+                        }
+                        return wrp
+                      }).join('')
+                      return `<select class="form-control" id="update-status-${row._id}">
+                        ${stat}
+                      </select>`
+                  }
+                },
+                {
+                  targets: 10, render:function(data, type, row){
                     return `<div class="btn-group">
                       <button id="btn-update-${data}" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                       <a href="/mmi-admin-dashboard/websites/view/${data}" title="View More" class="btn btn-info"><i class="fas fa-eye"></i></a>
@@ -1328,7 +1387,7 @@ class dataDraw{
 
 async function download(){
     let filename = prompt('Enter file name', 'Document')
-    let fields = $('input').map(function(i,e){
+    let fields = $('input:not([id^=update-]),select:not([name="website-datatable_length"],[id^=update-],[name="validate"]').map(function(i,e){
       let obj = {}
       
       let inputName = $(e).attr('name')
@@ -1381,6 +1440,7 @@ $(document).on('click', 'button[id^=btn-update-]', async function(e){
     obj.country = $(`#update-country-${id}`).val()
     obj.country_code = $(`#update-country_code-${id}`).val()
     obj.website_category = $(`#update-website_category-${id}`).val()
+    obj.status = $(`#update-status-${id}`).val()
     obj.alexa_rankings = {
       "global": $(`#update-global_rank-${id}`).val(),
       "local": $(`#update-local_rank-${id}`).val()
@@ -1391,8 +1451,17 @@ $(document).on('click', 'button[id^=btn-update-]', async function(e){
   })
   let c = confirm('You are editing this row, make sure you know what you are doing!')
   if(c){
+    // console.log(obj)
     let updateData = await rq('/mmi-admin-dashboard/websites/update/'+_id, 'POST', obj)
-    alert('Successfully updated '+updateData.data.website_name)
+    // alert('Successfully updated '+updateData.data.website_name)
+    $(document).Toasts('create', {
+      class: 'bg-success', 
+      delay: 1500,
+      autohide: true,
+      title: 'Success.',
+      // subtitle: 'Subtitle',
+      body: 'Successfully updated '+updateData.data.website_name
+    })
     $(this).parent('div').parent('td').parent('tr').remove()
   }else{
     return false

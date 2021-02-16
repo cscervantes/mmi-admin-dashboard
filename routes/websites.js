@@ -464,6 +464,12 @@ router.get('/website-lists', async function(req, res, next){
 
     }
 
+    if(q.hasOwnProperty('status')){
+
+        query.status = q.status
+
+    }
+
     if(q.hasOwnProperty('date_created')){
 
         query.date_created = {"$gte": moment(q.date_created).subtract(1, 'day').format('YYYY-MM-DD')+"T16:00:00.000Z", "$lte": q.date_created+"T16:00:00.000Z" }
@@ -474,7 +480,7 @@ router.get('/website-lists', async function(req, res, next){
 
     let countDocs = await fetch(configUrl+'web/count_custom_query', 'POST', configHeaders, query)
     // console.log(countDocs)
-    let result = await fetch(configUrl+'web/custom_query?fields={"website_name":1, "fqdn":1, "country":1, "country_code":1, "alexa_rankings":1, "website_category":1, "verified":1}&limit='+countDocs.data, 'POST', configHeaders, query)
+    let result = await fetch(configUrl+'web/custom_query?fields={"website_name":1, "fqdn":1, "country":1, "country_code":1, "alexa_rankings":1, "website_category":1, "verified":1, "status":1}&limit='+countDocs.data, 'POST', configHeaders, query)
     // console.log(result)
     let workbook = new excel.Workbook();
     let worksheet = workbook.addWorksheet(filename)
@@ -487,6 +493,7 @@ router.get('/website-lists', async function(req, res, next){
         {header:"Alexa Global Ranking", width: 25},
         {header:"Alexa Local Ranking", width: 25},
         {header:"Verified", key:"verified", width:20},
+        {header:"Status", key:"status", width:20},
     ]
     // worksheet.addRows(result.data)
     result.data.forEach(element=>{
@@ -499,7 +506,7 @@ router.get('/website-lists', async function(req, res, next){
                 element.website_category, 
                 element.alexa_rankings.global, 
                 element.alexa_rankings.local, 
-                element.verified
+                element.verified, element.status
             ])
     })
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
