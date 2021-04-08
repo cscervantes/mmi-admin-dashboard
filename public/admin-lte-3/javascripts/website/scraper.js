@@ -1052,7 +1052,7 @@ $(document).ready(function(){
         columnDefs:[
             {
                 targets:0, render:function(data, type, row){
-                    return `<a class="nav-link" href="${row.url}" data-toggle="tooltip" title="Go to ${data}" target="_blank">${data}</a>`
+                    return `<a class="nav-link" href="${row.website_url}" data-toggle="tooltip" title="Go to ${data}" target="_blank">${data}</a>`
                     // return `<input type="text" id="update-website_name-${row._id}" class="form-control" value=${data}>`
                 }
             },

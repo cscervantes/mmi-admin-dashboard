@@ -103,6 +103,11 @@ block content
               label(class="col-sm-2 col-form-label", for="website_cost") Website Cost
               .col-sm-10
                 input#website_cost(type="number", name="website_cost", class="form-control", placeholder="(Optional) default is 300", value=website_cost)
+
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="website_scraper_delay") Website Scraper Delay
+              .col-sm-10
+                input#website_scraper_delay(type="number", name="website_scraper_delay", class="form-control", placeholder="(Optional) default is 500ms", value=website_scraper_delay)
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="needs_search_params") Need Search Params?
@@ -124,6 +129,13 @@ block content
                 .custom-control.custom-switch
                   input#needs_endslash(type="checkbox", name="needs_endslash", class="custom-control-input", checked=(needs_endslash) ? true: false)
                   label(for="needs_endslash", class="custom-control-label") Yes or No
+            
+            .form-group.row
+              label(class="col-sm-2 col-form-label", for="is_using_proxy") Using Proxy?
+              .col-sm-10
+                .custom-control.custom-switch
+                  input#is_using_proxy(type="checkbox", name="is_using_proxy", class="custom-control-input", checked=(is_using_proxy) ? true: false)
+                  label(for="is_using_proxy", class="custom-control-label") Yes or No
             
             .form-group.row
               label(class="col-sm-2 col-form-label", for="main_sections") Section Urls
