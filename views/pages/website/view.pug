@@ -44,7 +44,8 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Created
-                    p.text-muted(title=moment(date_created).add(8, 'hours').format('LLLL'))=moment(date_created).add(8, 'hours').fromNow()
+                    //- p.text-muted(title=moment(date_created).add(8, 'hours').format('LLLL'))=moment(date_created).add(8, 'hours').fromNow()
+                    p.text-muted(title=moment(date_created).format('LLLL'))=moment(date_created).fromNow()
                     hr
                     strong
                         i.fas.fa-user
@@ -54,7 +55,8 @@ block content
                     strong 
                         i.fas.fa-calendar
                         |  Date Updated
-                    p.text-muted(title=moment(date_updated).add(8, 'hours').format('LLLL'))=moment(date_updated).add(8, 'hours').fromNow()
+                    //- p.text-muted(title=moment(date_updated).add(8, 'hours').format('LLLL'))=moment(date_updated).add(8, 'hours').fromNow()
+                    p.text-muted(title=moment(date_updated).format('LLLL'))=moment(date_updated).fromNow()
         
         .col-sm-9
             .card

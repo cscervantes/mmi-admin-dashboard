@@ -70,7 +70,8 @@ $(document).ready(function(){
             },
             {
                 targets: [3, 7], render: function(data, type, row){
-                    return moment(data).subtract(8, 'hours').format('LLLL')
+                    // return moment(data).subtract(8, 'hours').format('LLLL')
+                    return moment(data).format('LLLL')
                 }
             }
         ],
