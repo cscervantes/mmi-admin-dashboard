@@ -773,15 +773,16 @@ $(document).on('click', 'button#btnAddSectionsToCrawl', function(){
     try {
         const _sections = []
         $('ul#main_sections li').each(function(i, e){
-            _sections.push({ idx: i, website: id, section_url: $(this).text().trim() })
+            _sections.push({ idx: i, website: id, section_url: $(this).text().trim(), fqdn: $(this).attr('data-fqdn') })
         })
-        console.log(_sections)
+        // console.log(_sections)
         const requestFunct = async (data) => {
             $('ul#main_sections').eq(0).children('li').eq(data.idx).html(`<a class="nav-link" href="${data.section_url}" target="_blank">${data.section_url} <i class="fas fa-spinner fa-pulse" title="Fetching..."></i></a>`)
             setTimeout(() => {
                 let dataObj = {
                     website: data.website,
                     section_url: data.section_url,
+                    fqdn: data.fqdn,
                     updated_by: user,
                     date_created: new Date(),
                     date_updated: new Date()

@@ -83,7 +83,7 @@ block content
 
                         //- #sections.active.tab-pane
                         #sections.tab-pane
-                            - const sections = main_sections.map(v=>`<li><a href="${v}" class="nav-link" target="_blank">${v}</a>`).join('</li>')
+                            - const sections = main_sections.map(v=>`<li data-fqdn="${fqdn}"><a href="${v}" class="nav-link" target="_blank">${v}</a>`).join('</li>')
                             ul(style="list-style: square outside none;", id="main_sections") !{sections}
                             button#btnAddSectionsToCrawl.btn.btn-warning Add to crawler
                             
